@@ -2,7 +2,8 @@
     "$schema": "https://turbo.build/schema.json",
     "globalDependencies": [
         "**/.env.*local",
-        "pnpm-lock.yaml",
+        "bun.lockb",
+        "bun.lock",
         "turbo.json",
         "**/tsconfig.json",
         "**/tsconfig.*.json"

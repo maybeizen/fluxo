@@ -42,7 +42,7 @@ Fluxo is an open-source billing panel targeted at hosting providers, similar to 
 The main web application frontend built with Next.js and React.
 
 - **Port**: `5000` (development)
-- **Tech Stack**: Next.js 15, React 19, Tailwind CSS 4, TypeScript
+- **Tech Stack**: Next.js 16.1.6, React 19.2.4, Tailwind CSS 4.1.18, TypeScript 5.9.3
 - **Location**: `apps/frontend/`
 
 #### **@fluxo/api**
@@ -77,12 +77,13 @@ Command-line interface for managing Fluxo.
 
 PostgreSQL database connection and schema package.
 
-- **Tech Stack**: Drizzle ORM, PostgreSQL, TypeScript
+- **Tech Stack**: Drizzle ORM `0.45.1`, Drizzle Kit `0.31.8`, PostgreSQL (postgres driver `3.4.8`), TypeScript `5.9.3`
 - **Location**: `packages/db/`
 - **Features**:
     - Database schema definitions
     - Migration system
     - Type-safe database queries
+    - Drizzle Studio integration
 
 #### **@fluxo/types**
 
@@ -117,29 +118,34 @@ Plugin system for loading and managing service and gateway plugins.
 
 ### Core Technologies
 
-- **Monorepo Management**: [Turborepo](https://turbo.build/) + [Bun workspaces](https://bun.sh/docs/install/workspaces)
+- **Monorepo Management**: [Turborepo](https://turbo.build/) `2.8.3` + [Bun workspaces](https://bun.sh/docs/install/workspaces)
 - **Package Manager**: [Bun](https://bun.sh/) `1.3.3`
 - **Language**: [TypeScript](https://www.typescriptlang.org/) `5.9.3`
-- **Build Tool**: [tsup](https://tsup.egoist.dev/) for packages, Next.js built-in for apps
+- **Build Tool**: [tsup](https://tsup.egoist.dev/) `8.5.1` for packages, Next.js built-in for apps
 
 ### Frontend Stack
 
-- **Framework**: [Next.js](https://nextjs.org/) `15.5.6` (with Turbopack)
-- **UI Library**: [React](https://react.dev/) `19.1.0`
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) `4.x`
-- **Validation**: [Zod](https://zod.dev/) `4.1.12`
-- **Websockets**: [Socket.IO Client](https://socket.io/) `4.8.1`
+- **Framework**: [Next.js](https://nextjs.org/) `16.1.6` (with Turbopack)
+- **UI Library**: [React](https://react.dev/) `19.2.4`
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) `4.1.18`
+- **Validation**: [Zod](https://zod.dev/) `4.3.6`
+- **Websockets**: [Socket.IO Client](https://socket.io/) `4.8.3`
+- **HTTP Client**: [Axios](https://axios-http.com/) `1.13.4`
 
 ### Backend Stack
 
 - **Framework**: [Express.js](https://expressjs.com/) `5.2.1`
 - **Database**: [PostgreSQL](https://www.postgresql.org/) with [Drizzle ORM](https://orm.drizzle.team/) `0.45.1`
-- **Cache/Session**: [Redis](https://redis.io/) `5.10.0`
+- **Database Driver**: [postgres](https://github.com/porsager/postgres) `3.4.8`
+- **Database Tools**: [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) `0.31.8`
+- **Cache/Session**: [Redis](https://redis.io/) `5.10.0` with [connect-redis](https://github.com/tj/connect-redis) `9.0.0`
 - **Websockets**: [Socket.IO](https://socket.io/) `4.8.3`
 - **Validation**: [Zod](https://zod.dev/) `4.3.6`
-- **Security**: bcrypt, express-rate-limit, CORS
-- **Email**: Nodemailer `7.0.13`
-- **PDF Generation**: PDFKit `0.15.2`
+- **Security**: bcrypt `6.0.0`, express-rate-limit `8.2.1`, CORS `2.8.6`
+- **Email**: [Nodemailer](https://nodemailer.com/) `8.0.0`
+- **PDF Generation**: [PDFKit](https://pdfkit.org/) `0.17.2`
+- **HTTP Client**: [Axios](https://axios-http.com/) `1.13.4`
+- **Payment Processing**: [Stripe](https://stripe.com/) `20.3.0`
 
 <div align="center">
 
@@ -152,6 +158,8 @@ Before you begin, ensure you have the following installed:
 - **Bun**: Version `1.3.3` or higher ([Install Bun](https://bun.sh/))
 - **PostgreSQL**: Version 14.x or higher (running instance, local or remote)
 - **Redis**: Version 7.x or higher (running instance, local or remote)
+
+**Note**: While the project uses Bun as the package manager, some packages may still reference pnpm in their package.json files. This is being migrated gradually.
 
 ### Optional Prerequisites
 
