@@ -1,0 +1,17 @@
+{
+    "name": "fluxo",
+    "version": "1.0.0",
+    "description": "Fluxo management CLI",
+    "private": true,
+    "type": "module",
+    "bin": {
+        "fluxo": "./bin/fluxo.js"
+    },
+    "scripts": {
+        "fluxo": "node bin/fluxo.js"
+    },
+    "dependencies": {
+        "chalk": "^5.3.0",
+        "boxen": "^7.1.1"
+    }
+}

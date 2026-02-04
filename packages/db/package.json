@@ -1,0 +1,35 @@
+{
+    "name": "@fluxo/db",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsup",
+        "dev": "cross-env NODE_ENV=development tsup --watch",
+        "start": "node dist/index.js",
+        "types": "tsc --noEmit",
+        "clean": "rm -rf dist",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix",
+        "db:generate": "drizzle-kit generate",
+        "db:migrate": "drizzle-kit migrate",
+        "db:push": "drizzle-kit push",
+        "db:studio": "drizzle-kit studio"
+    },
+    "packageManager": "pnpm@10.18.3",
+    "dependencies": {
+        "@fluxo/types": "workspace:*",
+        "dotenv": "^17.2.3",
+        "drizzle-orm": "^0.45.1",
+        "postgres": "^3.4.8"
+    },
+    "devDependencies": {
+        "@fluxo/eslint-config": "workspace:*",
+        "@types/node": "^20.19.30",
+        "drizzle-kit": "^0.30.6",
+        "eslint": "^9.39.2",
+        "tsup": "^8.5.1",
+        "typescript": "^5.9.3"
+    }
+}

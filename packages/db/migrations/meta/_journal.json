@@ -1,0 +1,20 @@
+{
+    "version": "7",
+    "dialect": "postgresql",
+    "entries": [
+        {
+            "idx": 0,
+            "version": "7",
+            "when": 1769570479685,
+            "tag": "0000_create_initial_tables",
+            "breakpoints": true
+        },
+        {
+            "idx": 2,
+            "version": "7",
+            "when": 1770089829168,
+            "tag": "0002_create_plugins_table",
+            "breakpoints": true
+        }
+    ]
+}

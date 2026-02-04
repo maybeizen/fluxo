@@ -1,0 +1,24 @@
+{
+    "name": "@fluxo/types",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsup",
+        "dev": "cross-env NODE_ENV=development tsup --watch",
+        "start": "node dist/index.js",
+        "types": "tsc --noEmit",
+        "clean": "rm -rf dist",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix"
+    },
+    "packageManager": "pnpm@10.18.3",
+    "devDependencies": {
+        "@fluxo/eslint-config": "workspace:*",
+        "@types/node": "^20.19.22",
+        "eslint": "^9.18.0",
+        "tsup": "^8.5.0",
+        "typescript": "^5.9.3"
+    }
+}

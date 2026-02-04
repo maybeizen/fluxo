@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to {{APP_NAME}}</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    </style>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family:
+        'Inter',
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        Roboto,
+        'Helvetica Neue',
+        Arial,
+        sans-serif;
+      background-color: #0c0a09;
+      color: #fafaf9;
+    "
+  >
+    <table role="presentation" style="width: 100%; border-collapse: collapse">
+      <tr>
+        <td align="center" style="padding: 40px 20px">
+          <table
+            role="presentation"
+            style="
+              width: 100%;
+              max-width: 600px;
+              border-collapse: collapse;
+              background-color: #1c1917;
+              border: 1px solid #2d2a28;
+              border-radius: 12px;
+              overflow: hidden;
+            "
+          >
+            <tr>
+              <td style="padding: 40px; text-align: center">
+                <img
+                  src="cid:logo"
+                  alt="{{APP_NAME}} Logo"
+                  width="48"
+                  style="margin: 0 auto 24px auto"
+                />
+                <h1 style="margin: 0 0 16px 0; font-size: 24px; font-weight: 700; color: #fafaf9">
+                  Welcome to {{APP_NAME}}! 🎉
+                </h1>
+                <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #a8a29e">
+                  Hi {{USERNAME}}, your email is verified. You can now access your dashboard and get
+                  started.
+                </p>
+                <a
+                  href="{{DASHBOARD_URL}}"
+                  style="
+                    display: inline-block;
+                    padding: 14px 32px;
+                    background-color: #dc2626;
+                    color: #ffffff;
+                    text-decoration: none;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    font-size: 16px;
+                    transition: background-color 0.2s;
+                  "
+                  onmouseover="this.style.backgroundColor='#b91c1c'"
+                  onmouseout="this.style.backgroundColor='#dc2626'"
+                >
+                  Go to Dashboard
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 24px 40px; border-top: 1px solid #2d2a28">
+                <p
+                  style="
+                    margin: 0;
+                    font-size: 12px;
+                    line-height: 1.6;
+                    color: #78716c;
+                    text-align: center;
+                  "
+                >
+                  If you have any questions, feel free to contact our support team.
+                  <br />
+                  © {{YEAR}} {{APP_NAME}}. All rights reserved.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+{
+    "id": "stripe-gateway",
+    "name": "Stripe",
+    "version": "1.0.0",
+    "type": "gateway",
+    "description": "Accept payments via Stripe Checkout",
+    "author": "Fluxo",
+    "shipped": true
+}

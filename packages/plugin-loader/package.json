@@ -1,0 +1,24 @@
+{
+    "name": "@fluxo/plugin-loader",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "clean": "rm -rf dist",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix"
+    },
+    "dependencies": {
+        "@fluxo/types": "workspace:*"
+    },
+    "devDependencies": {
+        "@fluxo/eslint-config": "workspace:*",
+        "@types/node": "^20.19.30",
+        "eslint": "^9.39.2",
+        "tsup": "^8.5.1",
+        "typescript": "^5.9.3"
+    }
+}
