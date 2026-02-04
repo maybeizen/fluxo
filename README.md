@@ -50,7 +50,7 @@ The main web application frontend built with Next.js and React.
 The backend REST API service providing all server-side functionality.
 
 - **Port**: Configurable via environment variables
-- **Tech Stack**: Express.js 5, MongoDB (Mongoose), Redis, Socket.IO, TypeScript
+- **Tech Stack**: Express.js 5, PostgreSQL (Drizzle ORM), Redis, Socket.IO, TypeScript
 - **Location**: `apps/api/`
 - **Features**:
     - User authentication and authorization
@@ -61,16 +61,28 @@ The backend REST API service providing all server-side functionality.
     - WebSocket support for real-time updates
     - Email notifications
     - PDF invoice generation
-    - Pterodactyl panel integration
+    - Plugin system for integrations (Pterodactyl, Proxmox, etc.)
+    - Payment gateway integrations
+
+#### **@fluxo/cli**
+
+Command-line interface for managing Fluxo.
+
+- **Location**: `apps/cli/`
+- **Tech Stack**: Bun, TypeScript
 
 ### Shared Packages
 
 #### **@fluxo/db**
 
-MongoDB database connection and models package.
+PostgreSQL database connection and schema package.
 
-- **Tech Stack**: Mongoose, TypeScript
+- **Tech Stack**: Drizzle ORM, PostgreSQL, TypeScript
 - **Location**: `packages/db/`
+- **Features**:
+    - Database schema definitions
+    - Migration system
+    - Type-safe database queries
 
 #### **@fluxo/types**
 
@@ -90,6 +102,13 @@ Shared ESLint configuration for consistent code style across the monorepo.
 
 - **Location**: `packages/eslint-config/`
 
+#### **@fluxo/plugin-loader**
+
+Plugin system for loading and managing service and gateway plugins.
+
+- **Tech Stack**: TypeScript
+- **Location**: `packages/plugin-loader/`
+
 <div align="center">
 
 ## Tech Stack
@@ -98,8 +117,8 @@ Shared ESLint configuration for consistent code style across the monorepo.
 
 ### Core Technologies
 
-- **Monorepo Management**: [Turborepo](https://turbo.build/) + [pnpm workspaces](https://pnpm.io/workspaces)
-- **Package Manager**: [pnpm](https://pnpm.io/) `10.18.3`
+- **Monorepo Management**: [Turborepo](https://turbo.build/) + [Bun workspaces](https://bun.sh/docs/install/workspaces)
+- **Package Manager**: [Bun](https://bun.sh/) `1.3.3`
 - **Language**: [TypeScript](https://www.typescriptlang.org/) `5.9.3`
 - **Build Tool**: [tsup](https://tsup.egoist.dev/) for packages, Next.js built-in for apps
 
@@ -113,12 +132,14 @@ Shared ESLint configuration for consistent code style across the monorepo.
 
 ### Backend Stack
 
-- **Framework**: [Express.js](https://expressjs.com/) `5.1.0`
-- **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/) `8.19.0`
-- **Cache/Session**: [Redis](https://redis.io/)
-- **Websockets**: [Socket.IO](https://socket.io/) `4.8.1`
-- **Validation**: [Zod](https://zod.dev/) `4.1.11`
+- **Framework**: [Express.js](https://expressjs.com/) `5.2.1`
+- **Database**: [PostgreSQL](https://www.postgresql.org/) with [Drizzle ORM](https://orm.drizzle.team/) `0.45.1`
+- **Cache/Session**: [Redis](https://redis.io/) `5.10.0`
+- **Websockets**: [Socket.IO](https://socket.io/) `4.8.3`
+- **Validation**: [Zod](https://zod.dev/) `4.3.6`
 - **Security**: bcrypt, express-rate-limit, CORS
+- **Email**: Nodemailer `7.0.13`
+- **PDF Generation**: PDFKit `0.15.2`
 
 <div align="center">
 
@@ -128,10 +149,9 @@ Shared ESLint configuration for consistent code style across the monorepo.
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js**: Version 20.x or higher
-- **pnpm**: Version `10.18.3` or compatible
-- **MongoDB**: Running instance (local or remote)
-- **Redis**: Running instance (local or remote)
+- **Bun**: Version `1.3.3` or higher ([Install Bun](https://bun.sh/))
+- **PostgreSQL**: Version 14.x or higher (running instance, local or remote)
+- **Redis**: Version 7.x or higher (running instance, local or remote)
 
 ### Optional Prerequisites
 
@@ -148,15 +168,16 @@ Before you begin, ensure you have the following installed:
 
 Run these commands from the root of the monorepo:
 
-- `pnpm dev` - Start all applications in development mode
-- `pnpm build` - Build all projects and packages
-- `pnpm start` - Start all applications in production mode
-- `pnpm lint` - Lint all projects
-- `pnpm lint:fix` - Fix linting issues automatically
-- `pnpm format` - Format all code with Prettier
-- `pnpm format:check` - Check code formatting
-- `pnpm test` - Run tests (if configured)
-- `pnpm clean` - Clean all build artifacts
+- `bun dev` - Start all applications in development mode
+- `bun build` - Build all projects and packages
+- `bun start` - Start all applications in production mode
+- `bun lint` - Lint all projects
+- `bun lint:fix` - Fix linting issues automatically
+- `bun format` - Format all code with Prettier
+- `bun format:check` - Check code formatting
+- `bun test` - Run tests (if configured)
+- `bun clean` - Clean all build artifacts
+- `bun fluxo` - Run the Fluxo CLI tool
 
 ### Running Individual Projects
 
@@ -164,21 +185,21 @@ You can also run scripts for specific projects:
 
 ```bash
 # Run a specific app
-pnpm --filter @fluxo/api dev
-pnpm --filter @fluxo/frontend dev
+bun --filter @fluxo/api dev
+bun --filter @fluxo/frontend dev
 
 # Build a specific package
-pnpm --filter @fluxo/db build
-pnpm --filter @fluxo/types build
+bun --filter @fluxo/db build
+bun --filter @fluxo/types build
 ```
 
 ### Development Workflow
 
 1. **Make changes** to the codebase
 2. **Type checking** runs automatically in most editors
-3. **Linting** can be checked with `pnpm lint`
-4. **Formatting** can be applied with `pnpm format`
-5. **Build** before committing with `pnpm build`
+3. **Linting** can be checked with `bun lint`
+4. **Formatting** can be applied with `bun format`
+5. **Build** before committing with `bun build`
 6. **Test** your changes locally
 
 ### Code Style
@@ -186,26 +207,24 @@ pnpm --filter @fluxo/types build
 - **TypeScript**: Strict mode enabled
 - **ESLint**: Shared configuration via `@fluxo/eslint-config`
 - **Prettier**: Configured with Tailwind CSS plugin for class sorting
-- **Formatting**: Run `pnpm format` before committing
+- **Formatting**: Run `bun format` before committing
 
 ### Project Structure
 
 ```
 fluxo/
 ├── apps/
-│   ├── api/              # Backend API service
-│   ├── bot/              # Discord bot
-│   ├── docs/             # Documentation site
-│   ├── frontend/         # Main web application
-│   └── status/           # Status page
+│   ├── api/              # Backend API service (Express.js)
+│   ├── cli/              # Command-line interface
+│   └── frontend/          # Main web application (Next.js)
 ├── packages/
-│   ├── db/               # Database models and connection
+│   ├── db/               # PostgreSQL database schema (Drizzle ORM)
 │   ├── eslint-config/   # Shared ESLint configuration
+│   ├── plugin-loader/   # Plugin system for integrations
 │   ├── redis/            # Redis client wrapper
-│   ├── types/            # Shared TypeScript types
-│   └── ui/               # Shared UI components
+│   └── types/            # Shared TypeScript types
+├── plugins/              # Service and gateway plugins
 ├── package.json          # Root package.json
-├── pnpm-workspace.yaml   # pnpm workspace configuration
 ├── turbo.json            # Turborepo configuration
 └── README.md             # This file
 ```
