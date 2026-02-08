@@ -69,7 +69,7 @@
       "name": "fluxo",
       "version": "1.0.0",
       "bin": {
-        "fluxo": "./bin/fluxo.js",
+        "fluxo": "./bin/cli.js",
       },
       "dependencies": {
         "boxen": "^7.1.1",
@@ -116,17 +116,17 @@
       "version": "1.0.0",
       "dependencies": {
         "@fluxo/types": "workspace:*",
-        "dotenv": "latest",
-        "drizzle-orm": "latest",
-        "postgres": "latest",
+        "dotenv": "^17.2.3",
+        "drizzle-orm": "^0.45.1",
+        "postgres": "^3.4.8",
       },
       "devDependencies": {
         "@fluxo/eslint-config": "workspace:*",
-        "@types/node": "latest",
-        "drizzle-kit": "latest",
-        "eslint": "latest",
-        "tsup": "latest",
-        "typescript": "latest",
+        "@types/node": "^25.2.0",
+        "drizzle-kit": "^0.31.8",
+        "eslint": "^9.39.2",
+        "tsup": "^8.5.1",
+        "typescript": "^5.9.3",
       },
     },
     "packages/eslint-config": {
