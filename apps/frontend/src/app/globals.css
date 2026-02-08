@@ -13,216 +13,235 @@
     --color-primary-800: #856700;
     --color-primary-900: #524000;
     --color-primary-950: #292000;
+
     --color-primary-400-text: #000000;
     --color-primary-500-text: #000000;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    background-color: #111111;
-    color: #fafafa;
-    font-family: 'Instrument Sans', sans-serif;
-    line-height: 1.6;
-}
-
-.bg-gradient-radial {
-    background: radial-gradient(
-        circle at center,
-        transparent 0%,
-        rgba(0, 0, 0, 0.2) 50%,
-        rgba(0, 0, 0, 0.6) 100%
-    );
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
+@layer base {
+    html {
+        scroll-behavior: smooth;
     }
-    to {
-        opacity: 1;
-    }
-}
 
-@keyframes slideDown {
-    from {
-        transform: translateY(-8px);
+    body {
+        background-color: #111111;
+        color: #fafafa;
+        font-family: 'Instrument Sans', sans-serif;
+        line-height: 1.6;
     }
-    to {
-        transform: translateY(0);
-    }
-}
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-8px);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 }
 
-.prose {
-    color: #fafafa;
-    max-width: none;
+@layer components {
+    .prose {
+        color: #fafafa;
+        max-width: none;
+    }
+
+    .prose h1,
+    .prose h2,
+    .prose h3,
+    .prose h4,
+    .prose h5,
+    .prose h6 {
+        color: #fafafa;
+        font-weight: 700;
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+    }
+
+    .prose h1 {
+        font-size: 2em;
+        border-bottom: 1px solid #27272a;
+        padding-bottom: 0.3em;
+    }
+
+    .prose h2 {
+        font-size: 1.5em;
+        border-bottom: 1px solid #27272a;
+        padding-bottom: 0.3em;
+    }
+
+    .prose h3 {
+        font-size: 1.25em;
+    }
+
+    .prose p {
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+
+    .prose a {
+        color: #ef4444;
+        text-decoration: underline;
+    }
+
+    .prose a:hover {
+        color: #dc2626;
+    }
+
+    .prose code {
+        background-color: #18181b;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-size: 0.875em;
+        color: #fafafa;
+    }
+
+    .prose pre {
+        background-color: #18181b;
+        padding: 1em;
+        border-radius: 6px;
+        overflow-x: auto;
+        border: 1px solid #27272a;
+    }
+
+    .prose pre code {
+        background-color: transparent;
+        padding: 0;
+    }
+
+    .prose blockquote {
+        border-left: 4px solid #ef4444;
+        padding-left: 1em;
+        color: #a1a1aa;
+        font-style: italic;
+    }
+
+    .prose ul,
+    .prose ol {
+        margin-top: 1em;
+        margin-bottom: 1em;
+        padding-left: 2em;
+    }
+
+    .prose li {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+
+    .prose table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+
+    .prose th,
+    .prose td {
+        border: 1px solid #27272a;
+        padding: 0.5em;
+        text-align: left;
+    }
+
+    .prose th {
+        background-color: #18181b;
+        font-weight: 600;
+    }
+
+    .prose img {
+        max-width: 100%;
+        border-radius: 6px;
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+
+    .prose hr {
+        border: 0;
+        border-top: 1px solid #27272a;
+        margin-top: 2em;
+        margin-bottom: 2em;
+    }
+
+    .prose strong {
+        font-weight: 700;
+        color: #fafafa;
+    }
+
+    .prose em {
+        font-style: italic;
+    }
+
+    .prose del {
+        text-decoration: line-through;
+        color: #71717a;
+    }
 }
 
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
-    color: #fafafa;
-    font-weight: 700;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-}
+@layer utilities {
+    .bg-gradient-radial {
+        background: radial-gradient(
+            circle at center,
+            transparent 0%,
+            rgba(0, 0, 0, 0.2) 50%,
+            rgba(0, 0, 0, 0.6) 100%
+        );
+    }
 
-.prose h1 {
-    font-size: 2em;
-    border-bottom: 1px solid #27272a;
-    padding-bottom: 0.3em;
-}
+    .text-primary-contrast {
+        color: var(--color-primary-400-text, #000000);
+    }
 
-.prose h2 {
-    font-size: 1.5em;
-    border-bottom: 1px solid #27272a;
-    padding-bottom: 0.3em;
-}
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+    }
 
-.prose h3 {
-    font-size: 1.25em;
-}
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #18181b;
+        border-radius: 4px;
+    }
 
-.prose p {
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #3f3f46;
+        border-radius: 4px;
+    }
 
-.prose a {
-    color: #ef4444;
-    text-decoration: underline;
-}
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #52525b;
+    }
 
-.prose a:hover {
-    color: #dc2626;
-}
+    .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #3f3f46 #18181b;
+    }
 
-.prose code {
-    background-color: #18181b;
-    padding: 0.2em 0.4em;
-    border-radius: 3px;
-    font-size: 0.875em;
-    color: #fafafa;
-}
+    .animate-fade-in {
+        animation: fadeIn 200ms ease-out both;
+    }
 
-.prose pre {
-    background-color: #18181b;
-    padding: 1em;
-    border-radius: 6px;
-    overflow-x: auto;
-    border: 1px solid #27272a;
-}
+    .animate-slide-down {
+        animation: slideDown 200ms ease-out both;
+    }
 
-.prose pre code {
-    background-color: transparent;
-    padding: 0;
-}
-
-.prose blockquote {
-    border-left: 4px solid #ef4444;
-    padding-left: 1em;
-    color: #a1a1aa;
-    font-style: italic;
-}
-
-.prose ul,
-.prose ol {
-    margin-top: 1em;
-    margin-bottom: 1em;
-    padding-left: 2em;
-}
-
-.prose li {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-}
-
-.prose table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
-
-.prose th,
-.prose td {
-    border: 1px solid #27272a;
-    padding: 0.5em;
-    text-align: left;
-}
-
-.prose th {
-    background-color: #18181b;
-    font-weight: 600;
-}
-
-.prose img {
-    max-width: 100%;
-    border-radius: 6px;
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
-
-.prose hr {
-    border: 0;
-    border-top: 1px solid #27272a;
-    margin-top: 2em;
-    margin-bottom: 2em;
-}
-
-.prose strong {
-    font-weight: 700;
-    color: #fafafa;
-}
-
-.prose em {
-    font-style: italic;
-}
-
-.prose del {
-    text-decoration: line-through;
-    color: #71717a;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: #18181b;
-    border-radius: 4px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #3f3f46;
-    border-radius: 4px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #52525b;
-}
-
-.custom-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: #3f3f46 #18181b;
-}
-
-.text-primary-contrast {
-    color: var(--color-primary-400-text, #000000);
+    .animate-fade-in-up {
+        animation: fadeInUp 300ms ease-out both;
+    }
 }
