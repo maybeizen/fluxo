@@ -11,9 +11,7 @@
     "description": "Fluxo management CLI",
     "private": true,
     "scripts": {
-        "fluxo": "node bin/cli.js",
-        "build": "tsup",
-        "dev": "tsup --watch"
+        "fluxo": "node bin/cli.js"
     },
     "type": "module"
 }

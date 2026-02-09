@@ -6,14 +6,13 @@
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "scripts": {
-        "build": "cross-env NODE_ENV=production tsup",
-        "dev": "cross-env NODE_ENV=development tsup --watch",
-        "start": "cross-env NODE_ENV=production node dist/index.js",
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "start": "node dist/index.js",
         "types": "tsc --noEmit",
-        "clean": "rm -rf dist",
+        "clean": "rm -r dist",
         "lint": "eslint",
-        "lint:fix": "eslint --fix",
-        "migrate:users": "tsx src/migrators/migrate-users.ts"
+        "lint:fix": "eslint --fix"
     },
     "devDependencies": {
         "@fluxo/eslint-config": "workspace:*",
@@ -28,7 +27,6 @@
         "@types/pdfkit": "^0.17.4",
         "eslint": "^9.39.2",
         "tsup": "^8.5.1",
-        "tsx": "^4.21.0",
         "typescript": "^5.9.3"
     },
     "dependencies": {
@@ -47,7 +45,6 @@
         "express-rate-limit": "^8.2.1",
         "express-session": "^1.19.0",
         "multer": "^2.0.2",
-        "mysql2": "^3.16.3",
         "node-cron": "^4.2.1",
         "nodemailer": "^8.0.0",
         "pdfkit": "^0.17.2",
