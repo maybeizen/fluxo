@@ -1,266 +1,84 @@
 <div align="center">
-  <img src="assets/fluxo.png" alt="Fluxo Logo" width="200" />
-  
+  <img src="assets/fluxo.png" alt="Fluxo Logo" width="160" />
+
   # Fluxo
-  
-  Fluxo is an open-source billing panel targeted at hosting providers, similar to WHMCS. 
+
+  Open-source billing panel for hosting providers — invoices, services, tickets, plugins, and payment gateways.
+
+  ![CI](https://img.shields.io/github/actions/workflow/status/maybeizen/fluxo/ci.yml?branch=dev&label=CI)
+  ![License](https://img.shields.io/github/license/maybeizen/fluxo?label=AGPL-3.0)
+  ![Last commit](https://img.shields.io/github/last-commit/maybeizen/fluxo/dev)
+  ![Issues](https://img.shields.io/github/issues/maybeizen/fluxo)
+  ![Stars](https://img.shields.io/github/stars/maybeizen/fluxo?style=social)
+
+  [![Available on GitHub](https://cdn.jsdelivr.net/gh/intergrav/devins-badges@master/dist/compact/image-s/svg/github.svg)](https://github.com/maybeizen/fluxo)
+  [![Documentation](https://cdn.jsdelivr.net/gh/intergrav/devins-badges@master/dist/compact/documentation/website/svg/docs.svg)](https://github.com/maybeizen/fluxo/blob/dev/DEPLOY.md)
+
 </div>
-
-<div align="center">
-
-## Table of Contents
-
-</div>
-
-- [Overview](#overview)
-- [Projects](#projects)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Development](#development)
-- [Project Structure](#project-structure)
-- [Team](#team)
-
-<div align="center">
 
 ## Overview
 
-</div>
+Fluxo is a self-hosted billing and client management platform similar to WHMCS, built as a Bun monorepo with a Next.js frontend, Express API, PostgreSQL, Redis, and an extensible plugin system.
 
-Fluxo is an open-source billing panel targeted at hosting providers, similar to WHMCS. This monorepo contains all the applications and shared packages needed to run the billing panel, including the frontend web application, backend API, and more.
+**License:** [AGPL-3.0-or-later](LICENSE) — you may use, modify, and redistribute Fluxo (including commercially), but derivative works must remain under AGPL.
 
-<div align="center">
-
-## Projects
-
-</div>
-
-### Applications
-
-#### **@fluxo/frontend**
-
-The main web application frontend built with Next.js and React.
-
-- **Port**: `5000` (development)
-- **Tech Stack**: Next.js 16.1.6, React 19.2.4, Tailwind CSS 4.1.18, TypeScript 5.9.3
-- **Location**: `apps/frontend/`
-
-#### **@fluxo/api**
-
-The backend REST API service providing all server-side functionality.
-
-- **Port**: Configurable via environment variables
-- **Tech Stack**: Express.js 5, PostgreSQL (Drizzle ORM), Redis, Socket.IO, TypeScript
-- **Location**: `apps/api/`
-- **Features**:
-    - User authentication and authorization
-    - Service management
-    - Invoice and billing system
-    - Ticket support system
-    - Admin dashboard API
-    - WebSocket support for real-time updates
-    - Email notifications
-    - PDF invoice generation
-    - Plugin system for integrations (Pterodactyl, Proxmox, etc.)
-    - Payment gateway integrations
-
-#### **@fluxo/cli**
-
-Command-line interface for managing Fluxo.
-
-- **Location**: `apps/cli/`
-- **Tech Stack**: Bun, TypeScript
-
-### Shared Packages
-
-#### **@fluxo/db**
-
-PostgreSQL database connection and schema package.
-
-- **Tech Stack**: Drizzle ORM `0.45.1`, Drizzle Kit `0.31.8`, PostgreSQL (postgres driver `3.4.8`), TypeScript `5.9.3`
-- **Location**: `packages/db/`
-- **Features**:
-    - Database schema definitions
-    - Migration system
-    - Type-safe database queries
-    - Drizzle Studio integration
-
-#### **@fluxo/types**
-
-Shared TypeScript type definitions used across all projects.
-
-- **Location**: `packages/types/`
-
-#### **@fluxo/redis**
-
-Redis client wrapper package.
-
-- **Location**: `packages/redis/`
-
-#### **@fluxo/eslint-config**
-
-Shared ESLint configuration for consistent code style across the monorepo.
-
-- **Location**: `packages/eslint-config/`
-
-#### **@fluxo/logger**
-
-Shared logging for all packages. Winston under the hood with chalk (forced color for Turbo).
-
-- **Location**: `packages/logger/`
-
-#### **@fluxo/forge**
-
-Plugin SDK: manifest schema, `PluginContext`, and base classes (`FluxoServerPlugin`, `FluxoGatewayPlugin`, `FluxoThemePlugin`).
-
-- **Location**: `packages/forge/`
-
-#### **@fluxo/plugin-manager**
-
-Discovers, loads, and orchestrates server/gateway plugins from `/plugins`. Handles enable/disable, error isolation, and migrations.
-
-- **Tech Stack**: TypeScript
-- **Location**: `packages/plugin-manager/`
-
-<div align="center">
-
-## Tech Stack
-
-</div>
-
-### Core Technologies
-
-- **Monorepo Management**: [Turborepo](https://turbo.build/) `2.8.3` + [Bun workspaces](https://bun.sh/docs/install/workspaces)
-- **Package Manager**: [Bun](https://bun.sh/) `1.3.3`
-- **Language**: [TypeScript](https://www.typescriptlang.org/) `5.9.3`
-- **Build Tool**: [tsup](https://tsup.egoist.dev/) `8.5.1` for packages, Next.js built-in for apps
-
-### Frontend Stack
-
-- **Framework**: [Next.js](https://nextjs.org/) `16.1.6` (with Turbopack)
-- **UI Library**: [React](https://react.dev/) `19.2.4`
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) `4.1.18`
-- **Validation**: [Zod](https://zod.dev/) `4.3.6`
-- **Websockets**: [Socket.IO Client](https://socket.io/) `4.8.3`
-- **HTTP Client**: [Axios](https://axios-http.com/) `1.13.4`
-
-### Backend Stack
-
-- **Framework**: [Express.js](https://expressjs.com/) `5.2.1`
-- **Database**: [PostgreSQL](https://www.postgresql.org/) with [Drizzle ORM](https://orm.drizzle.team/) `0.45.1`
-- **Database Driver**: [postgres](https://github.com/porsager/postgres) `3.4.8`
-- **Database Tools**: [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) `0.31.8`
-- **Cache/Session**: [Redis](https://redis.io/) `5.10.0` with [connect-redis](https://github.com/tj/connect-redis) `9.0.0`
-- **Websockets**: [Socket.IO](https://socket.io/) `4.8.3`
-- **Validation**: [Zod](https://zod.dev/) `4.3.6`
-- **Security**: bcrypt `6.0.0`, express-rate-limit `8.2.1`, CORS `2.8.6`
-- **Email**: [Nodemailer](https://nodemailer.com/) `8.0.0`
-- **PDF Generation**: [PDFKit](https://pdfkit.org/) `0.17.2`
-- **HTTP Client**: [Axios](https://axios-http.com/) `1.13.4`
-- **Payment Processing**: [Stripe](https://stripe.com/) `20.3.0`
-
-<div align="center">
-
-## Prerequisites
-
-</div>
-
-Before you begin, ensure you have the following installed:
-
-- **Bun**: Version `1.3.3` or higher ([Install Bun](https://bun.sh/))
-- **PostgreSQL**: Version 14.x or higher (running instance, local or remote)
-- **Redis**: Version 7.x or higher (running instance, local or remote)
-
-**Note**: While the project uses Bun as the package manager, some packages may still reference pnpm in their package.json files. This is being migrated gradually.
-
-### Optional Prerequisites
-
-- **Pterodactyl Panel**: If you need to test server management features
-- **Email Service**: SMTP credentials for email functionality
-
-<div align="center">
-
-## Development
-
-</div>
-
-### Available Scripts
-
-Run these commands from the root of the monorepo:
-
-- `bun dev` - Start all applications in development mode
-- `bun build` - Build all projects and packages
-- `bun start` - Start all applications in production mode
-- `bun lint` - Lint all projects
-- `bun lint:fix` - Fix linting issues automatically
-- `bun format` - Format all code with Prettier
-- `bun format:check` - Check code formatting
-- `bun test` - Run tests (if configured)
-- `bun clean` - Clean all build artifacts
-- `bun fluxo` - Run the Fluxo CLI tool
-
-### Running Individual Projects
-
-You can also run scripts for specific projects:
+## Quick start
 
 ```bash
-# Run a specific app
-bun --filter @fluxo/api dev
-bun --filter @fluxo/frontend dev
-
-# Build a specific package
-bun --filter @fluxo/db build
-bun --filter @fluxo/types build
+git clone https://github.com/maybeizen/fluxo.git
+cd fluxo
+cp .env.example .env   # edit — never commit .env
+bun install
+bun run --filter @fluxo/db db:migrate
+bun dev
 ```
 
-### Development Workflow
+- Frontend: http://localhost:5000
+- API: http://localhost:3001
 
-1. **Make changes** to the codebase
-2. **Type checking** runs automatically in most editors
-3. **Linting** can be checked with `bun lint`
-4. **Formatting** can be applied with `bun format`
-5. **Build** before committing with `bun build`
-6. **Test** your changes locally
+## Documentation
 
-### Code Style
+| Topic | Link |
+| --- | --- |
+| Deployment (Docker + server) | [DEPLOY.md](DEPLOY.md) |
+| Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| Security | [SECURITY.md](SECURITY.md) |
+| Plugins | [docs/README.md](docs/README.md) |
+| Code of Conduct | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
 
-- **TypeScript**: Strict mode enabled
-- **ESLint**: Shared configuration via `@fluxo/eslint-config`
-- **Prettier**: Configured with Tailwind CSS plugin for class sorting
-- **Formatting**: Run `bun format` before committing
+## Tech stack
 
-### Project Structure
+- **Runtime:** [Bun](https://bun.sh/) 1.3.x, [Turborepo](https://turbo.build/)
+- **Frontend:** Next.js 16, React 19, Tailwind CSS 4
+- **API:** Express 5, Socket.IO, Zod
+- **Data:** PostgreSQL 16, Drizzle ORM, Redis 7
+- **Plugins:** `@fluxo/forge` SDK (server, gateway, theme plugins)
+
+## Monorepo layout
 
 ```
 fluxo/
-├── apps/
-│   ├── api/              # Backend API service (Express.js)
-│   ├── cli/              # Command-line interface
-│   └── frontend/          # Main web application (Next.js)
-├── packages/
-│   ├── db/               # PostgreSQL database schema (Drizzle ORM)
-│   ├── eslint-config/   # Shared ESLint configuration
-│   ├── forge/            # Plugin SDK (FluxoServerPlugin, FluxoGatewayPlugin, FluxoThemePlugin)
-│   ├── logger/           # Shared winston + chalk logging
-│   ├── plugin-manager/   # Plugin discovery, registry, and orchestration
-│   ├── redis/            # Redis client wrapper
-│   └── types/            # Shared TypeScript types
-├── plugins/              # Server and gateway plugins (extend @fluxo/forge)
-├── package.json          # Root package.json
-├── turbo.json            # Turborepo configuration
-└── README.md             # This file
+├── apps/api/          # Express REST + WebSocket API
+├── apps/frontend/     # Next.js client + admin UI
+├── apps/cli/          # fluxo CLI
+├── packages/          # db, forge, plugin-manager, types, …
+├── plugins/           # Server/gateway/theme plugins
+├── scripts/           # Bare-metal install & systemd units
+└── docker-compose.yml # Docker deployment stack
 ```
 
-<div align="center">
+## Development
 
-## Team
+```bash
+bun run format:check
+bun run lint
+bun run types
+bun run build
+bun dev
+```
 
-</div>
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branch/PR conventions.
 
-**This repository and these applications** are developed and maintained by:
+## Maintainer
 
-- **maybeizen** - Lead Developer & Maintainer
-
----
-
-**Note**: This is an active development repository. Features and APIs may change without notice.
+**maybeizen** — [github.com/maybeizen](https://github.com/maybeizen)
