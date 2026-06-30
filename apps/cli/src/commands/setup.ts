@@ -55,49 +55,53 @@ export const execute: CommandExecute = async () => {
 
     await withDb(
         async (db) => {
-        const settingsRow = await getOrCreateSettings(db)
-        logger.success(`Settings row ready (id ${settingsRow.id})`)
+            const settingsRow = await getOrCreateSettings(db)
+            logger.success(`Settings row ready (id ${settingsRow.id})`)
 
-        const createAdmin = await promptConfirm(
-            'Create a first admin user now?',
-            true
-        )
+            const createAdmin = await promptConfirm(
+                'Create a first admin user now?',
+                true
+            )
 
-        if (createAdmin) {
-            const email = await promptText('Admin email', {
-                validate: (v) =>
-                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
-                        ? undefined
-                        : 'Enter a valid email',
-            })
+            if (createAdmin) {
+                const email = await promptText('Admin email', {
+                    validate: (v) =>
+                        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+                            ? undefined
+                            : 'Enter a valid email',
+                })
 
-            const username = await promptText('Admin username', {
-                defaultValue: 'admin',
-                validate: (v) => {
-                    const r = usernameSchema.safeParse(v)
-                    return r.success ? undefined : r.error.issues[0]?.message
-                },
-            })
+                const username = await promptText('Admin username', {
+                    defaultValue: 'admin',
+                    validate: (v) => {
+                        const r = usernameSchema.safeParse(v)
+                        return r.success
+                            ? undefined
+                            : r.error.issues[0]?.message
+                    },
+                })
 
-            const password = await promptPassword('Admin password', {
-                validate: (v) => {
-                    const r = passwordSchema.safeParse(v)
-                    return r.success ? undefined : r.error.issues[0]?.message
-                },
-            })
+                const password = await promptPassword('Admin password', {
+                    validate: (v) => {
+                        const r = passwordSchema.safeParse(v)
+                        return r.success
+                            ? undefined
+                            : r.error.issues[0]?.message
+                    },
+                })
 
-            const user = await createUserRecord(db, {
-                email,
-                username,
-                password,
-                role: UserRole.ADMIN,
-                isVerified: true,
-            })
+                const user = await createUserRecord(db, {
+                    email,
+                    username,
+                    password,
+                    role: UserRole.ADMIN,
+                    isVerified: true,
+                })
 
-            console.log('\n' + formatUserDetail(user))
-            logger.success(`Admin user ${user.id} created`)
-        }
-    },
+                console.log('\n' + formatUserDetail(user))
+                logger.success(`Admin user ${user.id} created`)
+            }
+        },
         { migrate: true }
     )
 
