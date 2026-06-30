@@ -4,7 +4,10 @@ import { type ReactNode, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { AuthGuard } from '@/components/auth-guard'
 import { Sidebar } from '@/components/ui/sidebar'
-import { AppSettingsProvider, useAppSettings } from '@/context/app-settings-context'
+import {
+    AppSettingsProvider,
+    useAppSettings,
+} from '@/context/app-settings-context'
 import { useAuth } from '@/context/auth-context'
 import AnnouncementBanner from '@/components/ui/announcement-banner'
 

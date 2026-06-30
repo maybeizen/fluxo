@@ -59,7 +59,7 @@ export const execute: CommandExecute = async () => {
 
         console.log('\nSystem')
         console.log(
-            `  Tickets enabled:     ${row.ticketsEnabled ?? true ? 'yes' : 'no'}`
+            `  Tickets enabled:     ${(row.ticketsEnabled ?? true) ? 'yes' : 'no'}`
         )
         console.log(
             `  Maintenance mode:    ${row.maintenanceMode ? 'yes' : 'no'}`

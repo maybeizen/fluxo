@@ -12,13 +12,7 @@ import SystemSettings from './system-settings'
 import Button from '@/components/ui/button'
 
 type TabType =
-    | 'app'
-    | 'theme'
-    | 'auth'
-    | 'integrations'
-    | 'email'
-    | 'storage'
-    | 'security'
+    'app' | 'theme' | 'auth' | 'integrations' | 'email' | 'storage' | 'security'
 
 interface SettingsContentProps {
     activeTab: TabType

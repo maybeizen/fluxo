@@ -3,13 +3,7 @@
 import React from 'react'
 
 type TabType =
-    | 'app'
-    | 'theme'
-    | 'auth'
-    | 'integrations'
-    | 'email'
-    | 'storage'
-    | 'security'
+    'app' | 'theme' | 'auth' | 'integrations' | 'email' | 'storage' | 'security'
 
 interface SettingsNavigationProps {
     activeTab: TabType

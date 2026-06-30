@@ -9,7 +9,13 @@ import { uploadAttachment } from './upload-attachment'
 
 const router: RouterType = Router()
 
-router.post('/', requireAuth, requireTicketsEnabled, isTicketBanned, createTicket)
+router.post(
+    '/',
+    requireAuth,
+    requireTicketsEnabled,
+    isTicketBanned,
+    createTicket
+)
 router.get('/', requireAuth, getMyTickets)
 router.get('/:id', requireAuth, getMyTicketById)
 router.post(

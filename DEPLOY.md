@@ -741,12 +741,12 @@ After upgrading to a release that includes migration `0009_settings_cleanup_syst
 
 Configure in **Admin → Settings → Application** or via CLI for recovery when the UI is unavailable:
 
-| Toggle | CLI |
-| ------ | --- |
-| Support tickets | `fluxo settings system --tickets-enabled` / `--no-tickets-enabled` |
-| Maintenance mode + message | `fluxo settings system --maintenance --maintenance-message "..."` |
-| Debug mode (verbose logs + API error details) | `fluxo settings system --debug` |
-| Announcement banner + message | `fluxo settings system --announcement --announcement-message "..."` |
+| Toggle                                        | CLI                                                                 |
+| --------------------------------------------- | ------------------------------------------------------------------- |
+| Support tickets                               | `fluxo settings system --tickets-enabled` / `--no-tickets-enabled`  |
+| Maintenance mode + message                    | `fluxo settings system --maintenance --maintenance-message "..."`   |
+| Debug mode (verbose logs + API error details) | `fluxo settings system --debug`                                     |
+| Announcement banner + message                 | `fluxo settings system --announcement --announcement-message "..."` |
 
 CLI writes flush Redis settings cache keys immediately; otherwise changes apply within the ~10 minute cache TTL or after API restart.
 

@@ -10,12 +10,15 @@ import {
 import { API_BASE_URL } from '@/lib/api-client'
 import type { AppSettings } from '@/lib/public/app-settings'
 
-interface AppSettingsContextValue extends AppSettings {
+interface AppSettingsContextValue extends Omit<AppSettings, 'logoUrl'> {
+    appName: string | null
+    logoUrl: string | null
     isLoading: boolean
 }
 
 const defaultValue: AppSettingsContextValue = {
-    logoUrl: undefined,
+    logoUrl: null,
+    appName: null,
     name: undefined,
     themeColor: undefined,
     ticketsEnabled: true,
@@ -68,7 +71,14 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
     }, [])
 
     return (
-        <AppSettingsContext.Provider value={{ ...settings, isLoading }}>
+        <AppSettingsContext.Provider
+            value={{
+                ...settings,
+                appName: settings.name ?? null,
+                logoUrl: settings.logoUrl ?? null,
+                isLoading,
+            }}
+        >
             {children}
         </AppSettingsContext.Provider>
     )
