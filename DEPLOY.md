@@ -1082,11 +1082,17 @@ docker compose exec redis redis-cli ping
 From repo root:
 
 ```bash
+bun run fluxo setup           # bootstrap DB, settings, optional admin
 bun run fluxo doctor          # environment checks
+bun run fluxo users list      # list users
+bun run fluxo settings show   # settings (secrets masked)
 bun run fluxo plugins list    # installed plugins
-bun run fluxo status          # service status (where configured)
+bun run fluxo plugins new     # scaffold gateway/service plugin
+bun run fluxo help            # full command reference
 bun run --filter @fluxo/db db:migrate
 ```
+
+Requires repo-root `.env` with `POSTGRES_URL`. Secret-writing settings commands also need `ENCRYPTION_KEY`.
 
 </details>
 

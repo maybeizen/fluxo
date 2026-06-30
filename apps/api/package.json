@@ -30,6 +30,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
+        "@fluxo/crypto": "workspace:*",
         "@fluxo/db": "workspace:*",
         "@fluxo/forge": "workspace:*",
         "@fluxo/logger": "workspace:*",

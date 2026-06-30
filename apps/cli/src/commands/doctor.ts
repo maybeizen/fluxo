@@ -56,7 +56,7 @@ export const execute: CommandExecute = async () => {
     if (process.env.POSTGRES_URL) {
         try {
             const { connect, disconnect } = await import('@fluxo/db')
-            await connect({ uri: process.env.POSTGRES_URL })
+            await connect({ uri: process.env.POSTGRES_URL, migrate: false })
             checks.push({ name: 'Database connection', ok: true })
             await disconnect()
         } catch (err) {

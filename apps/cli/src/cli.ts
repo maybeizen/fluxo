@@ -1,7 +1,10 @@
 import { createLogger } from '@fluxo/logger'
+import { loadEnv } from './utils/env.js'
 import { loadCommands } from './loader.js'
 import { resolveCommand, routeCommand } from './router.js'
 import { showHelp, showCommandHelp } from './help.js'
+
+loadEnv()
 
 const logger = createLogger({ source: 'CLI', file: false })
 const argv = process.argv.slice(2)
