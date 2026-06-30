@@ -1,0 +1,8 @@
+{
+    "id": "example-service",
+    "name": "Example Service",
+    "version": "1.0.0",
+    "type": "service",
+    "description": "Reference service plugin with all config field types and lifecycle hooks",
+    "author": "Fluxo"
+}

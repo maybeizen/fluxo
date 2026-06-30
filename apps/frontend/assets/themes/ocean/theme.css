@@ -1,0 +1,21 @@
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--color-background, #111111);
+        color: var(--color-foreground, #fafafa);
+        font-family: var(--font-sans, 'Instrument Sans', sans-serif);
+        line-height: 1.6;
+    }
+
+    [data-theme='ocean'] body,
+    [data-theme='ocean'] {
+        --color-background: #0a1628;
+        --color-foreground: #e8f4fc;
+        --color-surface: #0f1f35;
+        --color-border: #1e3a5f;
+        --color-muted: #94a3b8;
+    }
+}

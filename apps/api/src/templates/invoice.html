@@ -1,0 +1,12 @@
+<tr>
+  <td style="padding: 40px">
+    <img src="cid:logo" alt="{{APP_NAME}} Logo" width="48" style="margin: 0 0 24px 0" />
+    <h1 style="margin: 0 0 16px 0; font-size: 24px; font-weight: 700; color: #fafaf9">Invoice</h1>
+    <p style="margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #a8a29e">Hello {{USER_NAME}},</p>
+    <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #a8a29e">
+      Your invoice for <strong style="color: #fafaf9">{{SERVICE_NAME}}</strong> is now available.
+    </p>
+    <p style="margin: 0 0 8px 0; color: #78716c; font-size: 14px">Due: {{DUE_DATE}} · Total: <span style="color: {{THEME_COLOR}}; font-weight: 700">${{AMOUNT}}</span></p>
+    <a href="{{SERVICE_URL}}" style="{{CTA_STYLE}}">Pay Invoice</a>
+  </td>
+</tr>

@@ -1,0 +1,19 @@
+{
+    "name": "@fluxo/plugin-stripe-gateway",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "lint": "eslint",
+        "types": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@fluxo/forge": "workspace:*",
+        "stripe": "^20.3.0"
+    },
+    "devDependencies": {
+        "@fluxo/eslint-config": "workspace:*",
+        "eslint": "^9.39.2",
+        "typescript": "^5.9.3"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "id": "example-gateway",
+    "name": "Example Gateway",
+    "version": "1.0.0",
+    "type": "gateway",
+    "description": "Reference gateway with mock payments and HMAC webhook verification",
+    "author": "Fluxo"
+}

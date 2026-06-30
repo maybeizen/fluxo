@@ -1,0 +1,9 @@
+{
+    "id": "pterodactyl",
+    "name": "Pterodactyl",
+    "version": "1.0.0",
+    "type": "service",
+    "description": "Provision game servers via Pterodactyl Panel",
+    "author": "Fluxo",
+    "shipped": true
+}

@@ -1,0 +1,29 @@
+{
+    "name": "fluxo-cli",
+    "version": "1.0.0",
+    "description": "Fluxo management CLI",
+    "private": true,
+    "type": "module",
+    "bin": {
+        "fluxo": "./bin/cli.js"
+    },
+    "scripts": {
+        "fluxo": "bun bin/cli.js",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix",
+        "types": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@fluxo/db": "workspace:*",
+        "@fluxo/logger": "workspace:*",
+        "boxen": "^8.0.1",
+        "chalk": "^5.6.2"
+    },
+    "devDependencies": {
+        "@fluxo/eslint-config": "workspace:*",
+        "@types/bun": "latest",
+        "@types/node": "^20.19.30",
+        "eslint": "^9.39.2",
+        "typescript": "^5.9.3"
+    }
+}

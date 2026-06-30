@@ -1,0 +1,48 @@
+{
+    "version": "7",
+    "dialect": "postgresql",
+    "entries": [
+        {
+            "idx": 0,
+            "version": "7",
+            "when": 1769570479685,
+            "tag": "0000_create_initial_tables",
+            "breakpoints": true
+        },
+        {
+            "idx": 2,
+            "version": "7",
+            "when": 1770089829168,
+            "tag": "0002_create_plugins_table",
+            "breakpoints": true
+        },
+        {
+            "idx": 3,
+            "version": "7",
+            "when": 1771213177192,
+            "tag": "0003_add_config_options_table",
+            "breakpoints": true
+        },
+        {
+            "idx": 4,
+            "version": "7",
+            "when": 1771500000000,
+            "tag": "0004_add_configurable_option_type",
+            "breakpoints": true
+        },
+        {
+            "idx": 5,
+            "version": "7",
+            "when": 1771800000000,
+            "tag": "0005_add_active_theme",
+            "breakpoints": true
+        },
+        {
+            "idx": 6,
+            "version": "7",
+            "when": 1772000000000,
+            "tag": "0006_schema_cleanup_indexes",
+            "breakpoints": true
+        }
+    ]
+}

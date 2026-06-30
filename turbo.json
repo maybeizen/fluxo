@@ -1,0 +1,39 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "globalDependencies": [
+        ".env",
+        "**/.env.*local",
+        "bun.lockb",
+        "bun.lock",
+        "turbo.json",
+        "tsconfig.base.json",
+        "**/tsconfig.json",
+        "**/tsconfig.*.json"
+    ],
+    "globalEnv": ["NODE_ENV", "TURBO_TEAM", "TURBO_TOKEN"],
+    "tasks": {
+        "build": {
+            "dependsOn": ["^build"],
+            "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+        },
+        "start": {
+            "dependsOn": ["^build"],
+            "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+        },
+        "dev": {
+            "dependsOn": ["^build"],
+            "cache": false,
+            "persistent": true
+        },
+        "lint": {},
+        "lint:fix": {},
+        "types": {},
+        "format:check": {},
+        "test": {
+            "dependsOn": ["^build"]
+        },
+        "clean": {
+            "cache": false
+        }
+    }
+}

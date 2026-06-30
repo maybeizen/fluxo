@@ -1,0 +1,8 @@
+display: inline-block;
+padding: 14px 32px;
+background-color: {{THEME_COLOR}};
+color: #111111;
+text-decoration: none;
+border-radius: 8px;
+font-weight: 600;
+font-size: 16px;

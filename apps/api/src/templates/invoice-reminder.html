@@ -1,0 +1,10 @@
+<tr>
+  <td style="padding: 40px">
+    <h1 style="margin: 0 0 16px 0; font-size: 22px; font-weight: 700; color: #fafaf9">Invoice Reminder</h1>
+    <p style="margin: 0 0 16px 0; font-size: 15px; line-height: 1.6; color: #a8a29e">
+      Hi {{USER_NAME}}, invoice #{{INVOICE_NUMBER}} is due in {{DAYS_UNTIL_DUE}} ({{DUE_DATE}}).
+    </p>
+    <p style="margin: 0 0 24px 0; font-size: 15px; color: #a8a29e">Amount: <span style="color: {{THEME_COLOR}}; font-weight: 700">${{AMOUNT}}</span></p>
+    <a href="{{INVOICE_URL}}" style="{{CTA_STYLE}}">View Invoice</a>
+  </td>
+</tr>

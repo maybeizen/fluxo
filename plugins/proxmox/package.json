@@ -1,0 +1,18 @@
+{
+    "name": "@fluxo/plugin-proxmox",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "lint": "eslint",
+        "types": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@fluxo/forge": "workspace:*"
+    },
+    "devDependencies": {
+        "@fluxo/eslint-config": "workspace:*",
+        "eslint": "^9.39.2",
+        "typescript": "^5.9.3"
+    }
+}

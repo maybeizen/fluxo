@@ -1,0 +1,9 @@
+{
+    "id": "example-theme",
+    "name": "Example Theme",
+    "version": "1.0.0",
+    "type": "theme",
+    "description": "Reference theme with tokens, CSS vars, and layout shell",
+    "author": "Fluxo",
+    "shipped": false
+}

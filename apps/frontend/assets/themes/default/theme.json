@@ -1,0 +1,9 @@
+{
+    "id": "default",
+    "name": "Default",
+    "version": "1.0.0",
+    "author": "Fluxo",
+    "type": "theme",
+    "description": "Fluxo default dark theme with yellow accent",
+    "shipped": true
+}

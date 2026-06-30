@@ -1,0 +1,12 @@
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--color-background, #0f172a);
+        color: var(--color-foreground, #f8fafc);
+        font-family: 'DM Sans', sans-serif;
+        line-height: 1.6;
+    }
+}

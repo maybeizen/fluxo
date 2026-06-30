@@ -1,0 +1,27 @@
+{
+    "name": "@fluxo/forge",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "types": "tsc --noEmit",
+        "clean": "rm -r dist",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix"
+    },
+    "dependencies": {
+        "axios": "^1.13.4",
+        "zod": "^4.3.6"
+    },
+    "devDependencies": {
+        "@fluxo/eslint-config": "workspace:*",
+        "@fluxo/logger": "workspace:*",
+        "@types/node": "^20.19.30",
+        "eslint": "^9.39.2",
+        "tsup": "^8.5.1",
+        "typescript": "^5.9.3"
+    }
+}
