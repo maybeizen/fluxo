@@ -4,17 +4,50 @@ updates:
       directory: /
       schedule:
           interval: weekly
+          day: monday
+      open-pull-requests-limit: 5
       groups:
           minor-and-patch:
               update-types:
                   - minor
                   - patch
-      open-pull-requests-limit: 10
+          major-production:
+              dependency-type: production
+              update-types:
+                  - major
+          major-development:
+              dependency-type: development
+              update-types:
+                  - major
+      ignore:
+          # Major bumps that need dedicated migration work — track manually
+          - dependency-name: typescript
+            update-types: [version-update:semver-major]
+          - dependency-name: eslint
+            update-types: [version-update:semver-major]
+          - dependency-name: '@types/node'
+            update-types: [version-update:semver-major]
+          - dependency-name: redis
+            update-types: [version-update:semver-major]
+          - dependency-name: stripe
+            update-types: [version-update:semver-major]
+          - dependency-name: nodemailer
+            update-types: [version-update:semver-major]
+          - dependency-name: '@types/nodemailer'
+            update-types: [version-update:semver-major]
+          - dependency-name: uuid
+            update-types: [version-update:semver-major]
+      commit-message:
+          prefix: build
+          prefix-development: build
+          include: scope
 
     - package-ecosystem: github-actions
       directory: /
       schedule:
           interval: weekly
+          day: monday
+      open-pull-requests-limit: 3
       groups:
           github-actions:
               patterns:

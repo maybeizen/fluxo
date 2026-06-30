@@ -101,7 +101,7 @@ fluxo/
 ├── apps/
 │   ├── api/              # Express REST API + WebSockets
 │   ├── frontend/         # Next.js client & admin UI
-│   └── cli/              # fluxo CLI (doctor, migrate, plugins)
+│   └── cli/              # fluxo CLI (setup, users, settings, plugins)
 ├── packages/             # db, forge, plugin-manager, types, …
 ├── plugins/              # Server & gateway plugins
 ├── scripts/              # Server install, env setup, systemd & PM2
@@ -119,7 +119,29 @@ bun run types          # TypeScript
 bun run build          # Production build
 bun dev                # Dev servers
 bun run fluxo doctor   # Environment checks
+bun run fluxo setup    # Bootstrap DB, settings, first admin
 ```
+
+### CLI reference
+
+Run `bun run fluxo help` for the full command list. Common commands:
+
+| Command                                 | Description                                                       |
+| --------------------------------------- | ----------------------------------------------------------------- |
+| `fluxo setup`                           | Verify `.env`, run migrations, seed settings, optional admin user |
+| `fluxo doctor`                          | Check repo, env, database, and plugins                            |
+| `fluxo users list`                      | List users (`--role`, `--search`, `--limit`)                      |
+| `fluxo users create`                    | Create a user (flags or prompts)                                  |
+| `fluxo users get <id\|email\|username>` | User details                                                      |
+| `fluxo settings show`                   | Show settings (secrets masked)                                    |
+| `fluxo settings smtp`                   | Configure SMTP                                                    |
+| `fluxo settings turnstile`              | Configure Cloudflare Turnstile                                    |
+| `fluxo settings app`                    | App name, theme color, logo                                       |
+| `fluxo settings auth`                   | Toggle auth restriction flags                                     |
+| `fluxo plugins list`                    | List installed plugins                                            |
+| `fluxo plugins new`                     | Scaffold a gateway or service plugin                              |
+
+Requires `POSTGRES_URL` in repo-root `.env`. Settings commands that write secrets also need `ENCRYPTION_KEY` (same value as the API).
 
 Branch **`dev`** is the integration branch; **`main`** is stable. See [CONTRIBUTING.md](CONTRIBUTING.md) for PR workflow.
 

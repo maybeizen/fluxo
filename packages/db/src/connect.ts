@@ -5,12 +5,14 @@ import * as schema from './schema'
 
 interface ConnectArgs {
     uri: string
+    /** Run Drizzle migrations on connect. Default true (API startup, `fluxo db migrate`). */
+    migrate?: boolean
 }
 
 let sql: postgres.Sql | null = null
 let dbInstance: ReturnType<typeof drizzle> | null = null
 
-export const connect = async ({ uri }: ConnectArgs) => {
+export const connect = async ({ uri, migrate = true }: ConnectArgs) => {
     try {
         if (sql && dbInstance) {
             return dbInstance
@@ -20,11 +22,15 @@ export const connect = async ({ uri }: ConnectArgs) => {
             max: 10,
             idle_timeout: 20,
             connect_timeout: 10,
+            // Suppress harmless NOTICE output from idempotent Drizzle migration DDL
+            onnotice: () => {},
         })
 
         dbInstance = drizzle(sql, { schema })
 
-        await runMigrations(dbInstance)
+        if (migrate) {
+            await runMigrations(dbInstance)
+        }
 
         return dbInstance
     } catch (error: unknown) {
