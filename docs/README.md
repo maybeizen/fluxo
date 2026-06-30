@@ -2,7 +2,16 @@
 
 ## Deployment & operations
 
-- [DEPLOY.md](../DEPLOY.md) — Docker Compose and bare-metal/server setup
+- **[DEPLOY.md](../DEPLOY.md)** — full production guide (Docker Compose, bare-metal, TLS, troubleshooting)
+    - [Architecture & requirements](../DEPLOY.md#architecture)
+    - [Environment variables](../DEPLOY.md#environment-variables)
+    - [Docker Compose](../DEPLOY.md#docker-compose-deployment)
+    - [Server deployment](../DEPLOY.md#server-deployment-debianubuntu)
+    - [Deployment scripts](../scripts/README.md)
+    - [Process managers (PM2, Supervisor)](../DEPLOY.md#process-managers-without-systemd)
+    - [Reverse proxy & TLS](../DEPLOY.md#reverse-proxy-and-tls)
+    - [Troubleshooting](../DEPLOY.md#troubleshooting)
+- **[scripts/README.md](../scripts/README.md)** — `bootstrap.sh`, `setup-env.sh`, systemd & PM2 configs
 - [CONTRIBUTING.md](../CONTRIBUTING.md) — local dev and PR workflow
 - [SECURITY.md](../SECURITY.md) — vulnerability reporting
 

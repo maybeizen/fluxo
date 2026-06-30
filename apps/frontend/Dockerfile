@@ -8,7 +8,7 @@ COPY apps/frontend/package.json ./apps/frontend/
 COPY packages ./packages
 COPY apps/frontend ./apps/frontend
 
-ARG NEXT_PUBLIC_API_URL=http://localhost:3001
+ARG NEXT_PUBLIC_API_URL=http://localhost:5001/api/v1
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV CI=true
 

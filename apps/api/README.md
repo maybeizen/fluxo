@@ -45,6 +45,7 @@ Create a `.env` file in the `apps/api` directory with the following variables:
 PORT=5001
 NODE_ENV=development
 APP_NAME=Fluxo API
+FRONTEND_URL=http://localhost:5000
 
 # Database
 POSTGRES_URL=postgresql://user:password@localhost:5432/fluxo

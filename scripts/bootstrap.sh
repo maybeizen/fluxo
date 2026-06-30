@@ -38,7 +38,8 @@ bun run build
 log_ok "Bootstrap complete."
 echo
 log_info "Next steps:"
-echo "  1. Copy systemd units: sudo cp scripts/fluxo-*.service /etc/systemd/system/"
-echo "  2. Edit units with your install path and user"
-echo "  3. sudo systemctl daemon-reload && sudo systemctl enable --now fluxo-api fluxo-frontend"
-echo "  4. Put Nginx/Caddy in front for HTTPS (see DEPLOY.md)"
+echo "  1. Process manager — pick one (see DEPLOY.md):"
+echo "       systemd: sudo cp scripts/fluxo-*.service /etc/systemd/system/ && sudo systemctl enable --now fluxo-api fluxo-frontend"
+echo "       PM2:       pm2 start scripts/ecosystem.config.cjs && pm2 save && pm2 startup"
+echo "  2. Put Nginx/Caddy in front for HTTPS (see DEPLOY.md)"
+echo "  3. Script reference: scripts/README.md"

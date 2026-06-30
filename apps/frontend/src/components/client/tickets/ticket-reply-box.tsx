@@ -74,8 +74,8 @@ export default function TicketReplyBox({
 
                 try {
                     const endpoint = isAdmin
-                        ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/admin/tickets/${ticketId}/attachments`
-                        : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/client/tickets/${ticketId}/attachments`
+                        ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api/v1'}/admin/tickets/${ticketId}/attachments`
+                        : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api/v1'}/client/tickets/${ticketId}/attachments`
 
                     const response = await fetch(endpoint, {
                         method: 'POST',

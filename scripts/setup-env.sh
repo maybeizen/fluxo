@@ -24,9 +24,9 @@ log_info "Fluxo environment setup (values from apps/api/src/utils/env.ts schema)
 echo
 
 NODE_ENV="$(prompt_default "NODE_ENV" "production")"
-PORT="$(prompt_default "PORT" "3001")"
+PORT="$(prompt_default "PORT" "5001")"
 FRONTEND_URL="$(prompt_default "FRONTEND_URL" "http://localhost:5000")"
-API_URL="$(prompt_default "API_URL" "http://localhost:3001")"
+API_URL="$(prompt_default "API_URL" "http://localhost:5001")"
 APP_NAME="$(prompt_default "APP_NAME" "Fluxo")"
 
 if confirm "Auto-generate ENCRYPTION_KEY?"; then
@@ -64,9 +64,9 @@ REDIS_PORT="$(prompt_default "REDIS_PORT" "6379")"
 
 DISCORD_CLIENT_ID="$(prompt_default "DISCORD_CLIENT_ID" "your-discord-client-id")"
 DISCORD_CLIENT_SECRET="$(prompt_secret "DISCORD_CLIENT_SECRET")"
-DISCORD_REDIRECT_URI="$(prompt_default "DISCORD_REDIRECT_URI" "${API_URL}/auth/discord/callback")"
+DISCORD_REDIRECT_URI="$(prompt_default "DISCORD_REDIRECT_URI" "${API_URL}/api/v1/discord/callback")"
 
-NEXT_PUBLIC_API_URL="$(prompt_default "NEXT_PUBLIC_API_URL" "${API_URL}")"
+NEXT_PUBLIC_API_URL="$(prompt_default "NEXT_PUBLIC_API_URL" "${API_URL}/api/v1")"
 
 SMTP_HOST="$(prompt_default "SMTP_HOST (optional, empty to skip)" "")"
 SMTP_PORT=""
