@@ -5,5 +5,6 @@
     "type": "gateway",
     "description": "Accept payments via Stripe Checkout",
     "author": "Fluxo",
-    "shipped": true
+    "shipped": true,
+    "icon": "icon.svg"
 }
