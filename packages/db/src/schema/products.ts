@@ -60,24 +60,6 @@ export const productIntegrations = pgTable('product_integrations', {
         .references(() => products.id, { onDelete: 'cascade' })
         .unique(),
 
-    enabled: boolean('enabled').notNull().default(false),
-    locationId: integer('location_id'),
-    nodeId: integer('node_id'),
-    nestId: integer('nest_id'),
-    eggId: integer('egg_id'),
-    memory: integer('memory'),
-    swap: integer('swap'),
-    disk: integer('disk'),
-    io: integer('io'),
-    cpu: integer('cpu'),
-    cpuPinning: varchar('cpu_pinning', { length: 255 }),
-    databases: integer('databases'),
-    backups: integer('backups'),
-    additionalAllocations: integer('additional_allocations'),
-    oomKiller: boolean('oom_killer').default(false),
-    skipEggInstallScript: boolean('skip_egg_install_script').default(false),
-    startOnCompletion: boolean('start_on_completion').default(true),
-
     servicePluginId: varchar('service_plugin_id', { length: 64 }).references(
         () => plugins.id,
         { onDelete: 'set null' }

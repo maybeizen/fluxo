@@ -5,6 +5,17 @@ import { decrypt } from '../../../../utils/encryption'
 import { settingsCache } from '../../../../utils/cache'
 import { resolveLogoUrl } from '../../../../utils/serializers/user'
 
+function formatSystemSettings(settingsRow: typeof settings.$inferSelect) {
+    return {
+        ticketsEnabled: settingsRow.ticketsEnabled ?? true,
+        maintenanceMode: settingsRow.maintenanceMode ?? false,
+        maintenanceMessage: settingsRow.maintenanceMessage ?? undefined,
+        debugMode: settingsRow.debugMode ?? false,
+        announcementEnabled: settingsRow.announcementEnabled ?? false,
+        announcementMessage: settingsRow.announcementMessage ?? undefined,
+    }
+}
+
 export const getSettings = async (req: Request, res: Response) => {
     try {
         const cacheKey = 'global'
@@ -38,11 +49,8 @@ export const getSettings = async (req: Request, res: Response) => {
                     emailSmtpUser: null,
                     emailSmtpPass: null,
                     emailFrom: null,
-                    gateways: {},
                     security: {},
                     storage: {},
-                    pterodactylBaseUrl: null,
-                    pterodactylApiKey: null,
                 })
                 .returning()
             settingsRow = newSettings
@@ -81,17 +89,6 @@ export const getSettings = async (req: Request, res: Response) => {
                     : undefined,
                 emailFrom: settingsRow.emailFrom,
             },
-            gateways: {
-                stripe: {
-                    secretKey: (settingsRow.gateways as any)?.stripe?.secretKey
-                        ? decrypt(
-                              (settingsRow.gateways as any).stripe.secretKey
-                          )
-                        : undefined,
-                    publishableKey: (settingsRow.gateways as any)?.stripe
-                        ?.publishableKey,
-                },
-            },
             security: {
                 cloudflare: {
                     turnstileEnabled:
@@ -129,6 +126,7 @@ export const getSettings = async (req: Request, res: Response) => {
                         ?.publicUrlBase,
                 },
             },
+            system: formatSystemSettings(settingsRow),
         }
 
         await settingsCache.set(cacheKey, decryptedSettings, 600)

@@ -19,10 +19,8 @@ const defaultSettingsValues = {
     emailSmtpUser: null,
     emailSmtpPass: null,
     emailFrom: null,
-    gateways: {},
     security: {},
-    pterodactylBaseUrl: null,
-    pterodactylApiKey: null,
+    storage: {},
 } as const
 
 export async function getOrCreateSettings(db: Db): Promise<SettingsRow> {

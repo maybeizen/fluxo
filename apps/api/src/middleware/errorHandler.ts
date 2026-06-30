@@ -1,8 +1,9 @@
 import { type Request, type Response, type NextFunction } from 'express'
 import { ZodError } from 'zod'
 import { logger } from '../utils/logger'
+import { getSettings } from '../utils/get-settings'
 
-export function errorHandler(
+export async function errorHandler(
     err: unknown,
     _req: Request,
     res: Response,
@@ -19,6 +20,18 @@ export function errorHandler(
     }
 
     logger.error(`Unhandled error - ${err}`)
+
+    const settings = await getSettings()
+    const debugMode = settings?.system?.debugMode ?? false
+
+    if (debugMode && err instanceof Error) {
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+            stack: err.stack,
+        })
+    }
+
     res.status(500).json({
         success: false,
         message: 'Internal server error',

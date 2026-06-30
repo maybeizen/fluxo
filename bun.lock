@@ -78,6 +78,7 @@
         "@fluxo/db": "workspace:*",
         "@fluxo/forge": "workspace:*",
         "@fluxo/logger": "workspace:*",
+        "@fluxo/redis": "workspace:*",
         "@fluxo/types": "workspace:*",
         "bcrypt": "^6.0.0",
         "boxen": "^8.0.1",

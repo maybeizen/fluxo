@@ -23,6 +23,7 @@ export interface FluxoLogger {
     error: (message: string, config?: LogConfig) => void
     fatal: (message: string, config?: LogConfig) => void
     debug: (message: string, config?: LogConfig) => void
+    setLogLevel: (level?: string) => void
 }
 
 export interface CreateLoggerOptions {
@@ -196,6 +197,10 @@ export function createLogger(opts: CreateLoggerOptions = {}): FluxoLogger {
         transports,
     })
 
+    const setLogLevel = (nextLevel?: string): void => {
+        winstonLogger.level = nextLevel ?? resolveLogLevel({})
+    }
+
     const log = (
         logLevel: LogLevel,
         message: string,
@@ -224,8 +229,16 @@ export function createLogger(opts: CreateLoggerOptions = {}): FluxoLogger {
         error: (message, config) => log('ERROR', message, config),
         fatal: (message, config) => log('FATAL', message, config),
         debug: (message, config) => log('DEBUG', message, config),
+        setLogLevel,
     }
 }
 
+let defaultLogger: FluxoLogger | null = null
+
+export function setLogLevel(level?: string): void {
+    defaultLogger?.setLogLevel(level)
+}
+
 export const logger = createLogger()
+defaultLogger = logger
 export { findRepoRoot, resolveLogsDir } from './paths.js'

@@ -720,10 +720,44 @@ Docker Compose sets `STORAGE_DIR=/app/storage` and mounts the `storage_data` vol
 
 ### 5. Payment gateways (Stripe)
 
+Payment gateways are configured exclusively via **Admin → Plugins** (e.g. **stripe-gateway**). The legacy Gateways settings tab has been removed.
+
 1. Enable **stripe-gateway** plugin in Admin → Plugins
 2. Enter Stripe secret key and webhook secret in plugin settings
 3. Configure Stripe webhook endpoint: `{API_URL}/api/v1/webhooks/gateway/stripe-gateway`
 4. Stripe requires **raw JSON body** — do not put another JSON parser in front of this path
+
+### 6. Pterodactyl (service plugin)
+
+Pterodactyl provisioning is handled by the **pterodactyl** plugin under **Admin → Plugins**. Legacy Pterodactyl settings and the `/admin/pterodactyl` page have been removed.
+
+After upgrading to a release that includes migration `0009_settings_cleanup_system_flags.sql`:
+
+1. Open **Admin → Plugins → Pterodactyl → Options**
+2. Re-enter **Panel URL** and **Admin API Key** (legacy encrypted settings cannot be migrated into plugin config)
+3. Confirm products that used legacy Pterodactyl integrations were backfilled to `service_plugin_id = pterodactyl` with config in `service_plugin_config`
+
+### 7. System toggles (Application tab / CLI)
+
+Configure in **Admin → Settings → Application** or via CLI for recovery when the UI is unavailable:
+
+| Toggle | CLI |
+| ------ | --- |
+| Support tickets | `fluxo settings system --tickets-enabled` / `--no-tickets-enabled` |
+| Maintenance mode + message | `fluxo settings system --maintenance --maintenance-message "..."` |
+| Debug mode (verbose logs + API error details) | `fluxo settings system --debug` |
+| Announcement banner + message | `fluxo settings system --announcement --announcement-message "..."` |
+
+CLI writes flush Redis settings cache keys immediately; otherwise changes apply within the ~10 minute cache TTL or after API restart.
+
+<details>
+<summary><strong>Maintenance / tickets / debug not taking effect</strong></summary>
+
+- Run `fluxo settings show` to verify DB values
+- Restart API or wait for Redis cache TTL (~600s) if settings were changed outside the CLI
+- Maintenance mode blocks non-admin API access (503) and redirects non-admin users to `/maintenance`
+
+</details>
 
 <details>
 <summary><strong>Payments stuck / webhooks not firing</strong></summary>

@@ -9,7 +9,6 @@ type TabType =
     | 'integrations'
     | 'email'
     | 'storage'
-    | 'gateways'
     | 'security'
 
 interface SettingsNavigationProps {
@@ -39,11 +38,6 @@ const tabs = [
         id: 'storage' as TabType,
         label: 'Storage',
         icon: 'fas fa-hard-drive',
-    },
-    {
-        id: 'gateways' as TabType,
-        label: 'Gateways',
-        icon: 'fas fa-credit-card',
     },
     { id: 'security' as TabType, label: 'Security', icon: 'fas fa-lock' },
 ]

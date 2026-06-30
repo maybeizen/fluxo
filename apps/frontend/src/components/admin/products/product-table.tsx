@@ -80,15 +80,6 @@ export default function ProductTable({
             )
         }
 
-        if (integrations.pterodactyl) {
-            return (
-                <span className="text-xs text-zinc-300">
-                    <i className="fas fa-server mr-1"></i>
-                    Pterodactyl
-                </span>
-            )
-        }
-
         return (
             <span className="text-xs text-zinc-500">
                 <i className="fas fa-plug mr-1"></i>

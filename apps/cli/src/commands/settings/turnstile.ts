@@ -6,6 +6,7 @@ import {
     getOrCreateSettings,
     requireEncryptionKey,
 } from '../../utils/settings.js'
+import { flushSettingsCache } from '../../utils/settings-cache.js'
 import {
     promptConfirm,
     promptPassword,
@@ -89,6 +90,7 @@ export const execute: CommandExecute = async (_positionals, options) => {
             })
             .where(eq(settings.id, row.id))
 
+        await flushSettingsCache()
         logger.success('Turnstile settings updated')
     })
 }

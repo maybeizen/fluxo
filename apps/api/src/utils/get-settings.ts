@@ -15,6 +15,11 @@ export interface CachedSettings {
             turnstileSecretKey?: string
         }
     }
+    system?: {
+        ticketsEnabled?: boolean
+        maintenanceMode?: boolean
+        debugMode?: boolean
+    }
 }
 
 export const getSettings = async (): Promise<CachedSettings | null> => {
@@ -42,6 +47,11 @@ export const getSettings = async (): Promise<CachedSettings | null> => {
                 settingsRow.authDisablePasswordChange || false,
         },
         security: settingsRow.security as CachedSettings['security'],
+        system: {
+            ticketsEnabled: settingsRow.ticketsEnabled ?? true,
+            maintenanceMode: settingsRow.maintenanceMode ?? false,
+            debugMode: settingsRow.debugMode ?? false,
+        },
     }
 
     await settingsCache.set(cacheKey, minimal, 600)

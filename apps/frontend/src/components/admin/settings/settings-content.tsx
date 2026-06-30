@@ -4,11 +4,11 @@ import React from 'react'
 import AppSettings from './app-settings'
 import AuthSettings from './auth-settings'
 import EmailSettings from './email-settings'
-import GatewaysSection from './gateways-settings'
 import SecuritySettings from './security-settings'
 import ThemeSettings from './theme-settings'
 import IntegrationsSection from './integrations-section'
 import StorageSettings from './storage-settings'
+import SystemSettings from './system-settings'
 import Button from '@/components/ui/button'
 
 type TabType =
@@ -18,7 +18,6 @@ type TabType =
     | 'integrations'
     | 'email'
     | 'storage'
-    | 'gateways'
     | 'security'
 
 interface SettingsContentProps {
@@ -51,8 +50,12 @@ interface SettingsContentProps {
         cloudflareTurnstileEnabled: boolean
         cloudflareTurnstileSiteKey: string
         cloudflareTurnstileSecretKey: string
-        stripeSecretKey: string
-        stripePublishableKey: string
+        ticketsEnabled: boolean
+        maintenanceMode: boolean
+        maintenanceMessage: string
+        debugMode: boolean
+        announcementEnabled: boolean
+        announcementMessage: string
     }
     onFormDataChange: (
         updates: Partial<SettingsContentProps['formData']>
@@ -83,31 +86,30 @@ export default function SettingsContent({
         )
     }
 
-    if (activeTab === 'gateways') {
-        return (
-            <GatewaysSection
-                formData={{
-                    stripeSecretKey: formData.stripeSecretKey,
-                    stripePublishableKey: formData.stripePublishableKey,
-                }}
-                onFormDataChange={onFormDataChange}
-                onSubmit={onSubmit}
-                isSaving={isSaving}
-            />
-        )
-    }
-
     return (
         <form onSubmit={onSubmit} className="space-y-8">
             {activeTab === 'app' && (
-                <AppSettings
-                    formData={{
-                        appName: formData.appName,
-                        appBaseUrl: formData.appBaseUrl,
-                        logoUrl: formData.logoUrl,
-                    }}
-                    onChange={onFormDataChange}
-                />
+                <>
+                    <AppSettings
+                        formData={{
+                            appName: formData.appName,
+                            appBaseUrl: formData.appBaseUrl,
+                            logoUrl: formData.logoUrl,
+                        }}
+                        onChange={onFormDataChange}
+                    />
+                    <SystemSettings
+                        formData={{
+                            ticketsEnabled: formData.ticketsEnabled,
+                            maintenanceMode: formData.maintenanceMode,
+                            maintenanceMessage: formData.maintenanceMessage,
+                            debugMode: formData.debugMode,
+                            announcementEnabled: formData.announcementEnabled,
+                            announcementMessage: formData.announcementMessage,
+                        }}
+                        onChange={onFormDataChange}
+                    />
+                </>
             )}
 
             {activeTab === 'theme' && (

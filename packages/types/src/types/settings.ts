@@ -28,13 +28,6 @@ export interface EmailSettings {
     emailFrom?: string
 }
 
-export interface GatewaysSettings {
-    stripe?: {
-        secretKey?: string
-        publishableKey?: string
-    }
-}
-
 export interface SecuritySettings {
     cloudflare?: {
         turnstileEnabled?: boolean
@@ -58,9 +51,13 @@ export interface StorageSettings {
     s3?: StorageS3Settings
 }
 
-export interface PterodactylSettings {
-    baseUrl?: string
-    apiKey?: string
+export interface SystemSettings {
+    ticketsEnabled?: boolean
+    maintenanceMode?: boolean
+    maintenanceMessage?: string
+    debugMode?: boolean
+    announcementEnabled?: boolean
+    announcementMessage?: string
 }
 
 export interface ApplicationSettings {
@@ -68,8 +65,18 @@ export interface ApplicationSettings {
     auth: AuthSettings
     discord: DiscordSettings
     email: EmailSettings
-    gateways: GatewaysSettings
     security: SecuritySettings
     storage: StorageSettings
-    pterodactyl: PterodactylSettings
+    system: SystemSettings
+}
+
+export interface PublicAppSettings {
+    name?: string
+    logoUrl?: string
+    themeColor?: string
+    ticketsEnabled?: boolean
+    maintenanceMode?: boolean
+    maintenanceMessage?: string
+    announcementEnabled?: boolean
+    announcementMessage?: string
 }

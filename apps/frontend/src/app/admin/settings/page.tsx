@@ -15,7 +15,6 @@ type TabType =
     | 'integrations'
     | 'email'
     | 'storage'
-    | 'gateways'
     | 'security'
 
 export default function AdminSettingsPage() {
