@@ -22,7 +22,7 @@
     "devDependencies": {
         "@fluxo/eslint-config": "workspace:*",
         "@types/bun": "latest",
-        "@types/node": "^20.19.30",
+        "@types/node": "^26.0.1",
         "eslint": "^9.39.2",
         "typescript": "^5.9.3"
     }
