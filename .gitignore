@@ -18,6 +18,7 @@ tmp/
 temp/
 
 **/uploads/
+/storage/
 *.tsbuildinfo
 
 logs

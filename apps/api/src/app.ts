@@ -13,6 +13,7 @@ import {
     webhookRateLimiter,
 } from './middleware/rateLimiters'
 import { errorHandler } from './middleware/errorHandler'
+import { resolveStorageDir } from './utils/storage'
 
 const app: Application = express()
 const httpServer = createServer(app)
@@ -46,8 +47,8 @@ app.use(sessionMiddleware)
 app.use(normalizeUserId)
 
 app.use(
-    '/uploads',
-    express.static('src/uploads', {
+    '/storage',
+    express.static(resolveStorageDir(), {
         setHeaders: (res, filePath) => {
             if (filePath.endsWith('.svg')) {
                 res.setHeader('Content-Disposition', 'attachment')

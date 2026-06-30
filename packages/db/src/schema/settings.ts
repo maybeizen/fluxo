@@ -57,6 +57,19 @@ export const settings = pgTable('settings', {
         }
     }>(),
 
+    storage: jsonb('storage').$type<{
+        provider?: 'local' | 's3'
+        s3?: {
+            endpoint?: string
+            region?: string
+            bucket?: string
+            accessKeyId?: string
+            secretAccessKey?: string
+            forcePathStyle?: boolean
+            publicUrlBase?: string
+        }
+    }>(),
+
     pterodactylBaseUrl: varchar('pterodactyl_base_url', { length: 500 }),
     pterodactylApiKey: text('pterodactyl_api_key'),
 })

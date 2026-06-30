@@ -14,6 +14,7 @@ type TabType =
     | 'auth'
     | 'integrations'
     | 'email'
+    | 'storage'
     | 'gateways'
     | 'security'
 

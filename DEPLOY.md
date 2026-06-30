@@ -158,12 +158,15 @@ When using [`docker-compose.yml`](docker-compose.yml), also set (or accept defau
 
 ### Optional
 
-| Variable                | Purpose                                                    |
-| ----------------------- | ---------------------------------------------------------- |
-| `COOKIE_DOMAIN`         | e.g. `.example.com` when panel and API share parent domain |
-| `SMTP_*` / `EMAIL_FROM` | Outbound email (or configure in Admin → SMTP)              |
-| `PLUGINS_DIR`           | Override plugin directory (default: repo `plugins/`)       |
-| `APP_THEME_COLOR`       | Email CTA color if not loaded from DB settings             |
+| Variable                | Purpose                                                     |
+| ----------------------- | ----------------------------------------------------------- |
+| `COOKIE_DOMAIN`         | e.g. `.example.com` when panel and API share parent domain  |
+| `SMTP_*` / `EMAIL_FROM` | Outbound email (or configure in Admin → SMTP)               |
+| `STORAGE_PROVIDER`      | `local` (default) or `s3` — or configure in Admin → Storage |
+| `STORAGE_DIR`           | Absolute path for local uploads (default: repo `/storage`)  |
+| `S3_*`                  | S3-compatible credentials (fallback if not set in Admin)    |
+| `PLUGINS_DIR`           | Override plugin directory (default: repo `plugins/`)        |
+| `APP_THEME_COLOR`       | Email CTA color if not loaded from DB settings              |
 
 <details>
 <summary><strong>URL configuration examples (single domain vs split)</strong></summary>
@@ -336,7 +339,7 @@ Changing only `.env` without rebuilding leaves the old API URL baked into the cl
 
 - Do **not** expose `5432`/`6379` publicly — remove `ports:` for Postgres/Redis in production or bind to `127.0.0.1`
 - Put [Nginx or Caddy](#reverse-proxy-and-tls) in front of `5000` and `5001`
-- Use named volumes (`postgres_data`, `redis_data`) — back up Postgres regularly
+- Use named volumes (`postgres_data`, `redis_data`, `storage_data`) — back up Postgres regularly; `storage_data` holds uploaded avatars, logos, and ticket attachments when using local storage
 
 ---
 
@@ -692,7 +695,26 @@ Configure in **Admin → Settings → SMTP** or via `.env` (`SMTP_HOST`, `SMTP_P
 
 </details>
 
-### 4. Payment gateways (Stripe)
+### 4. Storage (local disk or S3)
+
+Configure in **Admin → Settings → Storage** or via `.env`:
+
+- **Local (default):** files are saved under `STORAGE_DIR` (repo-root `/storage` by default) and served at `{API_URL}/storage/<category>/<file>`
+- **S3-compatible:** set provider to `s3` and supply region, bucket, and credentials. Supports AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, etc. via `S3_ENDPOINT` and `S3_FORCE_PATH_STYLE`
+
+Docker Compose sets `STORAGE_DIR=/app/storage` and mounts the `storage_data` volume automatically.
+
+<details>
+<summary><strong>Uploads not appearing / 404 on avatars</strong></summary>
+
+- Ensure `STORAGE_DIR` is an **absolute** path (Docker: `/app/storage`)
+- Check the API can write to that directory
+- For S3, verify bucket policy allows public read (or set `S3_PUBLIC_URL_BASE` to your CDN URL)
+- Admin settings DB values take precedence over `.env` fallbacks
+
+</details>
+
+### 5. Payment gateways (Stripe)
 
 1. Enable **stripe-gateway** plugin in Admin → Plugins
 2. Enter Stripe secret key and webhook secret in plugin settings
@@ -901,7 +923,7 @@ Also back up securely:
 
 - `.env` (secrets)
 - `plugins/` custom configs if modified
-- Uploaded files under `apps/api/src/uploads/` (if used)
+- Uploaded files under `/storage/` (local mode) or your S3 bucket (S3 mode)
 
 Redis holds sessions and cache — usually rebuildable; backing up is optional.
 

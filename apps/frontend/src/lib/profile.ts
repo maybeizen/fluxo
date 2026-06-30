@@ -44,9 +44,6 @@ export async function uploadAvatar(file: File): Promise<string> {
         `/client/profile/me/avatar`,
         formData,
         {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
             withCredentials: true,
         }
     )
@@ -54,8 +51,10 @@ export async function uploadAvatar(file: File): Promise<string> {
 }
 
 export async function updateAvatarUrl(url: string): Promise<User> {
-    const response = await apiClient.patch(`/client/profile/me`, {
-        'profile.avatarUrl': url,
-    })
+    const response = await apiClient.patch(
+        `/client/profile/me`,
+        { avatarUrl: url },
+        { withCredentials: true }
+    )
     return response.data.profile
 }
