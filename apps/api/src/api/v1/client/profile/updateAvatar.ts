@@ -28,10 +28,7 @@ export const updateAvatar = async (req: Request, res: Response) => {
             }
 
             if (
-                !validateUploadedFileMagic(
-                    req.file.buffer,
-                    req.file.mimetype
-                )
+                !validateUploadedFileMagic(req.file.buffer, req.file.mimetype)
             ) {
                 return res.status(400).json({
                     success: false,
@@ -48,7 +45,10 @@ export const updateAvatar = async (req: Request, res: Response) => {
 
             const db = getDb()
             const [existingUser] = await db
-                .select({ avatarUrl: users.avatarUrl, username: users.username })
+                .select({
+                    avatarUrl: users.avatarUrl,
+                    username: users.username,
+                })
                 .from(users)
                 .where(eq(users.id, req.userId))
                 .limit(1)

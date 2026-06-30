@@ -113,10 +113,7 @@ export async function getStorageDriver(): Promise<StorageDriver> {
         }
         cachedDriver = new S3StorageDriver(config.s3)
     } else {
-        cachedDriver = new LocalStorageDriver(
-            config.storageDir,
-            config.apiUrl
-        )
+        cachedDriver = new LocalStorageDriver(config.storageDir, config.apiUrl)
     }
 
     cachedConfigKey = configKey

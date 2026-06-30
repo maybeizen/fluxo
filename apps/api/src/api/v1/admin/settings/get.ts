@@ -114,9 +114,7 @@ export const getSettings = async (req: Request, res: Response) => {
                     region: (settingsRow.storage as any)?.s3?.region,
                     bucket: (settingsRow.storage as any)?.s3?.bucket,
                     accessKeyId: (settingsRow.storage as any)?.s3?.accessKeyId
-                        ? decrypt(
-                              (settingsRow.storage as any).s3.accessKeyId
-                          )
+                        ? decrypt((settingsRow.storage as any).s3.accessKeyId)
                         : undefined,
                     secretAccessKey: (settingsRow.storage as any)?.s3
                         ?.secretAccessKey

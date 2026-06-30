@@ -40,9 +40,7 @@ export class LocalStorageDriver implements StorageDriver {
         const normalizedApiUrl = this.apiUrl.replace(/\/$/, '')
 
         if (urlOrKey.startsWith(normalizedApiUrl + storagePrefix)) {
-            return urlOrKey.slice(
-                (normalizedApiUrl + storagePrefix).length
-            )
+            return urlOrKey.slice((normalizedApiUrl + storagePrefix).length)
         }
 
         if (urlOrKey.startsWith(storagePrefix)) {

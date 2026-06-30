@@ -66,10 +66,7 @@ export const uploadAttachment = async (req: Request, res: Response) => {
             }
 
             if (
-                !validateUploadedFileMagic(
-                    req.file.buffer,
-                    req.file.mimetype
-                )
+                !validateUploadedFileMagic(req.file.buffer, req.file.mimetype)
             ) {
                 return res.status(400).json({
                     success: false,

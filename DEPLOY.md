@@ -158,15 +158,15 @@ When using [`docker-compose.yml`](docker-compose.yml), also set (or accept defau
 
 ### Optional
 
-| Variable                | Purpose                                                    |
-| ----------------------- | ---------------------------------------------------------- |
-| `COOKIE_DOMAIN`         | e.g. `.example.com` when panel and API share parent domain |
-| `SMTP_*` / `EMAIL_FROM` | Outbound email (or configure in Admin → SMTP)              |
+| Variable                | Purpose                                                     |
+| ----------------------- | ----------------------------------------------------------- |
+| `COOKIE_DOMAIN`         | e.g. `.example.com` when panel and API share parent domain  |
+| `SMTP_*` / `EMAIL_FROM` | Outbound email (or configure in Admin → SMTP)               |
 | `STORAGE_PROVIDER`      | `local` (default) or `s3` — or configure in Admin → Storage |
 | `STORAGE_DIR`           | Absolute path for local uploads (default: repo `/storage`)  |
 | `S3_*`                  | S3-compatible credentials (fallback if not set in Admin)    |
-| `PLUGINS_DIR`           | Override plugin directory (default: repo `plugins/`)       |
-| `APP_THEME_COLOR`       | Email CTA color if not loaded from DB settings             |
+| `PLUGINS_DIR`           | Override plugin directory (default: repo `plugins/`)        |
+| `APP_THEME_COLOR`       | Email CTA color if not loaded from DB settings              |
 
 <details>
 <summary><strong>URL configuration examples (single domain vs split)</strong></summary>
