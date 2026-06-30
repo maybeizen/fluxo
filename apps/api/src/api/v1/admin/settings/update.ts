@@ -7,6 +7,7 @@ import { logger } from '../../../../utils/logger'
 import { encrypt, decrypt } from '../../../../utils/encryption'
 import { settingsCache } from '../../../../utils/cache'
 import { setEmailThemeColor } from '../../../../utils/email-templates'
+import { invalidateStorageDriver } from '../../../../utils/storage'
 
 export const updateSettings = async (req: Request, res: Response) => {
     try {
@@ -106,6 +107,43 @@ export const updateSettings = async (req: Request, res: Response) => {
             updateData.security = updatedSecurity
         }
 
+        if (data.storage) {
+            const currentStorage = (settingsRow.storage as any) || {}
+            const updatedStorage = {
+                ...currentStorage,
+                ...(data.storage.provider !== undefined && {
+                    provider: data.storage.provider,
+                }),
+                s3: {
+                    ...currentStorage.s3,
+                    ...(data.storage.s3?.endpoint !== undefined && {
+                        endpoint: data.storage.s3.endpoint,
+                    }),
+                    ...(data.storage.s3?.region !== undefined && {
+                        region: data.storage.s3.region,
+                    }),
+                    ...(data.storage.s3?.bucket !== undefined && {
+                        bucket: data.storage.s3.bucket,
+                    }),
+                    ...(data.storage.s3?.accessKeyId !== undefined && {
+                        accessKeyId: encrypt(data.storage.s3.accessKeyId),
+                    }),
+                    ...(data.storage.s3?.secretAccessKey !== undefined && {
+                        secretAccessKey: encrypt(
+                            data.storage.s3.secretAccessKey
+                        ),
+                    }),
+                    ...(data.storage.s3?.forcePathStyle !== undefined && {
+                        forcePathStyle: data.storage.s3.forcePathStyle,
+                    }),
+                    ...(data.storage.s3?.publicUrlBase !== undefined && {
+                        publicUrlBase: data.storage.s3.publicUrlBase,
+                    }),
+                },
+            }
+            updateData.storage = updatedStorage
+        }
+
         await db
             .update(settings)
             .set(updateData)
@@ -120,6 +158,7 @@ export const updateSettings = async (req: Request, res: Response) => {
         await settingsCache.del('global')
         await settingsCache.del('global:minimal')
         await settingsCache.del('public:app-settings')
+        invalidateStorageDriver()
 
         if (updatedSettings.appThemeColor) {
             setEmailThemeColor(updatedSettings.appThemeColor)
@@ -184,6 +223,31 @@ export const updateSettings = async (req: Request, res: Response) => {
                                   .turnstileSecretKey
                           )
                         : undefined,
+                },
+            },
+            storage: {
+                provider: (updatedSettings.storage as any)?.provider ?? 'local',
+                s3: {
+                    endpoint: (updatedSettings.storage as any)?.s3?.endpoint,
+                    region: (updatedSettings.storage as any)?.s3?.region,
+                    bucket: (updatedSettings.storage as any)?.s3?.bucket,
+                    accessKeyId: (updatedSettings.storage as any)?.s3
+                        ?.accessKeyId
+                        ? decrypt(
+                              (updatedSettings.storage as any).s3.accessKeyId
+                          )
+                        : undefined,
+                    secretAccessKey: (updatedSettings.storage as any)?.s3
+                        ?.secretAccessKey
+                        ? decrypt(
+                              (updatedSettings.storage as any).s3
+                                  .secretAccessKey
+                          )
+                        : undefined,
+                    forcePathStyle: (updatedSettings.storage as any)?.s3
+                        ?.forcePathStyle,
+                    publicUrlBase: (updatedSettings.storage as any)?.s3
+                        ?.publicUrlBase,
                 },
             },
         }

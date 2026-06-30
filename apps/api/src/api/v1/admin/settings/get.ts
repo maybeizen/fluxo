@@ -39,6 +39,7 @@ export const getSettings = async (req: Request, res: Response) => {
                     emailFrom: null,
                     gateways: {},
                     security: {},
+                    storage: {},
                     pterodactylBaseUrl: null,
                     pterodactylApiKey: null,
                 })
@@ -104,6 +105,29 @@ export const getSettings = async (req: Request, res: Response) => {
                                   .turnstileSecretKey
                           )
                         : undefined,
+                },
+            },
+            storage: {
+                provider: (settingsRow.storage as any)?.provider ?? 'local',
+                s3: {
+                    endpoint: (settingsRow.storage as any)?.s3?.endpoint,
+                    region: (settingsRow.storage as any)?.s3?.region,
+                    bucket: (settingsRow.storage as any)?.s3?.bucket,
+                    accessKeyId: (settingsRow.storage as any)?.s3?.accessKeyId
+                        ? decrypt(
+                              (settingsRow.storage as any).s3.accessKeyId
+                          )
+                        : undefined,
+                    secretAccessKey: (settingsRow.storage as any)?.s3
+                        ?.secretAccessKey
+                        ? decrypt(
+                              (settingsRow.storage as any).s3.secretAccessKey
+                          )
+                        : undefined,
+                    forcePathStyle: (settingsRow.storage as any)?.s3
+                        ?.forcePathStyle,
+                    publicUrlBase: (settingsRow.storage as any)?.s3
+                        ?.publicUrlBase,
                 },
             },
         }

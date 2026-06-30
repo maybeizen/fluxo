@@ -43,6 +43,13 @@
             "when": 1772000000000,
             "tag": "0006_schema_cleanup_indexes",
             "breakpoints": true
+        },
+        {
+            "idx": 7,
+            "version": "7",
+            "when": 1772100000000,
+            "tag": "0007_add_storage_settings",
+            "breakpoints": true
         }
     ]
 }

@@ -43,6 +43,21 @@ export interface SecuritySettings {
     }
 }
 
+export interface StorageS3Settings {
+    endpoint?: string
+    region?: string
+    bucket?: string
+    accessKeyId?: string
+    secretAccessKey?: string
+    forcePathStyle?: boolean
+    publicUrlBase?: string
+}
+
+export interface StorageSettings {
+    provider?: 'local' | 's3'
+    s3?: StorageS3Settings
+}
+
 export interface PterodactylSettings {
     baseUrl?: string
     apiKey?: string
@@ -55,5 +70,6 @@ export interface ApplicationSettings {
     email: EmailSettings
     gateways: GatewaysSettings
     security: SecuritySettings
+    storage: StorageSettings
     pterodactyl: PterodactylSettings
 }

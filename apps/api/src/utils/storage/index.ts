@@ -64,9 +64,7 @@ function resolveS3Config(
 export async function resolveStorageConfig(): Promise<ResolvedStorageConfig> {
     const db = getDb()
     const [settingsRow] = await db.select().from(settings).limit(1)
-    const dbStorage =
-        ((settingsRow as { storage?: StorageSettings } | undefined)
-            ?.storage as StorageSettings | null) ?? {}
+    const dbStorage = settingsRow?.storage ?? {}
 
     let dbS3 = dbStorage.s3
     if (dbS3?.accessKeyId) {

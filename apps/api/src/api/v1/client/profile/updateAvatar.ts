@@ -4,6 +4,11 @@ import {
     validateUploadedFileMagic,
     normalizeExtension,
 } from '../../../../utils/upload'
+import { getDb, users } from '@fluxo/db'
+import { eq } from '@fluxo/db'
+import { logger } from '../../../../utils/logger'
+import { getStorageDriver } from '../../../../utils/storage'
+import { userCache } from '../../../../utils/cache'
 
 export const updateAvatar = async (req: Request, res: Response) => {
     uploadAvatar(req, res, async (err) => {
