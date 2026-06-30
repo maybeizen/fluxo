@@ -9,7 +9,7 @@
     },
     "dependencies": {
         "@fluxo/forge": "workspace:*",
-        "stripe": "^20.3.0"
+        "stripe": "^22.3.0"
     },
     "devDependencies": {
         "@fluxo/eslint-config": "workspace:*",
