@@ -47,11 +47,7 @@ export const createTicket = async (req: Request, res: Response) => {
                 title: sanitizeText(validated.title),
                 content: sanitizeText(validated.content),
                 type: validated.type as
-                    | 'general'
-                    | 'account'
-                    | 'billing'
-                    | 'legal'
-                    | 'other',
+                    'general' | 'account' | 'billing' | 'legal' | 'other',
                 status: TicketStatus.OPEN,
             })
             .returning()

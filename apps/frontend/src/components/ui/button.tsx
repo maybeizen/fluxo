@@ -3,13 +3,7 @@
 import React, { useEffect, useState } from 'react'
 
 type ButtonVariant =
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'fail'
-    | 'glass'
-    | 'ghost'
-    | 'custom'
+    'primary' | 'secondary' | 'success' | 'fail' | 'glass' | 'ghost' | 'custom'
 
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 

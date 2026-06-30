@@ -9,7 +9,7 @@ import {
 } from '@fluxo/forge'
 
 async function getStripe(secretKey: string): Promise<Stripe> {
-    return new Stripe(secretKey, { apiVersion: '2026-01-28.clover' })
+    return new Stripe(secretKey, { apiVersion: '2026-02-25.clover' })
 }
 
 export default class StripeGatewayPlugin extends FluxoGatewayPlugin {

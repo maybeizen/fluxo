@@ -19,12 +19,7 @@ import ServersTab from '@/components/admin/pterodactyl/servers-tab'
 import Button from '@/components/ui/button'
 
 type TabType =
-    | 'overview'
-    | 'actions'
-    | 'nodes'
-    | 'users'
-    | 'servers'
-    | 'settings'
+    'overview' | 'actions' | 'nodes' | 'users' | 'servers' | 'settings'
 
 export default function AdminPterodactylPage() {
     const notifications = useNotifications()

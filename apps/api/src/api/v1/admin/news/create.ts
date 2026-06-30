@@ -26,10 +26,7 @@ export const createNews = async (req: Request, res: Response) => {
                 isFeatured: validated.isFeatured,
                 tags: validated.tags,
                 visibility: validated.visibility as
-                    | 'public'
-                    | 'private'
-                    | 'draft'
-                    | 'archived',
+                    'public' | 'private' | 'draft' | 'archived',
                 slug: validated.metadata.slug,
                 featuredImageUrl: validated.metadata.featuredImageUrl || null,
                 seoTitle: validated.metadata.seoTitle || null,

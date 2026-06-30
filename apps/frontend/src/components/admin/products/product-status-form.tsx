@@ -19,11 +19,7 @@ interface ProductStatusFormProps {
     errors: Record<string, string>
     validateField?: (
         field:
-            | 'hidden'
-            | 'disabled'
-            | 'allowCoupons'
-            | 'stockEnabled'
-            | 'stock',
+            'hidden' | 'disabled' | 'allowCoupons' | 'stockEnabled' | 'stock',
         value: unknown
     ) => boolean
 }

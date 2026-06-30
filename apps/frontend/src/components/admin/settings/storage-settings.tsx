@@ -36,8 +36,7 @@ export default function StorageSettings({
                         onChange={(e) =>
                             onChange({
                                 storageProvider: e.target.value as
-                                    | 'local'
-                                    | 's3',
+                                    'local' | 's3',
                             })
                         }
                         className="focus:border-primary-400 w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-white focus:outline-none"

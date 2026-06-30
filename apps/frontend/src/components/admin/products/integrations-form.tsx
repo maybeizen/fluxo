@@ -47,6 +47,22 @@ export default function IntegrationsForm({
     const [eggs, setEggs] = useState<PterodactylEgg[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
+    const loadPterodactylData = async () => {
+        try {
+            const [locationsData, nodesData, nestsData] = await Promise.all([
+                fetchPterodactylLocations(),
+                fetchPterodactylNodes(),
+                fetchPterodactylNests(),
+            ])
+
+            setLocations(locationsData as PterodactylLocation[])
+            setNodes(nodesData as PterodactylNode[])
+            setNests(nestsData as PterodactylNest[])
+        } catch (error) {
+            console.error('Failed to load Pterodactyl data:', error)
+        }
+    }
+
     useEffect(() => {
         const checkPterodactyl = async () => {
             try {
@@ -67,22 +83,6 @@ export default function IntegrationsForm({
 
         checkPterodactyl()
     }, [])
-
-    const loadPterodactylData = async () => {
-        try {
-            const [locationsData, nodesData, nestsData] = await Promise.all([
-                fetchPterodactylLocations(),
-                fetchPterodactylNodes(),
-                fetchPterodactylNests(),
-            ])
-
-            setLocations(locationsData as PterodactylLocation[])
-            setNodes(nodesData as PterodactylNode[])
-            setNests(nestsData as PterodactylNest[])
-        } catch (error) {
-            console.error('Failed to load Pterodactyl data:', error)
-        }
-    }
 
     useEffect(() => {
         const loadEggs = async () => {

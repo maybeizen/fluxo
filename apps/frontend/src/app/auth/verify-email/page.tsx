@@ -28,6 +28,45 @@ function VerifyEmailContent() {
     const [resending, setResending] = useState(false)
     const [cooldown, setCooldown] = useState(0)
 
+    const handleTokenVerification = async (token: string) => {
+        if (hasVerified.current) return
+        hasVerified.current = true
+
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/auth/verify-email?token=${token}`,
+                { credentials: 'include' }
+            )
+            const data = await response.json()
+            const from = searchParams.get('from')
+
+            if (response.ok && data.success) {
+                setStatus('success')
+                setTitle(
+                    data.alreadyVerified
+                        ? 'Email Already Verified'
+                        : 'Email Verified!'
+                )
+                setMessage(data.message || 'You can now access all features.')
+
+                await refreshAuth()
+
+                setTimeout(() => {
+                    router.push(from || '/client')
+                }, 2000)
+            } else {
+                setStatus('error')
+                setTitle(data.expired ? 'Link Expired' : 'Verification Failed')
+                setMessage(data.message || 'The verification link is invalid.')
+                if (data.email) setEmail(data.email)
+            }
+        } catch {
+            setStatus('error')
+            setTitle('Verification Failed')
+            setMessage('An error occurred. Please try again later.')
+        }
+    }
+
     useEffect(() => {
         if (!isLoading && user?.isVerified) {
             router.replace('/client')
@@ -69,45 +108,6 @@ function VerifyEmailContent() {
             return () => clearTimeout(timer)
         }
     }, [cooldown])
-
-    const handleTokenVerification = async (token: string) => {
-        if (hasVerified.current) return
-        hasVerified.current = true
-
-        try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/auth/verify-email?token=${token}`,
-                { credentials: 'include' }
-            )
-            const data = await response.json()
-            const from = searchParams.get('from')
-
-            if (response.ok && data.success) {
-                setStatus('success')
-                setTitle(
-                    data.alreadyVerified
-                        ? 'Email Already Verified'
-                        : 'Email Verified!'
-                )
-                setMessage(data.message || 'You can now access all features.')
-
-                await refreshAuth()
-
-                setTimeout(() => {
-                    router.push(from || '/client')
-                }, 2000)
-            } else {
-                setStatus('error')
-                setTitle(data.expired ? 'Link Expired' : 'Verification Failed')
-                setMessage(data.message || 'The verification link is invalid.')
-                if (data.email) setEmail(data.email)
-            }
-        } catch (error) {
-            setStatus('error')
-            setTitle('Verification Failed')
-            setMessage('An error occurred. Please try again later.')
-        }
-    }
 
     const handleResend = async () => {
         if (!email) {

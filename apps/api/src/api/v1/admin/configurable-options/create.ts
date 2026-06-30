@@ -53,9 +53,7 @@ export const createConfigurableOption = async (req: Request, res: Response) => {
             await db.insert(configurableOptionPricing).values({
                 optionId: option.id,
                 pricingType: validated.pricing.pricingType as
-                    | 'one_time'
-                    | 'recurring'
-                    | 'billing_cycle',
+                    'one_time' | 'recurring' | 'billing_cycle',
                 amount: validated.pricing.amount,
                 useValueAsMultiplier: validated.pricing.useMultiplier ?? false,
             })

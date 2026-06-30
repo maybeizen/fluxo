@@ -17,6 +17,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const [themeColor, setThemeColorState] =
         useState<string>(DEFAULT_THEME_COLOR)
 
+    const updateThemeColors = (color: string) => {
+        applyThemeColor(color)
+    }
+
     useEffect(() => {
         const loadTheme = async () => {
             try {
@@ -45,10 +49,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
         loadTheme()
     }, [])
-
-    const updateThemeColors = (color: string) => {
-        applyThemeColor(color)
-    }
 
     const setThemeColor = (color: string) => {
         setThemeColorState(color)

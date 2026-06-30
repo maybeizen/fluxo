@@ -65,10 +65,7 @@ export const createUser = async (req: Request, res: Response) => {
                 lastName: lastName || '',
                 slug,
                 role: (role || UserRole.USER) as
-                    | 'user'
-                    | 'admin'
-                    | 'staff'
-                    | 'client',
+                    'user' | 'admin' | 'staff' | 'client',
                 isVerified: isVerified || false,
             })
             .returning()
