@@ -8,6 +8,7 @@ import GatewaysSection from './gateways-settings'
 import SecuritySettings from './security-settings'
 import ThemeSettings from './theme-settings'
 import IntegrationsSection from './integrations-section'
+import StorageSettings from './storage-settings'
 import Button from '@/components/ui/button'
 
 type TabType =
@@ -16,6 +17,7 @@ type TabType =
     | 'auth'
     | 'integrations'
     | 'email'
+    | 'storage'
     | 'gateways'
     | 'security'
 
@@ -38,6 +40,14 @@ interface SettingsContentProps {
         emailSmtpUser: string
         emailSmtpPass: string
         emailFrom: string
+        storageProvider: 'local' | 's3'
+        s3Endpoint: string
+        s3Region: string
+        s3Bucket: string
+        s3AccessKeyId: string
+        s3SecretAccessKey: string
+        s3ForcePathStyle: boolean
+        s3PublicUrlBase: string
         cloudflareTurnstileEnabled: boolean
         cloudflareTurnstileSiteKey: string
         cloudflareTurnstileSecretKey: string
@@ -130,6 +140,22 @@ export default function SettingsContent({
                         emailSmtpUser: formData.emailSmtpUser,
                         emailSmtpPass: formData.emailSmtpPass,
                         emailFrom: formData.emailFrom,
+                    }}
+                    onChange={onFormDataChange}
+                />
+            )}
+
+            {activeTab === 'storage' && (
+                <StorageSettings
+                    formData={{
+                        storageProvider: formData.storageProvider,
+                        s3Endpoint: formData.s3Endpoint,
+                        s3Region: formData.s3Region,
+                        s3Bucket: formData.s3Bucket,
+                        s3AccessKeyId: formData.s3AccessKeyId,
+                        s3SecretAccessKey: formData.s3SecretAccessKey,
+                        s3ForcePathStyle: formData.s3ForcePathStyle,
+                        s3PublicUrlBase: formData.s3PublicUrlBase,
                     }}
                     onChange={onFormDataChange}
                 />

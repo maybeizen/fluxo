@@ -118,9 +118,6 @@ export async function uploadAttachment(
         `/client/tickets/${ticketId}/attachments`,
         formData,
         {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
             withCredentials: true,
         }
     )

@@ -38,6 +38,14 @@ export function useSettingsData() {
         cloudflareTurnstileSecretKey: '',
         stripeSecretKey: '',
         stripePublishableKey: '',
+        storageProvider: 'local' as 'local' | 's3',
+        s3Endpoint: '',
+        s3Region: '',
+        s3Bucket: '',
+        s3AccessKeyId: '',
+        s3SecretAccessKey: '',
+        s3ForcePathStyle: false,
+        s3PublicUrlBase: '',
     })
 
     useEffect(() => {
@@ -96,6 +104,16 @@ export function useSettingsData() {
                             data.security?.cloudflare?.turnstileSiteKey || '',
                         cloudflareTurnstileSecretKey:
                             data.security?.cloudflare?.turnstileSecretKey || '',
+                        storageProvider: data.storage?.provider || 'local',
+                        s3Endpoint: data.storage?.s3?.endpoint || '',
+                        s3Region: data.storage?.s3?.region || '',
+                        s3Bucket: data.storage?.s3?.bucket || '',
+                        s3AccessKeyId: '',
+                        s3SecretAccessKey: '',
+                        s3ForcePathStyle:
+                            data.storage?.s3?.forcePathStyle || false,
+                        s3PublicUrlBase:
+                            data.storage?.s3?.publicUrlBase || '',
                     })
                 }
             } catch (error) {
@@ -159,6 +177,18 @@ export function useSettingsData() {
                         formData.cloudflareTurnstileSiteKey || undefined,
                     turnstileSecretKey:
                         formData.cloudflareTurnstileSecretKey || undefined,
+                },
+            },
+            storage: {
+                provider: formData.storageProvider,
+                s3: {
+                    endpoint: formData.s3Endpoint || undefined,
+                    region: formData.s3Region || undefined,
+                    bucket: formData.s3Bucket || undefined,
+                    accessKeyId: formData.s3AccessKeyId || undefined,
+                    secretAccessKey: formData.s3SecretAccessKey || undefined,
+                    forcePathStyle: formData.s3ForcePathStyle,
+                    publicUrlBase: formData.s3PublicUrlBase || undefined,
                 },
             },
         }

@@ -45,9 +45,6 @@ export async function uploadLogo(file: File): Promise<string> {
     formData.append('logo', file)
 
     const response = await apiClient.post(`/admin/settings/logo`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
         withCredentials: true,
     })
     return response.data.logoUrl
