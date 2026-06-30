@@ -1,84 +1,132 @@
 <div align="center">
-  <img src="assets/fluxo.png" alt="Fluxo Logo" width="160" />
+
+<img src="assets/fluxo.png" alt="Fluxo" width="140" />
 
 # Fluxo
 
-Open-source billing panel for hosting providers — invoices, services, tickets, plugins, and payment gateways.
+**Self-hosted billing and client management for hosting providers.**
 
-![CI](https://img.shields.io/github/actions/workflow/status/maybeizen/fluxo/ci.yml?branch=dev&label=CI)
-![License](https://img.shields.io/github/license/maybeizen/fluxo?label=AGPL-3.0)
-![Last commit](https://img.shields.io/github/last-commit/maybeizen/fluxo/dev)
-![Issues](https://img.shields.io/github/issues/maybeizen/fluxo)
-![Stars](https://img.shields.io/github/stars/maybeizen/fluxo?style=social)
+Invoices, services, support tickets, payment gateways, and provisioning plugins — without WHMCS.
 
-[![Available on GitHub](https://cdn.jsdelivr.net/gh/intergrav/devins-badges@master/dist/compact/image-s/svg/github.svg)](https://github.com/maybeizen/fluxo)
-[![Documentation](https://cdn.jsdelivr.net/gh/intergrav/devins-badges@master/dist/compact/documentation/website/svg/docs.svg)](https://github.com/maybeizen/fluxo/blob/dev/DEPLOY.md)
+<br />
+
+[![CI](https://img.shields.io/github/actions/workflow/status/maybeizen/fluxo/ci.yml?branch=dev&style=for-the-badge&logo=githubactions&logoColor=white&label=CI)](https://github.com/maybeizen/fluxo/actions/workflows/ci.yml)
+[![CodeQL](https://img.shields.io/github/actions/workflow/status/maybeizen/fluxo/codeql.yml?branch=dev&style=for-the-badge&logo=github&logoColor=white&label=CodeQL)](https://github.com/maybeizen/fluxo/actions/workflows/codeql.yml)
+[![Last commit](https://img.shields.io/github/last-commit/maybeizen/fluxo/dev?style=for-the-badge&logo=git&logoColor=white)](https://github.com/maybeizen/fluxo/commits/dev)
+[![Issues](https://img.shields.io/github/issues/maybeizen/fluxo?style=for-the-badge&logo=github&logoColor=white)](https://github.com/maybeizen/fluxo/issues)
+[![Stars](https://img.shields.io/github/stars/maybeizen/fluxo?style=for-the-badge&logo=github&logoColor=white)](https://github.com/maybeizen/fluxo/stargazers)
+
+<br />
+
+[Deploy](DEPLOY.md) · [Documentation](docs/README.md) · [Contributing](CONTRIBUTING.md) · [Report a bug](https://github.com/maybeizen/fluxo/issues/new/choose)
 
 </div>
 
-## Overview
+---
 
-Fluxo is a self-hosted billing and client management platform similar to WHMCS, built as a Bun monorepo with a Next.js frontend, Express API, PostgreSQL, Redis, and an extensible plugin system.
+## Features
 
-**License:** [AGPL-3.0-or-later](LICENSE) — you may use, modify, and redistribute Fluxo (including commercially), but derivative works must remain under AGPL.
+- **Billing** — Products, invoices, coupons, PDF export, gateway plugins (Stripe)
+- **Client panel** — Service dashboard, checkout, ticket support with live updates
+- **Admin panel** — Users, services, news, settings, plugin management
+- **Plugins** — Extensible server provisioning (`@fluxo/forge`) and payment gateways
+- **Production-ready** — Docker Compose, bare-metal scripts, systemd / PM2 / Supervisor
 
-## Quick start
+Licensed under [AGPL-3.0-or-later](LICENSE). You may use, modify, and redistribute Fluxo commercially; derivative works must stay under AGPL.
+
+---
+
+## Quick start (development)
+
+**Requires:** [Bun](https://bun.sh/) 1.3+, PostgreSQL 16+, Redis 7+
 
 ```bash
 git clone https://github.com/maybeizen/fluxo.git
 cd fluxo
-cp .env.example .env   # edit — never commit .env
+cp .env.example .env          # configure — never commit .env
 bun install
 bun run --filter @fluxo/db db:migrate
 bun dev
 ```
 
-- Frontend: http://localhost:5000
-- API: http://localhost:3001
+| Service  | URL                          |
+| -------- | ---------------------------- |
+| Frontend | http://localhost:5000        |
+| API      | http://localhost:5001/api/v1 |
+
+Set `NEXT_PUBLIC_API_URL=http://localhost:5001/api/v1` in `.env` before building the frontend for production-like local testing.
+
+---
+
+## Deployment
+
+For production, use **[DEPLOY.md](DEPLOY.md)** — full guides for:
+
+- **Docker Compose** — `docker compose up -d --build`
+- **Bare-metal / VPS** — [`scripts/bootstrap.sh`](scripts/bootstrap.sh) and [script reference](scripts/README.md)
+- **Process managers** — [systemd](DEPLOY.md#option-a--systemd), [PM2](DEPLOY.md#option-b--pm2-recommended-without-systemd), or [Supervisor](DEPLOY.md#option-c--supervisor)
+- Environment variables, TLS, backups, and [troubleshooting](DEPLOY.md#troubleshooting)
+
+---
 
 ## Documentation
 
-| Topic                        | Link                                     |
-| ---------------------------- | ---------------------------------------- |
-| Deployment (Docker + server) | [DEPLOY.md](DEPLOY.md)                   |
-| Contributing                 | [CONTRIBUTING.md](CONTRIBUTING.md)       |
-| Security                     | [SECURITY.md](SECURITY.md)               |
-| Plugins                      | [docs/README.md](docs/README.md)         |
-| Code of Conduct              | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
+| Topic              | Link                                     |
+| ------------------ | ---------------------------------------- |
+| Deployment         | [DEPLOY.md](DEPLOY.md)                   |
+| Deployment scripts | [scripts/README.md](scripts/README.md)   |
+| Plugin development | [docs/README.md](docs/README.md)         |
+| Contributing       | [CONTRIBUTING.md](CONTRIBUTING.md)       |
+| Security           | [SECURITY.md](SECURITY.md)               |
+| Code of conduct    | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
+
+---
 
 ## Tech stack
 
-- **Runtime:** [Bun](https://bun.sh/) 1.3.x, [Turborepo](https://turbo.build/)
-- **Frontend:** Next.js 16, React 19, Tailwind CSS 4
-- **API:** Express 5, Socket.IO, Zod
-- **Data:** PostgreSQL 16, Drizzle ORM, Redis 7
-- **Plugins:** `@fluxo/forge` SDK (server, gateway, theme plugins)
+| Layer    | Technologies                                                         |
+| -------- | -------------------------------------------------------------------- |
+| Monorepo | [Bun](https://bun.sh/) workspaces, [Turborepo](https://turbo.build/) |
+| Frontend | Next.js 16, React 19, Tailwind CSS 4                                 |
+| API      | Express 5, Socket.IO, Zod                                            |
+| Data     | PostgreSQL 16, Drizzle ORM, Redis 7                                  |
+| Plugins  | `@fluxo/forge`, `@fluxo/plugin-manager`                              |
 
-## Monorepo layout
+---
+
+## Project structure
 
 ```
 fluxo/
-├── apps/api/          # Express REST + WebSocket API
-├── apps/frontend/     # Next.js client + admin UI
-├── apps/cli/          # fluxo CLI
-├── packages/          # db, forge, plugin-manager, types, …
-├── plugins/           # Server/gateway/theme plugins
-├── scripts/           # Bare-metal install & systemd units
-└── docker-compose.yml # Docker deployment stack
+├── apps/
+│   ├── api/              # Express REST API + WebSockets
+│   ├── frontend/         # Next.js client & admin UI
+│   └── cli/              # fluxo CLI (doctor, migrate, plugins)
+├── packages/             # db, forge, plugin-manager, types, …
+├── plugins/              # Server & gateway plugins
+├── scripts/              # Server install, env setup, systemd & PM2
+└── docker-compose.yml
 ```
+
+---
 
 ## Development
 
 ```bash
-bun run format:check
-bun run lint
-bun run types
-bun run build
-bun dev
+bun run format:check   # Prettier
+bun run lint           # ESLint (all workspaces)
+bun run types          # TypeScript
+bun run build          # Production build
+bun dev                # Dev servers
+bun run fluxo doctor   # Environment checks
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for branch/PR conventions.
+Branch **`dev`** is the integration branch; **`main`** is stable. See [CONTRIBUTING.md](CONTRIBUTING.md) for PR workflow.
 
-## Maintainer
+---
 
-**maybeizen** — [github.com/maybeizen](https://github.com/maybeizen)
+<div align="center">
+
+Maintained by **[maybeizen](https://github.com/maybeizen)**
+
+</div>

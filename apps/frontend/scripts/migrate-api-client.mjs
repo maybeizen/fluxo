@@ -19,7 +19,7 @@ for (const file of walk(root)) {
 
     content = content.replace(/import axios from 'axios'\n/g, "import { apiClient } from '@/lib/api-client'\n")
     content = content.replace(
-        /const API_URL =\s*\n?\s*process\.env\.NEXT_PUBLIC_API_URL \|\| 'http:\/\/localhost:3001\/api\/v1'\n\n?/g,
+        /const API_URL =\s*\n?\s*process\.env\.NEXT_PUBLIC_API_URL \|\| 'http:\/\/localhost:5001\/api\/v1'\n\n?/g,
         ''
     )
     content = content.replace(/\baxios\./g, 'apiClient.')

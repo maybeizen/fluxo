@@ -39,7 +39,7 @@ Create a `.env.local` file in the `apps/frontend` directory:
 
 ```env
 # API Configuration
-NEXT_PUBLIC_API_URL=http://localhost:5001
+NEXT_PUBLIC_API_URL=http://localhost:5001/api/v1
 
 # Optional: Other environment variables
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=your-site-key

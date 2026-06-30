@@ -13,7 +13,7 @@ Reference **gateway** plugin with mock checkout and HMAC-signed webhooks.
 ```bash
 BODY='{"invoiceId":1,"paid":true}'
 SIG=$(echo -n "$BODY" | openssl dgst -sha256 -hmac "dev-secret" | awk '{print $2}')
-curl -X POST http://localhost:3000/api/v1/webhooks/gateway/example-gateway \
+curl -X POST http://localhost:5001/api/v1/webhooks/gateway/example-gateway \
   -H "Content-Type: application/json" \
   -H "X-Example-Signature: $SIG" \
   -d "$BODY"
