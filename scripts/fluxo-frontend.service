@@ -1,0 +1,18 @@
+[Unit]
+Description=Fluxo Frontend (Next.js)
+After=network.target fluxo-api.service
+Wants=fluxo-api.service
+
+[Service]
+Type=simple
+User=fluxo
+Group=fluxo
+WorkingDirectory=/opt/fluxo/apps/frontend
+EnvironmentFile=/opt/fluxo/.env
+Environment=NODE_ENV=production
+ExecStart=/home/fluxo/.bun/bin/bun run start
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
