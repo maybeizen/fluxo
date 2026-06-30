@@ -5,6 +5,7 @@ import { logger } from '../../../utils/logger'
 import { getSettings } from '../../../utils/get-settings'
 import { verifyTurnstileToken } from '../../../utils/turnstile'
 import { env } from '../../../utils/env'
+import { serializeProfile } from '../../../utils/serializers/user'
 
 export const login = async (req: Request, res: Response) => {
     try {
@@ -69,7 +70,7 @@ export const login = async (req: Request, res: Response) => {
             req.session.cookie.maxAge = sessionLifetimeInMs
             req.session.userId = user.id
 
-            req.session.save((saveErr) => {
+            req.session.save(async (saveErr) => {
                 if (saveErr) {
                     logger.error(`Error saving session - ${saveErr}`)
                     return res.status(500).json({
@@ -78,23 +79,32 @@ export const login = async (req: Request, res: Response) => {
                     })
                 }
 
+                const serialized = await serializeProfile({
+                    id: user.id,
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    role: user.role,
+                    isVerified: user.isVerified,
+                    username: user.username,
+                    slug: user.slug,
+                    headline: user.headline,
+                    about: user.about,
+                    avatarKey: user.avatarKey,
+                    avatarUrl: user.avatarUrl,
+                })
+
                 res.status(200).json({
                     success: true,
                     message: 'User logged in successfully',
                     user: {
-                        id: user.id,
-                        email: user.email,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        profile: {
-                            username: user.username,
-                            slug: user.slug,
-                            headline: user.headline,
-                            about: user.about,
-                            avatarUrl: user.avatarUrl,
-                        },
-                        role: user.role,
-                        isVerified: user.isVerified,
+                        id: serialized.id,
+                        email: serialized.email,
+                        firstName: serialized.firstName,
+                        lastName: serialized.lastName,
+                        profile: serialized.profile,
+                        role: serialized.role,
+                        isVerified: serialized.isVerified,
                     },
                 })
             })

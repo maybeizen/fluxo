@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import MarkdownEditor from '@/components/admin/news/markdown-editor'
 import Button from '@/components/ui/button'
 import { useNotifications } from '@/context/notification-context'
+import { resolveStorageUrl } from '@/lib/storage'
 
 interface TicketReplyBoxProps {
     ticketId: string
@@ -86,7 +87,10 @@ export default function TicketReplyBox({
                     if (!response.ok) throw new Error('Upload failed')
 
                     const data = await response.json()
-                    attachmentUrls.push(data.attachment.fileUrl)
+                    const resolvedUrl =
+                        resolveStorageUrl(data.attachment.fileUrl) ??
+                        data.attachment.fileUrl
+                    attachmentUrls.push(resolvedUrl)
                 } catch (error) {
                     notifications.error('Failed to upload image')
                     continue

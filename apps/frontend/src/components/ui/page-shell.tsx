@@ -31,17 +31,17 @@ export default function PageShell({
 }: PageShellProps) {
     return (
         <div
-            className={`bg-background min-h-screen px-4 pt-12 lg:px-8 ${className}`}
+            className={`min-h-screen bg-black px-4 pt-12 lg:px-8 ${className}`}
         >
             <div className={`mx-auto ${maxWidthClasses[maxWidth]}`}>
                 <header className="mb-8">
                     <div className="mb-4 flex items-center justify-between gap-4">
                         <div>
-                            <h1 className="text-foreground mb-2 text-3xl font-bold">
+                            <h1 className="mb-2 text-3xl font-bold text-white">
                                 {title}
                             </h1>
                             {description && (
-                                <p className="text-muted">{description}</p>
+                                <p className="text-zinc-400">{description}</p>
                             )}
                         </div>
                         {actions && (

@@ -8,10 +8,16 @@ const MAGIC: Record<string, number[][]> = {
     'image/webp': [[0x52, 0x49, 0x46, 0x46]],
 }
 
+function isWebp(buffer: Buffer): boolean {
+    if (buffer.length < 12) return false
+    const riff = buffer.toString('ascii', 0, 4)
+    const webp = buffer.toString('ascii', 8, 12)
+    return riff === 'RIFF' && webp === 'WEBP'
+}
+
 function matchesMagic(buffer: Buffer, mimetype: string): boolean {
-    if (mimetype === 'image/svg+xml') {
-        const header = buffer.toString('utf8', 0, Math.min(buffer.length, 256))
-        return header.includes('<svg')
+    if (mimetype === 'image/webp') {
+        return isWebp(buffer)
     }
 
     const signatures = MAGIC[mimetype]
@@ -24,22 +30,6 @@ export function validateUploadedFileMagic(
     mimetype: string
 ): boolean {
     return matchesMagic(buffer, mimetype)
-}
-
-export function normalizeExtension(mimetype: string): string {
-    switch (mimetype) {
-        case 'image/png':
-            return '.png'
-        case 'image/jpeg':
-        case 'image/jpg':
-            return '.jpg'
-        case 'image/webp':
-            return '.webp'
-        case 'image/svg+xml':
-            return '.svg'
-        default:
-            return '.bin'
-    }
 }
 
 interface CreateUploadOptions {
@@ -75,19 +65,13 @@ export function createUpload({
 export const uploadAvatar: RequestHandler = createUpload({
     field: 'avatar',
     maxSize: 5 * 1024 * 1024,
-    allowedMimes: ['image/png', 'image/jpeg', 'image/jpg'],
+    allowedMimes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
 })
 
 export const uploadLogo: RequestHandler = createUpload({
     field: 'logo',
     maxSize: 2 * 1024 * 1024,
-    allowedMimes: [
-        'image/png',
-        'image/jpeg',
-        'image/jpg',
-        'image/svg+xml',
-        'image/webp',
-    ],
+    allowedMimes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
 })
 
 export const uploadTicketAttachment: RequestHandler = createUpload({

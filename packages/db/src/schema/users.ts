@@ -28,6 +28,7 @@ export const users = pgTable(
         headline: text('headline'),
         about: text('about'),
         avatarUrl: varchar('avatar_url', { length: 500 }),
+        avatarKey: varchar('avatar_key', { length: 300 }),
 
         isBanned: boolean('is_banned').notNull().default(false),
         isTicketBanned: boolean('is_ticket_banned').notNull().default(false),

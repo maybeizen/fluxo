@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { getApiErrorMessage } from '@/lib/api-client'
 
 export interface PaginatedResult<TItem> {
@@ -51,12 +51,15 @@ export function usePaginatedList<TItem, TFilters>(
     const [total, setTotal] = useState(0)
     const [filters, setFiltersState] = useState<TFilters>(initialFilters)
 
+    const fetcherRef = useRef(fetcher)
+    fetcherRef.current = fetcher
+
     const load = useCallback(async () => {
         if (!enabled) return
         setIsLoading(true)
         setError(null)
         try {
-            const result = await fetcher({
+            const result = await fetcherRef.current({
                 page: currentPage,
                 limit: itemsPerPage,
                 filters,
@@ -69,7 +72,7 @@ export function usePaginatedList<TItem, TFilters>(
         } finally {
             setIsLoading(false)
         }
-    }, [currentPage, enabled, fetcher, filters, itemsPerPage])
+    }, [currentPage, enabled, filters, itemsPerPage])
 
     useEffect(() => {
         let cancelled = false
@@ -81,7 +84,7 @@ export function usePaginatedList<TItem, TFilters>(
             setIsLoading(true)
             setError(null)
             try {
-                const result = await fetcher({
+                const result = await fetcherRef.current({
                     page: currentPage,
                     limit: itemsPerPage,
                     filters,
@@ -100,7 +103,7 @@ export function usePaginatedList<TItem, TFilters>(
         return () => {
             cancelled = true
         }
-    }, [currentPage, enabled, fetcher, filters, itemsPerPage])
+    }, [currentPage, enabled, filters, itemsPerPage])
 
     const setFilters = useCallback((next: TFilters) => {
         setFiltersState(next)

@@ -8,6 +8,7 @@ import { eq } from '@fluxo/db'
 import { UserRole } from '@fluxo/types'
 import { logger } from '../../../../utils/logger'
 import { userCache } from '../../../../utils/cache'
+import { serializeAdminUser } from '../../../../utils/serializers/user'
 
 export const createUser = async (req: Request, res: Response) => {
     try {
@@ -72,21 +73,7 @@ export const createUser = async (req: Request, res: Response) => {
 
         await userCache.delPattern('list:*')
 
-        const transformedUser = {
-            ...newUser,
-            uuid: newUser.id.toString(),
-            profile: {
-                username: newUser.username,
-                slug: newUser.slug,
-                headline: newUser.headline,
-                about: newUser.about,
-                avatarUrl: newUser.avatarUrl,
-            },
-            timestamps: {
-                createdAt: newUser.createdAt,
-                updatedAt: newUser.updatedAt,
-            },
-        }
+        const transformedUser = await serializeAdminUser(newUser)
 
         res.status(201).json({
             success: true,

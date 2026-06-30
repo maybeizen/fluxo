@@ -3,6 +3,7 @@
 import { type ReactNode } from 'react'
 import { AuthGuard } from '@/components/auth-guard'
 import { Sidebar } from '@/components/ui/sidebar'
+import { AppSettingsProvider } from '@/context/app-settings-context'
 import { useAuth } from '@/context/auth-context'
 
 interface ClientLayoutProps {
@@ -43,17 +44,19 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     ]
 
     return (
-        <AuthGuard>
-            <div className="bg-background flex min-h-screen">
-                <Sidebar
-                    user={user!}
-                    items={navItems}
-                    onLogout={handleLogout}
-                />
-                <main className="flex flex-1 flex-col p-0 transition-all duration-300 lg:ml-64">
-                    {children}
-                </main>
-            </div>
-        </AuthGuard>
+        <AppSettingsProvider>
+            <AuthGuard>
+                <div className="bg-background flex min-h-screen">
+                    <Sidebar
+                        user={user!}
+                        items={navItems}
+                        onLogout={handleLogout}
+                    />
+                    <main className="flex flex-1 flex-col p-0 transition-all duration-300 lg:ml-64">
+                        {children}
+                    </main>
+                </div>
+            </AuthGuard>
+        </AppSettingsProvider>
     )
 }

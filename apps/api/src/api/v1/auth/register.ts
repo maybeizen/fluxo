@@ -17,6 +17,7 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 import { getSettings } from '../../../utils/get-settings'
 import { verifyTurnstileToken } from '../../../utils/turnstile'
+import { serializeProfile } from '../../../utils/serializers/user'
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -93,19 +94,15 @@ export const register = async (req: Request, res: Response) => {
             })
 
             const { password: _, ...userWithoutPassword } = newUser
+            const serialized = await serializeProfile(newUser)
 
             res.status(201).json({
                 success: true,
                 message: 'User registered successfully. You can now log in.',
                 user: {
                     ...userWithoutPassword,
-                    profile: {
-                        username: newUser.username,
-                        slug: newUser.slug,
-                        headline: newUser.headline,
-                        about: newUser.about,
-                        avatarUrl: newUser.avatarUrl,
-                    },
+                    uuid: serialized.uuid,
+                    profile: serialized.profile,
                 },
             })
         } else {
@@ -143,6 +140,7 @@ export const register = async (req: Request, res: Response) => {
             })
 
             const { password: _, ...userWithoutPassword } = newUser
+            const serialized = await serializeProfile(newUser)
 
             res.status(201).json({
                 success: true,
@@ -150,13 +148,8 @@ export const register = async (req: Request, res: Response) => {
                     'User registered successfully. Please check your email to verify your account.',
                 user: {
                     ...userWithoutPassword,
-                    profile: {
-                        username: newUser.username,
-                        slug: newUser.slug,
-                        headline: newUser.headline,
-                        about: newUser.about,
-                        avatarUrl: newUser.avatarUrl,
-                    },
+                    uuid: serialized.uuid,
+                    profile: serialized.profile,
                 },
             })
         }

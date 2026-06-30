@@ -8,6 +8,7 @@ import { getDb, news, newsComments, users } from '@fluxo/db'
 import { eq } from '@fluxo/db'
 import { logger } from '../../../../utils/logger'
 import { newsCache } from '../../../../utils/cache'
+import { serializeNewsAuthor } from '../../../../utils/serializers/user'
 
 export const addComment = async (req: Request, res: Response) => {
     try {
@@ -42,6 +43,7 @@ export const addComment = async (req: Request, res: Response) => {
                 lastName: users.lastName,
                 email: users.email,
                 username: users.username,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
             })
             .from(users)
@@ -70,15 +72,14 @@ export const addComment = async (req: Request, res: Response) => {
             await newsCache.del(`slug:${validated.news.slug}`)
         }
 
+        const serializedAuthor = await serializeNewsAuthor(user)
+
         const comment = {
             ...newComment,
             uuid: newComment.id.toString(),
             author: {
-                id: user.id,
-                uuid: user.id.toString(),
-                name: `${user.firstName} ${user.lastName}`,
+                ...serializedAuthor,
                 email: user.email,
-                avatarUrl: user.avatarUrl || '',
             },
         }
 

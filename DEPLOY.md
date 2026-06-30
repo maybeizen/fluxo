@@ -699,8 +699,12 @@ Configure in **Admin → Settings → SMTP** or via `.env` (`SMTP_HOST`, `SMTP_P
 
 Configure in **Admin → Settings → Storage** or via `.env`:
 
-- **Local (default):** files are saved under `STORAGE_DIR` (repo-root `/storage` by default) and served at `{API_URL}/storage/<category>/<file>`
+- **Local (default):** files are saved under `STORAGE_DIR` (set an absolute path; Docker uses `/app/storage`) and served at `{API_URL}/storage/<category>/<file>-<size>.webp`
 - **S3-compatible:** set provider to `s3` and supply region, bucket, and credentials. Supports AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, etc. via `S3_ENDPOINT` and `S3_FORCE_PATH_STYLE`
+
+Uploads are processed with **sharp** on the API: avatars and logos are stored as WebP variants (`-64`, `-256`, `-full` suffixes). Only PNG, JPEG, and WebP are accepted (no SVG). Static files are served with long-lived cache headers (`Cache-Control: immutable, max-age=1y`).
+
+The frontend `next/image` config must allow your API origin (`NEXT_PUBLIC_API_URL` without `/api/v1`) and any S3/CDN host used for public URLs.
 
 Docker Compose sets `STORAGE_DIR=/app/storage` and mounts the `storage_data` volume automatically.
 

@@ -8,6 +8,7 @@ import { encrypt, decrypt } from '../../../../utils/encryption'
 import { settingsCache } from '../../../../utils/cache'
 import { setEmailThemeColor } from '../../../../utils/email-templates'
 import { invalidateStorageDriver } from '../../../../utils/storage'
+import { resolveLogoUrl } from '../../../../utils/serializers/user'
 
 export const updateSettings = async (req: Request, res: Response) => {
     try {
@@ -19,8 +20,6 @@ export const updateSettings = async (req: Request, res: Response) => {
 
         if (data.app) {
             if (data.app.name !== undefined) updateData.appName = data.app.name
-            if (data.app.logoUrl !== undefined)
-                updateData.appLogoUrl = data.app.logoUrl
             if (data.app.themeColor !== undefined)
                 updateData.appThemeColor = data.app.themeColor
         }
@@ -169,7 +168,7 @@ export const updateSettings = async (req: Request, res: Response) => {
             uuid: updatedSettings.id.toString(),
             app: {
                 name: updatedSettings.appName,
-                logoUrl: updatedSettings.appLogoUrl,
+                logoUrl: await resolveLogoUrl(updatedSettings),
                 themeColor: updatedSettings.appThemeColor ?? undefined,
             },
             auth: {

@@ -2,6 +2,7 @@ import { type Request, type Response } from 'express'
 import { getDb, users } from '@fluxo/db'
 import { eq } from '@fluxo/db'
 import { logger } from '../../../utils/logger'
+import { serializeProfile } from '../../../utils/serializers/user'
 
 export const me = async (req: Request, res: Response) => {
     try {
@@ -26,6 +27,7 @@ export const me = async (req: Request, res: Response) => {
                 slug: users.slug,
                 headline: users.headline,
                 about: users.about,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
                 isBanned: users.isBanned,
                 isTicketBanned: users.isTicketBanned,
@@ -43,19 +45,12 @@ export const me = async (req: Request, res: Response) => {
             })
         }
 
+        const serialized = await serializeProfile(user)
+
         res.status(200).json({
             success: true,
             message: 'User fetched successfully',
-            user: {
-                ...user,
-                profile: {
-                    username: user.username,
-                    slug: user.slug,
-                    headline: user.headline,
-                    about: user.about,
-                    avatarUrl: user.avatarUrl,
-                },
-            },
+            user: serialized,
         })
     } catch (error: unknown) {
         logger.error(`Error fetching user - ${error}`)

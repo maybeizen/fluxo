@@ -125,9 +125,16 @@ export function invalidateStorageDriver(): void {
     cachedConfigKey = null
 }
 
+export {
+    resolveStorageUrl,
+    resolveAppLogoUrl,
+    parseStorageBaseKey,
+    isAbsoluteStorageUrl,
+} from './resolve'
 export type {
     StorageCategory,
     StorageDriver,
     StorageProvider,
     ResolvedStorageConfig,
+    StorageVariant,
 } from './types'

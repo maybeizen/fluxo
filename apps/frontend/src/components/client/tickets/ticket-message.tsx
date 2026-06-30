@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic'
 import { type TicketMessage, UserRole, type UserProfile } from '@fluxo/types'
 import remarkGfm from 'remark-gfm'
 import Image from 'next/image'
+import Avatar from '@/components/ui/avatar'
+import { resolveStorageUrl } from '@/lib/storage'
 
 const ReactMarkdown = dynamic(() => import('react-markdown'), {
     ssr: false,
@@ -70,17 +72,13 @@ export default function TicketMessageComponent({
         message.author?.email?.split('@')[0] ||
         'Unknown'
 
-    const avatarUrl = message.author?.profile?.avatarUrl as string | undefined
-
-    const initials = authorName
-        .split(' ')
-        .map((n: string) => n[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2)
+    const avatarUrl = message.author?.profile?.avatarUrl
 
     const images = useMemo(
-        () => extractImages(message.content),
+        () =>
+            extractImages(message.content).map(
+                (url) => resolveStorageUrl(url) ?? url
+            ),
         [message.content]
     )
     const textContent = useMemo(
@@ -101,19 +99,12 @@ export default function TicketMessageComponent({
             <div
                 className={`flex-shrink-0 ${isOwnMessage ? 'order-2 ml-2' : 'mr-2'}`}
             >
-                <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-zinc-700 bg-zinc-800 text-sm font-semibold text-white">
-                    {avatarUrl ? (
-                        <Image
-                            src={avatarUrl}
-                            alt={authorName}
-                            width={40}
-                            height={40}
-                            className="h-full w-full object-cover"
-                        />
-                    ) : (
-                        <span>{initials}</span>
-                    )}
-                </div>
+                <Avatar
+                    src={avatarUrl}
+                    name={authorName}
+                    size="sm"
+                    className="border border-zinc-700"
+                />
             </div>
 
             <div className={`flex max-w-md min-w-0 flex-col`}>
@@ -179,7 +170,6 @@ export default function TicketMessageComponent({
                                         alt="Attachment"
                                         width={400}
                                         height={400}
-                                        unoptimized
                                         className="h-auto max-h-[400px] w-full cursor-pointer object-contain"
                                     />
                                 </a>
@@ -202,7 +192,6 @@ export default function TicketMessageComponent({
                                                 alt={`Attachment ${idx + 1}`}
                                                 width={200}
                                                 height={200}
-                                                unoptimized
                                                 className="h-auto max-h-[200px] w-full cursor-pointer object-contain"
                                             />
                                         </a>

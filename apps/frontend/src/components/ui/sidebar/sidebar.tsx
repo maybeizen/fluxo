@@ -10,8 +10,9 @@ import {
     DropdownItem,
     DropdownDivider,
 } from '@/components/ui/dropdown'
-import Image from 'next/image'
-import { useAppLogo } from '@/hooks/use-app-logo'
+import Avatar from '@/components/ui/avatar'
+import Logo from '@/components/ui/logo'
+import { useAppSettings } from '@/context/app-settings-context'
 
 interface SidebarItemProps {
     href: string
@@ -64,24 +65,20 @@ function SidebarProfile({
     const email = user.email
     const avatarUrl = user.profile?.avatarUrl
 
+    const avatarTrigger = (
+        <Avatar
+            src={avatarUrl}
+            name={username}
+            size="sm"
+            rounded="lg"
+            className="cursor-pointer transition-colors hover:bg-zinc-700"
+        />
+    )
+
     if (isCollapsed) {
         return (
             <Dropdown
-                trigger={
-                    <div className="flex h-10 w-10 flex-shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-zinc-800 text-sm font-bold text-white uppercase transition-colors hover:bg-zinc-700">
-                        {avatarUrl ? (
-                            <Image
-                                src={avatarUrl}
-                                alt={username}
-                                width={40}
-                                height={40}
-                                className="h-full w-full object-cover"
-                            />
-                        ) : (
-                            <span>{username.slice(0, 2)}</span>
-                        )}
-                    </div>
-                }
+                trigger={avatarTrigger}
                 placement="top"
                 align="left"
                 useFixed={true}
@@ -146,19 +143,7 @@ function SidebarProfile({
         <Dropdown
             trigger={
                 <div className="flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 transition-colors hover:bg-zinc-900">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg bg-zinc-800 text-sm font-bold text-white uppercase">
-                        {avatarUrl ? (
-                            <Image
-                                src={avatarUrl}
-                                alt={username}
-                                width={40}
-                                height={40}
-                                className="h-full w-full object-cover"
-                            />
-                        ) : (
-                            <span>{username.slice(0, 2)}</span>
-                        )}
-                    </div>
+                    {avatarTrigger}
                     <div className="flex min-w-0 flex-1 flex-col">
                         <span className="truncate text-sm font-medium text-white">
                             {username}
@@ -235,7 +220,7 @@ interface SidebarProps {
 
 export default function Sidebar({ user, items, onLogout }: SidebarProps) {
     const pathname = usePathname()
-    const { logoUrl, appName } = useAppLogo()
+    const { appName } = useAppSettings()
     const [isCollapsed, setIsCollapsed] = useState(() => {
         if (typeof window !== 'undefined') {
             const stored = localStorage.getItem('sidebar-collapsed')
@@ -280,13 +265,7 @@ export default function Sidebar({ user, items, onLogout }: SidebarProps) {
                             href={dashboardHref}
                             className="flex items-center gap-2"
                         >
-                            <Image
-                                src={logoUrl || '/logo.png'}
-                                alt="Fluxo"
-                                width={32}
-                                height={32}
-                                className="h-8 w-8"
-                            />
+                            <Logo width={32} height={32} className="h-8 w-8" />
                             <span className="text-xl font-bold text-white">
                                 {appName || 'Fluxo'}
                             </span>
@@ -296,13 +275,7 @@ export default function Sidebar({ user, items, onLogout }: SidebarProps) {
                             href={dashboardHref}
                             className="flex items-center justify-center"
                         >
-                            <Image
-                                src={logoUrl || '/logo.png'}
-                                alt="Fluxo"
-                                width={24}
-                                height={24}
-                                className="h-6 w-6"
-                            />
+                            <Logo width={24} height={24} className="h-6 w-6" />
                         </Link>
                     )}
                     <button

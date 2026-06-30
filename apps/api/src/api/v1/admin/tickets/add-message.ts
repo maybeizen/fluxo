@@ -9,6 +9,7 @@ import { emitNewMessage } from '../../../../utils/websocket'
 import { sendEmail } from '../../../../utils/mailer'
 import { ticketRespondedTemplate } from '../../../../utils/email-templates'
 import { env } from '../../../../utils/env'
+import { serializeAuthor } from '../../../../utils/serializers/user'
 
 export const addMessage = async (req: Request, res: Response) => {
     try {
@@ -76,6 +77,7 @@ export const addMessage = async (req: Request, res: Response) => {
                 slug: users.slug,
                 headline: users.headline,
                 about: users.about,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
                 role: users.role,
             })
@@ -87,21 +89,7 @@ export const addMessage = async (req: Request, res: Response) => {
             ...newMessage,
             uuid: newMessage.id.toString(),
             ticketUuid: newMessage.ticketId.toString(),
-            author: author
-                ? {
-                      id: author.id,
-                      uuid: author.id.toString(),
-                      email: author.email,
-                      profile: {
-                          username: author.username,
-                          slug: author.slug,
-                          headline: author.headline,
-                          about: author.about,
-                          avatarUrl: author.avatarUrl,
-                      },
-                      role: author.role,
-                  }
-                : null,
+            author: author ? await serializeAuthor(author) : null,
         }
 
         await ticketCache.delPattern('admin:*')

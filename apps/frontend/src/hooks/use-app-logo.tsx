@@ -1,44 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { API_BASE_URL } from '@/lib/api-client'
-
-interface AppSettings {
-    name?: string
-    logoUrl?: string
-}
+import { useAppSettings } from '@/context/app-settings-context'
 
 export function useAppLogo() {
-    const [logoUrl, setLogoUrl] = useState<string | null>(null)
-    const [appName, setAppName] = useState<string | null>(null)
-    const [isLoading, setIsLoading] = useState(true)
-
-    useEffect(() => {
-        const fetchSettings = async () => {
-            try {
-                const response = await fetch(
-                    `${API_BASE_URL}/public/app-settings`
-                )
-                if (response.ok) {
-                    const data = await response.json()
-                    if (data.success && data.settings) {
-                        if (data.settings.logoUrl) {
-                            setLogoUrl(data.settings.logoUrl)
-                        }
-                        if (data.settings.name) {
-                            setAppName(data.settings.name)
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Failed to fetch app settings:', error)
-            } finally {
-                setIsLoading(false)
-            }
-        }
-
-        fetchSettings()
-    }, [])
-
+    const { logoUrl, appName, isLoading } = useAppSettings()
     return { logoUrl, appName, isLoading }
 }

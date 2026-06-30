@@ -6,6 +6,7 @@ import { eq, and } from '@fluxo/db'
 import { logger } from '../../../utils/logger'
 import { NewsVisibility } from '@fluxo/types'
 import { paramString } from '../../../utils/sanitize'
+import { serializeNewsAuthor } from '../../../utils/serializers/user'
 
 export const addPublicComment = async (req: Request, res: Response) => {
     try {
@@ -51,7 +52,10 @@ export const addPublicComment = async (req: Request, res: Response) => {
                 slug: users.slug,
                 headline: users.headline,
                 about: users.about,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
+                firstName: users.firstName,
+                lastName: users.lastName,
             })
             .from(users)
             .where(eq(users.id, userId))
@@ -73,16 +77,15 @@ export const addPublicComment = async (req: Request, res: Response) => {
             })
             .returning()
 
+        const serializedAuthor = await serializeNewsAuthor(user)
+
         const comment = {
             ...newComment,
             uuid: newComment.id.toString(),
             author: {
-                id: user.id,
-                uuid: user.id.toString(),
-                name: `${user.username}`,
+                ...serializedAuthor,
+                name: user.username,
                 email: user.email,
-                username: user.username,
-                avatarUrl: user.avatarUrl,
             },
         }
 

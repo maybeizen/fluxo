@@ -5,7 +5,7 @@ import { type User, UserRole } from '@fluxo/types'
 import { apiClient } from '@/lib/api-client'
 import InputError from './input-error'
 import Spinner from '../spinner'
-import Image from 'next/image'
+import Avatar from '@/components/ui/avatar'
 
 interface UserSearchSelectProps {
     value: string
@@ -129,24 +129,11 @@ export default function UserSearchSelect({
                                 onClick={() => handleUserSelect(user)}
                                 className="flex w-full items-center gap-3 border-b border-zinc-800 px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-zinc-800"
                             >
-                                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-sm font-bold text-white uppercase">
-                                    {user.profile?.avatarUrl ? (
-                                        <Image
-                                            src={user.profile.avatarUrl}
-                                            alt={user.profile.username}
-                                            width={40}
-                                            height={40}
-                                            className="h-full w-full object-cover"
-                                        />
-                                    ) : (
-                                        <span>
-                                            {user.profile?.username?.slice(
-                                                0,
-                                                2
-                                            ) || 'U'}
-                                        </span>
-                                    )}
-                                </div>
+                                <Avatar
+                                    src={user.profile?.avatarUrl}
+                                    name={user.profile?.username || 'Unknown'}
+                                    size="sm"
+                                />
                                 <div className="min-w-0 flex-1">
                                     <div className="truncate text-sm font-medium text-white">
                                         {user.profile?.username || 'Unknown'}

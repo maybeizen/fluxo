@@ -13,6 +13,7 @@ import { logger } from '../../../utils/logger'
 import { NewsVisibility } from '@fluxo/types'
 import { newsCache } from '../../../utils/cache'
 import { paramString } from '../../../utils/sanitize'
+import { serializeNewsAuthor } from '../../../utils/serializers/user'
 
 const populateAuthorsAndComments = async (
     newsArticle: any,
@@ -37,6 +38,7 @@ const populateAuthorsAndComments = async (
                       lastName: users.lastName,
                       email: users.email,
                       username: users.username,
+                      avatarKey: users.avatarKey,
                       avatarUrl: users.avatarUrl,
                   })
                   .from(users)
@@ -59,6 +61,7 @@ const populateAuthorsAndComments = async (
                       lastName: users.lastName,
                       email: users.email,
                       username: users.username,
+                      avatarKey: users.avatarKey,
                       avatarUrl: users.avatarUrl,
                   })
                   .from(users)
@@ -72,29 +75,19 @@ const populateAuthorsAndComments = async (
     const newsObj = {
         ...newsArticle,
         uuid: newsArticle.id.toString(),
-        author: authorUsers.map((user) => ({
-            id: user.id,
-            uuid: user.id.toString(),
-            name: `${user.firstName} ${user.lastName}`,
-            username: user.username,
-            avatarUrl: user.avatarUrl,
-        })),
-        comments: commentsList.map((comment) => {
-            const author = userMap.get(comment.authorId)
-            return {
-                ...comment,
-                uuid: comment.id.toString(),
-                author: author
-                    ? {
-                          id: author.id,
-                          uuid: author.id.toString(),
-                          name: `${author.firstName} ${author.lastName}`,
-                          username: author.username,
-                          avatarUrl: author.avatarUrl,
-                      }
-                    : null,
-            }
-        }),
+        author: await Promise.all(
+            authorUsers.map((user) => serializeNewsAuthor(user))
+        ),
+        comments: await Promise.all(
+            commentsList.map(async (comment) => {
+                const author = userMap.get(comment.authorId)
+                return {
+                    ...comment,
+                    uuid: comment.id.toString(),
+                    author: author ? await serializeNewsAuthor(author) : null,
+                }
+            })
+        ),
         metadata: {
             slug: newsArticle.slug,
             featuredImageUrl: newsArticle.featuredImageUrl,

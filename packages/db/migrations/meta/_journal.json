@@ -50,6 +50,13 @@
             "when": 1772100000000,
             "tag": "0007_add_storage_settings",
             "breakpoints": true
+        },
+        {
+            "idx": 8,
+            "version": "7",
+            "when": 1772200000000,
+            "tag": "0008_add_image_storage_keys",
+            "breakpoints": true
         }
     ]
 }

@@ -1,20 +1,18 @@
+import type { ImageVariantSize } from '../image'
+
 export type StorageCategory = 'avatars' | 'logos' | 'tickets'
 
 export type StorageProvider = 'local' | 's3'
 
-export interface StorageSaveResult {
-    url: string
-    key: string
+export interface StorageVariant {
+    size: ImageVariantSize
+    buffer: Buffer
 }
 
 export interface StorageDriver {
-    save(
-        category: StorageCategory,
-        filename: string,
-        buffer: Buffer,
-        contentType: string
-    ): Promise<StorageSaveResult>
-    remove(urlOrKey: string): Promise<void>
+    saveVariants(baseKey: string, variants: StorageVariant[]): Promise<void>
+    resolveUrl(baseKey: string, size: ImageVariantSize): string
+    remove(baseKeyOrUrl: string): Promise<void>
 }
 
 export interface ResolvedS3Config {

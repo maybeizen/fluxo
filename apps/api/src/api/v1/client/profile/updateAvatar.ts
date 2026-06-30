@@ -2,13 +2,14 @@ import { type Request, type Response } from 'express'
 import {
     uploadAvatar,
     validateUploadedFileMagic,
-    normalizeExtension,
 } from '../../../../utils/upload'
 import { getDb, users } from '@fluxo/db'
 import { eq } from '@fluxo/db'
 import { logger } from '../../../../utils/logger'
 import { getStorageDriver } from '../../../../utils/storage'
 import { userCache } from '../../../../utils/cache'
+import { processImage } from '../../../../utils/image'
+import { serializeProfile } from '../../../../utils/serializers/user'
 
 export const updateAvatar = async (req: Request, res: Response) => {
     uploadAvatar(req, res, async (err) => {
@@ -46,6 +47,7 @@ export const updateAvatar = async (req: Request, res: Response) => {
             const db = getDb()
             const [existingUser] = await db
                 .select({
+                    avatarKey: users.avatarKey,
                     avatarUrl: users.avatarUrl,
                     username: users.username,
                 })
@@ -54,22 +56,32 @@ export const updateAvatar = async (req: Request, res: Response) => {
                 .limit(1)
 
             const driver = await getStorageDriver()
-            const ext = normalizeExtension(req.file.mimetype)
-            const filename = `${req.userId}-${Date.now()}${ext}`
-            const { url: avatarUrl } = await driver.save(
-                'avatars',
-                filename,
-                req.file.buffer,
-                req.file.mimetype
+            const baseKey = `avatars/${req.userId}-${Date.now()}`
+            const variants = await processImage(req.file.buffer, {
+                sizes: [64, 256, 'full'],
+                cap: 1024,
+            })
+
+            await driver.saveVariants(
+                baseKey,
+                variants.map((variant) => ({
+                    size: variant.size,
+                    buffer: variant.buffer,
+                }))
             )
 
-            if (existingUser?.avatarUrl) {
-                await driver.remove(existingUser.avatarUrl)
+            const oldKey = existingUser?.avatarKey ?? existingUser?.avatarUrl
+            if (oldKey) {
+                await driver.remove(oldKey)
             }
 
             await db
                 .update(users)
-                .set({ avatarUrl, updatedAt: new Date() })
+                .set({
+                    avatarKey: baseKey,
+                    avatarUrl: null,
+                    updatedAt: new Date(),
+                })
                 .where(eq(users.id, req.userId))
 
             await userCache.del(`id:${req.userId}`)
@@ -87,6 +99,7 @@ export const updateAvatar = async (req: Request, res: Response) => {
                     slug: users.slug,
                     headline: users.headline,
                     about: users.about,
+                    avatarKey: users.avatarKey,
                     avatarUrl: users.avatarUrl,
                     firstName: users.firstName,
                     lastName: users.lastName,
@@ -96,23 +109,14 @@ export const updateAvatar = async (req: Request, res: Response) => {
                 .where(eq(users.id, req.userId))
                 .limit(1)
 
+            const serialized = user ? await serializeProfile(user) : null
+            const avatarUrl = serialized?.profile.avatarUrl ?? null
+
             res.status(200).json({
                 success: true,
                 message: 'Avatar updated successfully',
-                avatarUrl: user?.avatarUrl,
-                user: user
-                    ? {
-                          ...user,
-                          uuid: user.id.toString(),
-                          profile: {
-                              username: user.username,
-                              slug: user.slug,
-                              headline: user.headline,
-                              about: user.about,
-                              avatarUrl: user.avatarUrl,
-                          },
-                      }
-                    : null,
+                avatarUrl,
+                user: serialized,
             })
         } catch (error: unknown) {
             logger.error(`Error updating avatar - ${error}`)

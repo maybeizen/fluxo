@@ -20,6 +20,7 @@ export const settings = pgTable('settings', {
         'default'
     ),
     appLogoUrl: varchar('app_logo_url', { length: 500 }),
+    appLogoKey: varchar('app_logo_key', { length: 300 }),
 
     authDisableEmailVerification: boolean(
         'auth_disable_email_verification'

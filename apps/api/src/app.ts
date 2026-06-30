@@ -1,5 +1,7 @@
 import express, { type Application } from 'express'
 import { createServer } from 'http'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { Server as SocketIOServer } from 'socket.io'
 import helmet from 'helmet'
 import { corsMiddleware } from './middleware/cors'
@@ -15,6 +17,18 @@ import {
 import { errorHandler } from './middleware/errorHandler'
 import { resolveStorageDir } from './utils/storage'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const legacyUploadsDir = resolve(__dirname, '../src/uploads')
+
+const staticOptions = {
+    maxAge: '1y' as const,
+    immutable: true,
+    etag: true,
+    setHeaders: (res: { setHeader: (name: string, value: string) => void }) => {
+        res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin')
+    },
+}
+
 const app: Application = express()
 const httpServer = createServer(app)
 
@@ -28,6 +42,9 @@ const io = new SocketIOServer(httpServer, {
 })
 
 setupWebSocket(io, sessionMiddleware, normalizeUserId)
+
+app.use('/storage', express.static(resolveStorageDir(), staticOptions))
+app.use('/uploads', express.static(legacyUploadsDir, staticOptions))
 
 app.use(helmet())
 app.use(globalRateLimiter)
@@ -45,18 +62,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(corsMiddleware)
 app.use(sessionMiddleware)
 app.use(normalizeUserId)
-
-app.use(
-    '/storage',
-    express.static(resolveStorageDir(), {
-        setHeaders: (res, filePath) => {
-            if (filePath.endsWith('.svg')) {
-                res.setHeader('Content-Disposition', 'attachment')
-                res.setHeader('Content-Type', 'application/octet-stream')
-            }
-        },
-    })
-)
 
 app.use('/api', apiRoutes)
 

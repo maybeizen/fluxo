@@ -6,11 +6,11 @@ import { ticketCache } from '../../../../utils/cache'
 import {
     uploadTicketAttachment,
     validateUploadedFileMagic,
-    normalizeExtension,
 } from '../../../../utils/upload'
 import { getStorageDriver } from '../../../../utils/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { type TicketAttachment, TicketStatus } from '@fluxo/types'
+import { processImage } from '../../../../utils/image'
 
 export const uploadAttachment = async (req: Request, res: Response) => {
     uploadTicketAttachment(req, res, async (err) => {
@@ -80,19 +80,26 @@ export const uploadAttachment = async (req: Request, res: Response) => {
             }
 
             const driver = await getStorageDriver()
-            const ext = normalizeExtension(req.file.mimetype)
-            const filename = `${uuidv4()}${ext}`
-            const { url: attachmentUrl } = await driver.save(
-                'tickets',
-                filename,
-                req.file.buffer,
-                req.file.mimetype
+            const baseKey = `tickets/${uuidv4()}`
+            const variants = await processImage(req.file.buffer, {
+                sizes: ['full'],
+                cap: 1280,
+            })
+
+            await driver.saveVariants(
+                baseKey,
+                variants.map((variant) => ({
+                    size: variant.size,
+                    buffer: variant.buffer,
+                }))
             )
+
+            const fileUrl = driver.resolveUrl(baseKey, 'full')
 
             const attachment: TicketAttachment = {
                 uuid: uuidv4(),
                 ticketUuid: ticketId.toString(),
-                fileUrl: attachmentUrl,
+                fileUrl,
                 createdAt: new Date(),
             }
 

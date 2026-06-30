@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '@/lib/api-client'
+
 export interface AppSettings {
     name?: string
     logoUrl?: string
@@ -5,7 +7,7 @@ export interface AppSettings {
 
 export async function getAppSettings(): Promise<AppSettings | null> {
     try {
-        const response = await fetch(`/public/app-settings`, {
+        const response = await fetch(`${API_BASE_URL}/public/app-settings`, {
             cache: 'no-store',
         })
         if (response.ok) {

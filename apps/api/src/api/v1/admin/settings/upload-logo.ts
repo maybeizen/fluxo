@@ -1,15 +1,13 @@
 import { type Request, type Response } from 'express'
-import {
-    uploadLogo,
-    validateUploadedFileMagic,
-    normalizeExtension,
-} from '../../../../utils/upload'
+import { uploadLogo, validateUploadedFileMagic } from '../../../../utils/upload'
 import { getDb, settings } from '@fluxo/db'
 import { eq } from '@fluxo/db'
 import { logger } from '../../../../utils/logger'
 import { settingsCache } from '../../../../utils/cache'
 import { getStorageDriver } from '../../../../utils/storage'
 import { v4 as uuidv4 } from 'uuid'
+import { processImage } from '../../../../utils/image'
+import { resolveLogoUrl } from '../../../../utils/serializers/user'
 
 export const uploadLogoHandler = async (req: Request, res: Response) => {
     uploadLogo(req, res, async (err) => {
@@ -48,27 +46,35 @@ export const uploadLogoHandler = async (req: Request, res: Response) => {
             }
 
             const driver = await getStorageDriver()
-            const ext = normalizeExtension(req.file.mimetype)
-            const filename = `logo-${uuidv4()}${ext}`
-            const { url: logoUrl } = await driver.save(
-                'logos',
-                filename,
-                req.file.buffer,
-                req.file.mimetype
+            const baseKey = `logos/logo-${uuidv4()}`
+            const variants = await processImage(req.file.buffer, {
+                sizes: [64, 'full'],
+                cap: 512,
+            })
+
+            await driver.saveVariants(
+                baseKey,
+                variants.map((variant) => ({
+                    size: variant.size,
+                    buffer: variant.buffer,
+                }))
             )
 
-            if (settingsRow.appLogoUrl) {
-                await driver.remove(settingsRow.appLogoUrl)
+            const oldKey = settingsRow.appLogoKey ?? settingsRow.appLogoUrl
+            if (oldKey) {
+                await driver.remove(oldKey)
             }
 
             await db
                 .update(settings)
-                .set({ appLogoUrl: logoUrl })
+                .set({ appLogoKey: baseKey, appLogoUrl: null })
                 .where(eq(settings.id, settingsRow.id))
 
             await settingsCache.del('global')
             await settingsCache.del('global:minimal')
             await settingsCache.del('public:app-settings')
+
+            const logoUrl = await resolveLogoUrl({ appLogoKey: baseKey })
 
             res.status(200).json({
                 success: true,

@@ -6,6 +6,7 @@ import { addMessageSchema } from '../../../../validators/client/tickets/add-mess
 import { logger } from '../../../../utils/logger'
 import { ticketCache } from '../../../../utils/cache'
 import { emitNewMessage } from '../../../../utils/websocket'
+import { serializeAuthor } from '../../../../utils/serializers/user'
 
 export const addMessage = async (req: Request, res: Response) => {
     try {
@@ -78,6 +79,7 @@ export const addMessage = async (req: Request, res: Response) => {
                 slug: users.slug,
                 headline: users.headline,
                 about: users.about,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
                 role: users.role,
             })
@@ -89,21 +91,7 @@ export const addMessage = async (req: Request, res: Response) => {
             ...newMessage,
             uuid: newMessage.id.toString(),
             ticketUuid: newMessage.ticketId.toString(),
-            author: author
-                ? {
-                      id: author.id,
-                      uuid: author.id.toString(),
-                      email: author.email,
-                      profile: {
-                          username: author.username,
-                          slug: author.slug,
-                          headline: author.headline,
-                          about: author.about,
-                          avatarUrl: author.avatarUrl,
-                      },
-                      role: author.role,
-                  }
-                : null,
+            author: author ? await serializeAuthor(author) : null,
         }
 
         await ticketCache.delPattern(`client:${userId}:*`)

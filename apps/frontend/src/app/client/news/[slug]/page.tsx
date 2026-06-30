@@ -17,6 +17,7 @@ const ReactMarkdown = dynamic(
 )
 import Button from '@/components/ui/button'
 import Spinner from '@/components/ui/spinner'
+import Avatar from '@/components/ui/avatar'
 import axios from 'axios'
 import { useNotifications } from '@/context/notification-context'
 
@@ -240,22 +241,15 @@ export default function ClientNewsArticlePage() {
                         <div className="flex items-center gap-6 text-zinc-500">
                             {article.author && article.author.length > 0 && (
                                 <div className="flex items-center gap-2">
-                                    {article.author[0].avatarUrl ? (
-                                        <Image
-                                            src={article.author[0].avatarUrl}
-                                            alt={
-                                                article.author[0].name ||
-                                                'Author'
-                                            }
-                                            width={40}
-                                            height={40}
-                                            className="h-10 w-10 rounded-full"
-                                        />
-                                    ) : (
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800">
-                                            <i className="fas fa-user text-zinc-600"></i>
-                                        </div>
-                                    )}
+                                    <Avatar
+                                        src={article.author[0].avatarUrl}
+                                        name={
+                                            article.author[0].name ||
+                                            article.author[0].username ||
+                                            'Author'
+                                        }
+                                        size="sm"
+                                    />
                                     <span className="text-white">
                                         @{article.author[0].username}
                                     </span>
@@ -397,19 +391,15 @@ export default function ClientNewsArticlePage() {
                                         className="rounded-lg border border-zinc-800 bg-black p-6"
                                     >
                                         <div className="flex items-start gap-4">
-                                            {comment.author.avatarUrl ? (
-                                                <img
-                                                    src={
-                                                        comment.author.avatarUrl
-                                                    }
-                                                    alt={comment.author.name}
-                                                    className="h-10 w-10 flex-shrink-0 rounded-full"
-                                                />
-                                            ) : (
-                                                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-zinc-800">
-                                                    <i className="fas fa-user text-zinc-600"></i>
-                                                </div>
-                                            )}
+                                            <Avatar
+                                                src={comment.author.avatarUrl}
+                                                name={
+                                                    comment.author.name ||
+                                                    comment.author.username ||
+                                                    'User'
+                                                }
+                                                size="sm"
+                                            />
                                             <div className="flex-1">
                                                 <div className="mb-2 flex items-center gap-2">
                                                     <span className="font-medium text-white">

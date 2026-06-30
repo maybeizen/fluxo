@@ -16,6 +16,7 @@ import {
 } from '@/lib/profile'
 import { initiateDiscordConnection, disconnectDiscord } from '@/lib/discord'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Avatar from '@/components/ui/avatar'
 
 export default function ProfilePage() {
     const { user, refreshAuth } = useAuth()
@@ -295,20 +296,12 @@ export default function ProfilePage() {
 
                         <div className="flex flex-col items-start gap-6 md:flex-row">
                             <div className="flex-shrink-0">
-                                <div className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-purple-600 to-pink-600">
-                                    {avatarUrl ? (
-                                        <img
-                                            src={avatarUrl}
-                                            alt="Avatar"
-                                            className="h-full w-full object-cover"
-                                        />
-                                    ) : (
-                                        <span className="text-4xl font-bold text-white">
-                                            {user.firstName[0]}
-                                            {user.lastName[0]}
-                                        </span>
-                                    )}
-                                </div>
+                                <Avatar
+                                    src={avatarUrl}
+                                    name={`${user.firstName} ${user.lastName}`}
+                                    size={128}
+                                    className="bg-gradient-to-br from-purple-600 to-pink-600 text-4xl"
+                                />
                             </div>
 
                             <div className="flex-1 space-y-4">

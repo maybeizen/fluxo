@@ -2,6 +2,7 @@ import { type Request, type Response } from 'express'
 import { getDb, settings } from '@fluxo/db'
 import { settingsCache } from '../../../utils/cache'
 import { logger } from '../../../utils/logger'
+import { resolveLogoUrl } from '../../../utils/serializers/user'
 
 export const getAppSettings = async (req: Request, res: Response) => {
     try {
@@ -19,6 +20,7 @@ export const getAppSettings = async (req: Request, res: Response) => {
         const [settingsRow] = await db
             .select({
                 appName: settings.appName,
+                appLogoKey: settings.appLogoKey,
                 appLogoUrl: settings.appLogoUrl,
                 appThemeColor: settings.appThemeColor,
             })
@@ -27,7 +29,7 @@ export const getAppSettings = async (req: Request, res: Response) => {
 
         const appSettings = {
             name: settingsRow?.appName,
-            logoUrl: settingsRow?.appLogoUrl,
+            logoUrl: await resolveLogoUrl(settingsRow ?? {}),
             themeColor: settingsRow?.appThemeColor ?? '#ffd952',
         }
 

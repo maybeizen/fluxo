@@ -7,7 +7,6 @@ export const updateProfileSchema = z.object({
     username: z.string().min(3).max(20).optional(),
     headline: z.string().max(100).optional(),
     about: z.string().max(500).optional(),
-    avatarUrl: z.string().url().optional(),
 })
 
 export type UpdateProfileSchema = z.infer<typeof updateProfileSchema>

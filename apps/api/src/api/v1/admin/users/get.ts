@@ -3,6 +3,7 @@ import { getDb, users } from '@fluxo/db'
 import { eq, and, or, ilike, desc, sql } from '@fluxo/db'
 import { logger } from '../../../../utils/logger'
 import { userCache } from '../../../../utils/cache'
+import { serializeAdminUser } from '../../../../utils/serializers/user'
 
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
@@ -65,6 +66,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
                       slug: users.slug,
                       headline: users.headline,
                       about: users.about,
+                      avatarKey: users.avatarKey,
                       avatarUrl: users.avatarUrl,
                       isBanned: users.isBanned,
                       isTicketBanned: users.isTicketBanned,
@@ -88,6 +90,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
                       slug: users.slug,
                       headline: users.headline,
                       about: users.about,
+                      avatarKey: users.avatarKey,
                       avatarUrl: users.avatarUrl,
                       isBanned: users.isBanned,
                       isTicketBanned: users.isTicketBanned,
@@ -99,21 +102,9 @@ export const getAllUsers = async (req: Request, res: Response) => {
                   .limit(limit)
                   .offset((page - 1) * limit)
 
-        const transformedUsers = usersList.map((u) => ({
-            ...u,
-            uuid: u.id.toString(),
-            profile: {
-                username: u.username,
-                slug: u.slug,
-                headline: u.headline,
-                about: u.about,
-                avatarUrl: u.avatarUrl,
-            },
-            timestamps: {
-                createdAt: u.createdAt,
-                updatedAt: u.updatedAt,
-            },
-        }))
+        const transformedUsers = await Promise.all(
+            usersList.map((u) => serializeAdminUser(u))
+        )
 
         const response = {
             success: true,
@@ -168,6 +159,7 @@ export const getUserByEmail = async (req: Request, res: Response) => {
                 slug: users.slug,
                 headline: users.headline,
                 about: users.about,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
                 isBanned: users.isBanned,
                 isTicketBanned: users.isTicketBanned,
@@ -185,21 +177,7 @@ export const getUserByEmail = async (req: Request, res: Response) => {
             })
         }
 
-        const transformedUser = {
-            ...user,
-            uuid: user.id.toString(),
-            profile: {
-                username: user.username,
-                slug: user.slug,
-                headline: user.headline,
-                about: user.about,
-                avatarUrl: user.avatarUrl,
-            },
-            timestamps: {
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
-            },
-        }
+        const transformedUser = await serializeAdminUser(user)
 
         const response = {
             success: true,
@@ -251,6 +229,7 @@ export const getUserById = async (req: Request, res: Response) => {
                 slug: users.slug,
                 headline: users.headline,
                 about: users.about,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
                 isBanned: users.isBanned,
                 isTicketBanned: users.isTicketBanned,
@@ -268,21 +247,7 @@ export const getUserById = async (req: Request, res: Response) => {
             })
         }
 
-        const transformedUser = {
-            ...user,
-            uuid: user.id.toString(),
-            profile: {
-                username: user.username,
-                slug: user.slug,
-                headline: user.headline,
-                about: user.about,
-                avatarUrl: user.avatarUrl,
-            },
-            timestamps: {
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
-            },
-        }
+        const transformedUser = await serializeAdminUser(user)
 
         const response = {
             success: true,
@@ -334,6 +299,7 @@ export const getUserByUsername = async (req: Request, res: Response) => {
                 slug: users.slug,
                 headline: users.headline,
                 about: users.about,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
                 isBanned: users.isBanned,
                 isTicketBanned: users.isTicketBanned,
@@ -351,21 +317,7 @@ export const getUserByUsername = async (req: Request, res: Response) => {
             })
         }
 
-        const transformedUser = {
-            ...user,
-            uuid: user.id.toString(),
-            profile: {
-                username: user.username,
-                slug: user.slug,
-                headline: user.headline,
-                about: user.about,
-                avatarUrl: user.avatarUrl,
-            },
-            timestamps: {
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
-            },
-        }
+        const transformedUser = await serializeAdminUser(user)
 
         const response = {
             success: true,

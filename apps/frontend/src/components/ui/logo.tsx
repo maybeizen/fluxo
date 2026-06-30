@@ -1,7 +1,8 @@
 'use client'
 
 import Image, { type ImageProps } from 'next/image'
-import { useAppLogo } from '@/hooks/use-app-logo'
+import { useAppSettings } from '@/context/app-settings-context'
+import { resolveStorageUrl } from '@/lib/storage'
 
 interface LogoProps extends Partial<ImageProps> {
     width?: number
@@ -11,21 +12,30 @@ interface LogoProps extends Partial<ImageProps> {
     logoUrl?: string
 }
 
-export default function Logo({
+interface LogoContentProps extends LogoProps {
+    contextLogoUrl: string | null
+    isLoading: boolean
+}
+
+function LogoContent({
     src: propSrc,
     logoUrl: propLogoUrl,
+    contextLogoUrl,
+    isLoading,
     alt = 'Fluxo Logo',
     width = 100,
     height = 100,
     className = '',
     ...rest
-}: LogoProps) {
-    const { logoUrl: hookLogoUrl, isLoading } = useAppLogo()
+}: LogoContentProps) {
+    const hasExternalSource = Boolean(propSrc || propLogoUrl)
     const defaultSrc = '/logo.png'
-    const logoUrl = propLogoUrl || hookLogoUrl
-    const src = propSrc || logoUrl || defaultSrc
+    const resolvedLogoUrl = resolveStorageUrl(
+        propLogoUrl || contextLogoUrl || undefined
+    )
+    const src = propSrc || resolvedLogoUrl || defaultSrc
 
-    if (isLoading && !propSrc && !propLogoUrl) {
+    if (isLoading && !hasExternalSource) {
         return (
             <div
                 className={`animate-pulse bg-zinc-800 ${className}`}
@@ -44,4 +54,25 @@ export default function Logo({
             {...rest}
         />
     )
+}
+
+function LogoWithContext(props: LogoProps) {
+    const { logoUrl: contextLogoUrl, isLoading } = useAppSettings()
+    return (
+        <LogoContent
+            {...props}
+            contextLogoUrl={contextLogoUrl}
+            isLoading={isLoading}
+        />
+    )
+}
+
+export default function Logo(props: LogoProps) {
+    if (props.src || props.logoUrl) {
+        return (
+            <LogoContent {...props} contextLogoUrl={null} isLoading={false} />
+        )
+    }
+
+    return <LogoWithContext {...props} />
 }

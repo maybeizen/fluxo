@@ -3,6 +3,7 @@ import { getDb, settings } from '@fluxo/db'
 import { logger } from '../../../../utils/logger'
 import { decrypt } from '../../../../utils/encryption'
 import { settingsCache } from '../../../../utils/cache'
+import { resolveLogoUrl } from '../../../../utils/serializers/user'
 
 export const getSettings = async (req: Request, res: Response) => {
     try {
@@ -52,7 +53,7 @@ export const getSettings = async (req: Request, res: Response) => {
             uuid: settingsRow.id.toString(),
             app: {
                 name: settingsRow.appName,
-                logoUrl: settingsRow.appLogoUrl,
+                logoUrl: await resolveLogoUrl(settingsRow),
                 themeColor: settingsRow.appThemeColor ?? undefined,
             },
             auth: {

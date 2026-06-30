@@ -11,6 +11,7 @@ import UserMetricsCard from '@/components/admin/dashboard/user-metrics-card'
 import FinancialSnapshotCard from '@/components/admin/dashboard/financial-snapshot-card'
 import ServiceOverviewCard from '@/components/admin/dashboard/service-overview-card'
 import BusinessPerformanceCard from '@/components/admin/dashboard/business-performance-card'
+import Avatar from '@/components/ui/avatar'
 
 export default function AdminDashboardPage() {
     const { user } = useAuth()
@@ -252,17 +253,7 @@ export default function AdminDashboardPage() {
         <div className="min-h-screen bg-black p-4 pb-6 lg:p-8">
             <div className="mx-auto max-w-7xl">
                 <div className="mb-8 flex items-center gap-4 rounded-lg border border-zinc-900 bg-zinc-950 p-6">
-                    <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-xl font-bold text-white uppercase">
-                        {avatarUrl ? (
-                            <img
-                                src={avatarUrl}
-                                alt={username}
-                                className="h-full w-full object-cover"
-                            />
-                        ) : (
-                            <span>{username.slice(0, 2)}</span>
-                        )}
-                    </div>
+                    <Avatar src={avatarUrl} name={username} size="lg" />
                     <div className="flex flex-col">
                         <h1 className="text-2xl font-bold text-white">
                             Welcome back, {username}

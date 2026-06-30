@@ -3,6 +3,7 @@
 import React from 'react'
 import { AuthGuard } from '@/components/auth-guard'
 import { Sidebar } from '@/components/ui/sidebar'
+import { AppSettingsProvider } from '@/context/app-settings-context'
 import { useAuth } from '@/context/auth-context'
 import { UserRole } from '@fluxo/types'
 
@@ -65,17 +66,19 @@ export default function AdminLayoutClient({ children }: AdminLayoutProps) {
     ]
 
     return (
-        <AuthGuard requireAdmin>
-            <div className="flex min-h-screen bg-black">
-                <Sidebar
-                    user={user!}
-                    items={navItems}
-                    onLogout={handleLogout}
-                />
-                <main className="flex flex-1 flex-col p-0 transition-all duration-300 lg:ml-64">
-                    {children}
-                </main>
-            </div>
-        </AuthGuard>
+        <AppSettingsProvider>
+            <AuthGuard requireAdmin>
+                <div className="flex min-h-screen bg-black">
+                    <Sidebar
+                        user={user!}
+                        items={navItems}
+                        onLogout={handleLogout}
+                    />
+                    <main className="flex flex-1 flex-col p-0 transition-all duration-300 lg:ml-64">
+                        {children}
+                    </main>
+                </div>
+            </AuthGuard>
+        </AppSettingsProvider>
     )
 }

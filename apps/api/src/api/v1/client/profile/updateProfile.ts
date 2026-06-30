@@ -10,6 +10,7 @@ import { env } from '../../../../utils/env'
 import { v4 as uuidv4 } from 'uuid'
 import { emailRateLimiter } from '../../../../middleware/rateLimiters'
 import { userCache } from '../../../../utils/cache'
+import { serializeProfile } from '../../../../utils/serializers/user'
 
 export const updateProfile = async (req: Request, res: Response) => {
     try {
@@ -94,8 +95,6 @@ export const updateProfile = async (req: Request, res: Response) => {
             if (updates.headline !== undefined)
                 otherUpdates.headline = updates.headline
             if (updates.about !== undefined) otherUpdates.about = updates.about
-            if (updates.avatarUrl !== undefined)
-                otherUpdates.avatarUrl = updates.avatarUrl
 
             if (Object.keys(otherUpdates).length > 1) {
                 await db
@@ -127,6 +126,7 @@ export const updateProfile = async (req: Request, res: Response) => {
                     slug: users.slug,
                     headline: users.headline,
                     about: users.about,
+                    avatarKey: users.avatarKey,
                     avatarUrl: users.avatarUrl,
                     createdAt: users.createdAt,
                     updatedAt: users.updatedAt,
@@ -135,17 +135,7 @@ export const updateProfile = async (req: Request, res: Response) => {
                 .where(eq(users.id, user.id))
                 .limit(1)
 
-            const profile = {
-                ...updatedUser,
-                uuid: updatedUser.id.toString(),
-                profile: {
-                    username: updatedUser.username,
-                    slug: updatedUser.slug,
-                    headline: updatedUser.headline,
-                    about: updatedUser.about,
-                    avatarUrl: updatedUser.avatarUrl,
-                },
-            }
+            const profile = await serializeProfile(updatedUser)
 
             await userCache.delPattern('list:*')
             await userCache.del(`id:${user.id}`)
@@ -183,8 +173,6 @@ export const updateProfile = async (req: Request, res: Response) => {
         if (updates.headline !== undefined)
             updateData.headline = updates.headline
         if (updates.about !== undefined) updateData.about = updates.about
-        if (updates.avatarUrl !== undefined)
-            updateData.avatarUrl = updates.avatarUrl
 
         await db.update(users).set(updateData).where(eq(users.id, user.id))
 
@@ -200,6 +188,7 @@ export const updateProfile = async (req: Request, res: Response) => {
                 slug: users.slug,
                 headline: users.headline,
                 about: users.about,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
                 createdAt: users.createdAt,
                 updatedAt: users.updatedAt,
@@ -208,17 +197,7 @@ export const updateProfile = async (req: Request, res: Response) => {
             .where(eq(users.id, user.id))
             .limit(1)
 
-        const profile = {
-            ...updatedUser,
-            uuid: updatedUser.id.toString(),
-            profile: {
-                username: updatedUser.username,
-                slug: updatedUser.slug,
-                headline: updatedUser.headline,
-                about: updatedUser.about,
-                avatarUrl: updatedUser.avatarUrl,
-            },
-        }
+        const profile = await serializeProfile(updatedUser)
 
         const newUsername = updatedUser.username
         await userCache.delPattern('list:*')

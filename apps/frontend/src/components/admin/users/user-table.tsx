@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Spinner from '@/components/ui/spinner'
 import CopyIdCell from '@/components/ui/copy-id-cell'
 import FormattedDate from '@/components/ui/formatted-date'
+import Avatar from '@/components/ui/avatar'
 
 interface UserTableProps {
     users: User[]
@@ -130,22 +131,13 @@ export default function UserTable({
                             </td>
                             <td className="px-4 py-3">
                                 <div className="flex items-center gap-3">
-                                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-sm font-bold text-white uppercase">
-                                        {user.profile?.avatarUrl ? (
-                                            <img
-                                                src={user.profile.avatarUrl}
-                                                alt={user.profile.username}
-                                                className="h-full w-full object-cover"
-                                            />
-                                        ) : (
-                                            <span>
-                                                {user.profile?.username?.slice(
-                                                    0,
-                                                    2
-                                                ) || 'U'}
-                                            </span>
-                                        )}
-                                    </div>
+                                    <Avatar
+                                        src={user.profile?.avatarUrl}
+                                        name={
+                                            user.profile?.username || 'Unknown'
+                                        }
+                                        size="sm"
+                                    />
                                     <div className="flex flex-col">
                                         <Link
                                             href={`/admin/users/${user.uuid}`}

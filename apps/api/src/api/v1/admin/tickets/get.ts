@@ -5,6 +5,7 @@ import { ZodError } from 'zod'
 import { logger } from '../../../../utils/logger'
 import { ticketCache } from '../../../../utils/cache'
 import { z } from 'zod'
+import { serializeAuthor } from '../../../../utils/serializers/user'
 
 const getAllTicketsSchema = z.object({
     query: z.object({
@@ -37,6 +38,7 @@ const populateTicket = async (ticket: any, db: ReturnType<typeof getDb>) => {
                 slug: users.slug,
                 headline: users.headline,
                 about: users.about,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
                 role: users.role,
                 isBanned: users.isBanned,
@@ -46,17 +48,9 @@ const populateTicket = async (ticket: any, db: ReturnType<typeof getDb>) => {
             .where(eq(users.id, ticketObj.userId))
             .limit(1)
         if (user) {
+            const author = await serializeAuthor(user)
             ticketObj.user = {
-                id: user.id,
-                uuid: user.id.toString(),
-                email: user.email,
-                profile: {
-                    username: user.username,
-                    slug: user.slug,
-                    headline: user.headline,
-                    about: user.about,
-                    avatarUrl: user.avatarUrl,
-                },
+                ...author,
                 role: user.role,
                 punishment: {
                     isBanned: user.isBanned,
@@ -75,24 +69,14 @@ const populateTicket = async (ticket: any, db: ReturnType<typeof getDb>) => {
                 slug: users.slug,
                 headline: users.headline,
                 about: users.about,
+                avatarKey: users.avatarKey,
                 avatarUrl: users.avatarUrl,
             })
             .from(users)
             .where(eq(users.id, ticketObj.assignedToId))
             .limit(1)
         if (assignedUser) {
-            ticketObj.assignedTo = {
-                id: assignedUser.id,
-                uuid: assignedUser.id.toString(),
-                email: assignedUser.email,
-                profile: {
-                    username: assignedUser.username,
-                    slug: assignedUser.slug,
-                    headline: assignedUser.headline,
-                    about: assignedUser.about,
-                    avatarUrl: assignedUser.avatarUrl,
-                },
-            }
+            ticketObj.assignedTo = await serializeAuthor(assignedUser)
         }
     }
 
@@ -116,6 +100,7 @@ const populateTicket = async (ticket: any, db: ReturnType<typeof getDb>) => {
                       slug: users.slug,
                       headline: users.headline,
                       about: users.about,
+                      avatarKey: users.avatarKey,
                       avatarUrl: users.avatarUrl,
                       role: users.role,
                   })
@@ -123,24 +108,14 @@ const populateTicket = async (ticket: any, db: ReturnType<typeof getDb>) => {
                   .where(inArray(users.id, userMessageIds))
             : []
 
-    const authorMap = new Map(
-        messageAuthors.map((u) => [
-            u.id,
-            {
-                id: u.id,
-                uuid: u.id.toString(),
-                email: u.email,
-                profile: {
-                    username: u.username,
-                    slug: u.slug,
-                    headline: u.headline,
-                    about: u.about,
-                    avatarUrl: u.avatarUrl,
-                },
-                role: u.role,
-            },
-        ])
-    )
+    const authorMap = new Map<
+        number,
+        Awaited<ReturnType<typeof serializeAuthor>>
+    >()
+
+    for (const u of messageAuthors) {
+        authorMap.set(u.id, await serializeAuthor(u))
+    }
 
     ticketObj.messages = messages.map((msg: any) => ({
         ...msg,
