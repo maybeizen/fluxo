@@ -44,6 +44,7 @@ export async function getPluginIcon(req: Request, res: Response) {
         const mimeType = getPluginIconMimeType(iconPath)
         res.setHeader('Content-Type', mimeType)
         res.setHeader('Cache-Control', 'public, max-age=86400')
+        res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin')
         createReadStream(iconPath).pipe(res)
     } catch (error: unknown) {
         res.status(500).json({
