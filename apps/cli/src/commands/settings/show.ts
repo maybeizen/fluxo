@@ -37,9 +37,6 @@ export const execute: CommandExecute = async () => {
                 turnstileSecretKey?: string
             }
         }
-        const gateways = (row.gateways ?? {}) as {
-            stripe?: { secretKey?: string; publishableKey?: string }
-        }
 
         console.log('App')
         console.log(`  Name:       ${row.appName ?? '(not set)'}`)
@@ -60,6 +57,24 @@ export const execute: CommandExecute = async () => {
             `  Disable password change:      ${row.authDisablePasswordChange ? 'yes' : 'no'}`
         )
 
+        console.log('\nSystem')
+        console.log(
+            `  Tickets enabled:     ${(row.ticketsEnabled ?? true) ? 'yes' : 'no'}`
+        )
+        console.log(
+            `  Maintenance mode:    ${row.maintenanceMode ? 'yes' : 'no'}`
+        )
+        console.log(
+            `  Maintenance message: ${row.maintenanceMessage ?? '(not set)'}`
+        )
+        console.log(`  Debug mode:          ${row.debugMode ? 'yes' : 'no'}`)
+        console.log(
+            `  Announcement:        ${row.announcementEnabled ? 'yes' : 'no'}`
+        )
+        console.log(
+            `  Announcement text:   ${row.announcementMessage ?? '(not set)'}`
+        )
+
         console.log('\nSMTP')
         console.log(`  Host:     ${row.emailSmtpHost ?? '(not set)'}`)
         console.log(`  Port:     ${row.emailSmtpPort ?? '(not set)'}`)
@@ -76,14 +91,6 @@ export const execute: CommandExecute = async () => {
         )
         console.log(
             `  Secret:   ${secretStatus(security.cloudflare?.turnstileSecretKey)}`
-        )
-
-        console.log('\nStripe (gateway config)')
-        console.log(
-            `  Publishable: ${gateways.stripe?.publishableKey ?? '(not set)'}`
-        )
-        console.log(
-            `  Secret:      ${secretStatus(gateways.stripe?.secretKey)}`
         )
 
         logger.success('Settings loaded')

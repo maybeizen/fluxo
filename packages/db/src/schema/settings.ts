@@ -43,13 +43,6 @@ export const settings = pgTable('settings', {
     emailSmtpPass: text('email_smtp_pass'),
     emailFrom: varchar('email_from', { length: 255 }),
 
-    gateways: jsonb('gateways').$type<{
-        stripe?: {
-            secretKey?: string
-            publishableKey?: string
-        }
-    }>(),
-
     security: jsonb('security').$type<{
         cloudflare?: {
             turnstileEnabled?: boolean
@@ -71,6 +64,10 @@ export const settings = pgTable('settings', {
         }
     }>(),
 
-    pterodactylBaseUrl: varchar('pterodactyl_base_url', { length: 500 }),
-    pterodactylApiKey: text('pterodactyl_api_key'),
+    ticketsEnabled: boolean('tickets_enabled').default(true),
+    maintenanceMode: boolean('maintenance_mode').default(false),
+    maintenanceMessage: text('maintenance_message'),
+    debugMode: boolean('debug_mode').default(false),
+    announcementEnabled: boolean('announcement_enabled').default(false),
+    announcementMessage: text('announcement_message'),
 })

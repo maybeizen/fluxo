@@ -2,6 +2,7 @@ import { createLogger } from '@fluxo/logger'
 import { settings, eq } from '@fluxo/db'
 import { withDb } from '../../utils/db.js'
 import { getOrCreateSettings } from '../../utils/settings.js'
+import { flushSettingsCache } from '../../utils/settings-cache.js'
 import { promptText } from '../../utils/prompts.js'
 import type { CommandData, CommandExecute } from '../../types.js'
 
@@ -54,6 +55,7 @@ export const execute: CommandExecute = async (_positionals, options) => {
             })
             .where(eq(settings.id, row.id))
 
+        await flushSettingsCache()
         logger.success('App settings updated')
     })
 }

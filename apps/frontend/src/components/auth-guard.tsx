@@ -1,7 +1,8 @@
 'use client'
 
 import { useAuth } from '@/context/auth-context'
-import { useRouter } from 'next/navigation'
+import { useAppSettings } from '@/context/app-settings-context'
+import { useRouter, usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import LoadingScreen from '@/components/loading-screen'
 import { UserRole } from '@fluxo/types'
@@ -13,10 +14,12 @@ interface AuthGuardProps {
 
 export function AuthGuard({ children, requireAdmin = false }: AuthGuardProps) {
     const { user, isLoading } = useAuth()
+    const { maintenanceMode, isLoading: settingsLoading } = useAppSettings()
     const router = useRouter()
+    const pathname = usePathname()
 
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading || settingsLoading) {
             return
         }
 
@@ -27,6 +30,15 @@ export function AuthGuard({ children, requireAdmin = false }: AuthGuardProps) {
 
         if (user.punishment?.isBanned) {
             router.replace('/banned')
+            return
+        }
+
+        if (
+            maintenanceMode &&
+            user.role !== UserRole.ADMIN &&
+            pathname !== '/maintenance'
+        ) {
+            router.replace('/maintenance')
             return
         }
 
@@ -46,14 +58,28 @@ export function AuthGuard({ children, requireAdmin = false }: AuthGuardProps) {
             )
             return
         }
-    }, [user, isLoading, router, requireAdmin])
+    }, [
+        user,
+        isLoading,
+        settingsLoading,
+        maintenanceMode,
+        router,
+        requireAdmin,
+        pathname,
+    ])
 
     let message = 'Verifying access...'
-    if (!isLoading) {
+    if (!isLoading && !settingsLoading) {
         if (!user) {
             message = 'Redirecting to login...'
         } else if (user.punishment?.isBanned) {
             message = 'Redirecting...'
+        } else if (
+            maintenanceMode &&
+            user.role !== UserRole.ADMIN &&
+            pathname !== '/maintenance'
+        ) {
+            message = 'Redirecting to maintenance page...'
         } else if (
             requireAdmin &&
             user.role !== UserRole.ADMIN &&
@@ -67,8 +93,12 @@ export function AuthGuard({ children, requireAdmin = false }: AuthGuardProps) {
 
     if (
         isLoading ||
+        settingsLoading ||
         !user ||
         user.punishment?.isBanned ||
+        (maintenanceMode &&
+            user.role !== UserRole.ADMIN &&
+            pathname !== '/maintenance') ||
         (requireAdmin &&
             user.role !== UserRole.ADMIN &&
             user.role !== UserRole.STAFF) ||

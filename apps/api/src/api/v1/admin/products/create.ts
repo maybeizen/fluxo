@@ -6,6 +6,16 @@ import { eq } from '@fluxo/db'
 import { logger } from '../../../../utils/logger'
 import { productCache } from '../../../../utils/cache'
 
+function formatIntegrations(integration: {
+    servicePluginId: string | null
+    servicePluginConfig: Record<string, unknown> | null
+}) {
+    return {
+        servicePluginId: integration.servicePluginId ?? undefined,
+        servicePluginConfig: integration.servicePluginConfig ?? undefined,
+    }
+}
+
 export const createProduct = async (req: Request, res: Response) => {
     try {
         const validated = await createProductSchema.parseAsync(req.body)
@@ -36,90 +46,22 @@ export const createProduct = async (req: Request, res: Response) => {
             })
             .returning()
 
-        const hasPterodactyl = validated.integrations?.pterodactyl
         const hasServicePlugin =
             validated.integrations?.servicePluginId &&
             validated.integrations.servicePluginId.length > 0
-        if (hasPterodactyl || hasServicePlugin) {
-            const integrationData: Record<string, unknown> = {
+
+        if (hasServicePlugin) {
+            await db.insert(productIntegrations).values({
                 productId: newProduct.id,
-                enabled: hasPterodactyl
-                    ? (validated.integrations!.pterodactyl!.enabled ?? false)
-                    : true,
-            }
-            if (hasPterodactyl) {
-                integrationData.oomKiller =
-                    validated.integrations!.pterodactyl!.oomKiller ?? false
-                integrationData.skipEggInstallScript =
-                    validated.integrations!.pterodactyl!.skipEggInstallScript ??
-                    false
-                integrationData.startOnCompletion =
-                    validated.integrations!.pterodactyl!.startOnCompletion ??
-                    true
-                if (
-                    validated.integrations!.pterodactyl!.locationId !==
-                    undefined
-                )
-                    integrationData.locationId =
-                        validated.integrations!.pterodactyl!.locationId
-                if (validated.integrations!.pterodactyl!.nodeId !== undefined)
-                    integrationData.nodeId =
-                        validated.integrations!.pterodactyl!.nodeId
-                if (validated.integrations!.pterodactyl!.nestId !== undefined)
-                    integrationData.nestId =
-                        validated.integrations!.pterodactyl!.nestId
-                if (validated.integrations!.pterodactyl!.eggId !== undefined)
-                    integrationData.eggId =
-                        validated.integrations!.pterodactyl!.eggId
-                if (validated.integrations!.pterodactyl!.memory !== undefined)
-                    integrationData.memory =
-                        validated.integrations!.pterodactyl!.memory
-                if (validated.integrations!.pterodactyl!.swap !== undefined)
-                    integrationData.swap =
-                        validated.integrations!.pterodactyl!.swap
-                if (validated.integrations!.pterodactyl!.disk !== undefined)
-                    integrationData.disk =
-                        validated.integrations!.pterodactyl!.disk
-                if (validated.integrations!.pterodactyl!.io !== undefined)
-                    integrationData.io = validated.integrations!.pterodactyl!.io
-                if (validated.integrations!.pterodactyl!.cpu !== undefined)
-                    integrationData.cpu =
-                        validated.integrations!.pterodactyl!.cpu
-                if (
-                    validated.integrations!.pterodactyl!.cpuPinning !==
-                    undefined
-                )
-                    integrationData.cpuPinning =
-                        validated.integrations!.pterodactyl!.cpuPinning
-            }
-            if (hasPterodactyl) {
-                if (
-                    validated.integrations!.pterodactyl!.databases !== undefined
-                )
-                    integrationData.databases =
-                        validated.integrations!.pterodactyl!.databases
-                if (validated.integrations!.pterodactyl!.backups !== undefined)
-                    integrationData.backups =
-                        validated.integrations!.pterodactyl!.backups
-                if (
-                    validated.integrations!.pterodactyl!
-                        .additionalAllocations !== undefined
-                )
-                    integrationData.additionalAllocations =
-                        validated.integrations!.pterodactyl!.additionalAllocations
-            }
-            if (hasServicePlugin) {
-                integrationData.servicePluginId =
-                    validated.integrations!.servicePluginId
-                integrationData.servicePluginConfig =
-                    validated.integrations!.servicePluginConfig ?? null
-            }
-            await db.insert(productIntegrations).values(integrationData as any)
+                servicePluginId: validated.integrations!.servicePluginId,
+                servicePluginConfig:
+                    validated.integrations!.servicePluginConfig ?? null,
+            })
         }
 
         await productCache.delPattern('list:*')
 
-        const [integration] = validated.integrations?.pterodactyl
+        const [integration] = hasServicePlugin
             ? await db
                   .select()
                   .from(productIntegrations)
@@ -156,32 +98,7 @@ export const createProduct = async (req: Request, res: Response) => {
             category: newProduct.categoryId,
             order: newProduct.order,
             integrations: integration
-                ? {
-                      pterodactyl: {
-                          enabled: integration.enabled,
-                          locationId: integration.locationId,
-                          nodeId: integration.nodeId,
-                          nestId: integration.nestId,
-                          eggId: integration.eggId,
-                          memory: integration.memory,
-                          swap: integration.swap,
-                          disk: integration.disk,
-                          io: integration.io,
-                          cpu: integration.cpu,
-                          cpuPinning: integration.cpuPinning,
-                          databases: integration.databases,
-                          backups: integration.backups,
-                          additionalAllocations:
-                              integration.additionalAllocations,
-                          oomKiller: integration.oomKiller,
-                          skipEggInstallScript:
-                              integration.skipEggInstallScript,
-                          startOnCompletion: integration.startOnCompletion,
-                      },
-                      servicePluginId: integration.servicePluginId ?? undefined,
-                      servicePluginConfig:
-                          integration.servicePluginConfig ?? undefined,
-                  }
+                ? formatIntegrations(integration)
                 : undefined,
             timestamps: {
                 createdAt: newProduct.createdAt,

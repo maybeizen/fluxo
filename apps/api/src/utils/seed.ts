@@ -24,10 +24,8 @@ export const seedDatabase = async (): Promise<void> => {
                 emailSmtpUser: null,
                 emailSmtpPass: null,
                 emailFrom: null,
-                gateways: {},
                 security: {},
-                pterodactylBaseUrl: null,
-                pterodactylApiKey: null,
+                storage: {},
             })
             logger.success('Settings table seeded successfully')
         } else {

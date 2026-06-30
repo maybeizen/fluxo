@@ -36,8 +36,6 @@ export function useSettingsData() {
         cloudflareTurnstileEnabled: false,
         cloudflareTurnstileSiteKey: '',
         cloudflareTurnstileSecretKey: '',
-        stripeSecretKey: '',
-        stripePublishableKey: '',
         storageProvider: 'local' as 'local' | 's3',
         s3Endpoint: '',
         s3Region: '',
@@ -46,6 +44,12 @@ export function useSettingsData() {
         s3SecretAccessKey: '',
         s3ForcePathStyle: false,
         s3PublicUrlBase: '',
+        ticketsEnabled: true,
+        maintenanceMode: false,
+        maintenanceMessage: '',
+        debugMode: false,
+        announcementEnabled: false,
+        announcementMessage: '',
     })
 
     useEffect(() => {
@@ -94,9 +98,6 @@ export function useSettingsData() {
                         emailSmtpUser: data.email?.smtpUser || '',
                         emailSmtpPass: '',
                         emailFrom: data.email?.emailFrom || '',
-                        stripeSecretKey: '',
-                        stripePublishableKey:
-                            data.gateways?.stripe?.publishableKey || '',
                         cloudflareTurnstileEnabled:
                             data.security?.cloudflare?.turnstileEnabled ||
                             false,
@@ -113,6 +114,15 @@ export function useSettingsData() {
                         s3ForcePathStyle:
                             data.storage?.s3?.forcePathStyle || false,
                         s3PublicUrlBase: data.storage?.s3?.publicUrlBase || '',
+                        ticketsEnabled: data.system?.ticketsEnabled ?? true,
+                        maintenanceMode: data.system?.maintenanceMode ?? false,
+                        maintenanceMessage:
+                            data.system?.maintenanceMessage || '',
+                        debugMode: data.system?.debugMode ?? false,
+                        announcementEnabled:
+                            data.system?.announcementEnabled ?? false,
+                        announcementMessage:
+                            data.system?.announcementMessage || '',
                     })
                 }
             } catch (error) {
@@ -163,12 +173,6 @@ export function useSettingsData() {
                 smtpPass: formData.emailSmtpPass || undefined,
                 emailFrom: formData.emailFrom || undefined,
             },
-            gateways: {
-                stripe: {
-                    secretKey: formData.stripeSecretKey || undefined,
-                    publishableKey: formData.stripePublishableKey || undefined,
-                },
-            },
             security: {
                 cloudflare: {
                     turnstileEnabled: formData.cloudflareTurnstileEnabled,
@@ -189,6 +193,14 @@ export function useSettingsData() {
                     forcePathStyle: formData.s3ForcePathStyle,
                     publicUrlBase: formData.s3PublicUrlBase || undefined,
                 },
+            },
+            system: {
+                ticketsEnabled: formData.ticketsEnabled,
+                maintenanceMode: formData.maintenanceMode,
+                maintenanceMessage: formData.maintenanceMessage || undefined,
+                debugMode: formData.debugMode,
+                announcementEnabled: formData.announcementEnabled,
+                announcementMessage: formData.announcementMessage || undefined,
             },
         }
 

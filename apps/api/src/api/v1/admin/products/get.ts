@@ -1,8 +1,18 @@
 import { type Request, type Response } from 'express'
 import { getDb, products, productIntegrations } from '@fluxo/db'
-import { eq, and, or, ilike, desc, asc, sql, inArray } from '@fluxo/db'
+import { eq, and, ilike, desc, asc, sql, inArray } from '@fluxo/db'
 import { logger } from '../../../../utils/logger'
 import { productCache } from '../../../../utils/cache'
+
+function formatIntegrations(integration: {
+    servicePluginId: string | null
+    servicePluginConfig: Record<string, unknown> | null
+}) {
+    return {
+        servicePluginId: integration.servicePluginId ?? undefined,
+        servicePluginConfig: integration.servicePluginConfig ?? undefined,
+    }
+}
 
 export const getAllProducts = async (req: Request, res: Response) => {
     try {
@@ -63,7 +73,6 @@ export const getAllProducts = async (req: Request, res: Response) => {
                       desc(products.createdAt)
                   )
 
-        // Fetch all integrations for the products in one query
         const productIds = productsList.map((p) => p.id)
         const integrationsList =
             productIds.length > 0
@@ -73,7 +82,6 @@ export const getAllProducts = async (req: Request, res: Response) => {
                       .where(inArray(productIntegrations.productId, productIds))
                 : []
 
-        // Create a map of productId -> integration for quick lookup
         const integrationsMap = new Map(
             integrationsList.map((i) => [i.productId, i])
         )
@@ -110,33 +118,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
                 category: p.categoryId,
                 order: p.order,
                 integrations: integration
-                    ? {
-                          pterodactyl: {
-                              enabled: integration.enabled,
-                              locationId: integration.locationId,
-                              nodeId: integration.nodeId,
-                              nestId: integration.nestId,
-                              eggId: integration.eggId,
-                              memory: integration.memory,
-                              swap: integration.swap,
-                              disk: integration.disk,
-                              io: integration.io,
-                              cpu: integration.cpu,
-                              cpuPinning: integration.cpuPinning,
-                              databases: integration.databases,
-                              backups: integration.backups,
-                              additionalAllocations:
-                                  integration.additionalAllocations,
-                              oomKiller: integration.oomKiller,
-                              skipEggInstallScript:
-                                  integration.skipEggInstallScript,
-                              startOnCompletion: integration.startOnCompletion,
-                          },
-                          servicePluginId:
-                              integration.servicePluginId ?? undefined,
-                          servicePluginConfig:
-                              integration.servicePluginConfig ?? undefined,
-                      }
+                    ? formatIntegrations(integration)
                     : undefined,
                 timestamps: {
                     createdAt: p.createdAt,
@@ -233,32 +215,7 @@ export const getProductById = async (req: Request, res: Response) => {
             category: product.categoryId,
             order: product.order,
             integrations: integration
-                ? {
-                      pterodactyl: {
-                          enabled: integration.enabled,
-                          locationId: integration.locationId,
-                          nodeId: integration.nodeId,
-                          nestId: integration.nestId,
-                          eggId: integration.eggId,
-                          memory: integration.memory,
-                          swap: integration.swap,
-                          disk: integration.disk,
-                          io: integration.io,
-                          cpu: integration.cpu,
-                          cpuPinning: integration.cpuPinning,
-                          databases: integration.databases,
-                          backups: integration.backups,
-                          additionalAllocations:
-                              integration.additionalAllocations,
-                          oomKiller: integration.oomKiller,
-                          skipEggInstallScript:
-                              integration.skipEggInstallScript,
-                          startOnCompletion: integration.startOnCompletion,
-                      },
-                      servicePluginId: integration.servicePluginId ?? undefined,
-                      servicePluginConfig:
-                          integration.servicePluginConfig ?? undefined,
-                  }
+                ? formatIntegrations(integration)
                 : undefined,
             timestamps: {
                 createdAt: product.createdAt,

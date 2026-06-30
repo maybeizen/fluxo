@@ -9,14 +9,7 @@ import SettingsNavigation from '@/components/admin/settings/settings-navigation'
 import SettingsContent from '@/components/admin/settings/settings-content'
 
 type TabType =
-    | 'app'
-    | 'theme'
-    | 'auth'
-    | 'integrations'
-    | 'email'
-    | 'storage'
-    | 'gateways'
-    | 'security'
+    'app' | 'theme' | 'auth' | 'integrations' | 'email' | 'storage' | 'security'
 
 export default function AdminSettingsPage() {
     const { user, isLoading: authLoading } = useAuth()

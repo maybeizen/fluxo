@@ -30,15 +30,6 @@ const emailSettingsSchema = z.object({
     emailFrom: z.email().optional(),
 })
 
-const gatewaysSettingsSchema = z.object({
-    stripe: z
-        .object({
-            secretKey: z.string().min(1).optional(),
-            publishableKey: z.string().min(1).optional(),
-        })
-        .optional(),
-})
-
 const securitySettingsSchema = z.object({
     cloudflare: z
         .object({
@@ -47,11 +38,6 @@ const securitySettingsSchema = z.object({
             turnstileSecretKey: z.string().min(1).optional(),
         })
         .optional(),
-})
-
-const pterodactylSettingsSchema = z.object({
-    baseUrl: z.url().optional(),
-    apiKey: z.string().min(1).optional(),
 })
 
 const storageSettingsSchema = z.object({
@@ -69,16 +55,24 @@ const storageSettingsSchema = z.object({
         .optional(),
 })
 
+const systemSettingsSchema = z.object({
+    ticketsEnabled: z.boolean().optional(),
+    maintenanceMode: z.boolean().optional(),
+    maintenanceMessage: z.string().max(5000).optional(),
+    debugMode: z.boolean().optional(),
+    announcementEnabled: z.boolean().optional(),
+    announcementMessage: z.string().max(5000).optional(),
+})
+
 export const updateSettingsSchema = z
     .object({
         app: appSettingsSchema.optional(),
         auth: authSettingsSchema.optional(),
         discord: discordSettingsSchema.optional(),
         email: emailSettingsSchema.optional(),
-        gateways: gatewaysSettingsSchema.optional(),
         security: securitySettingsSchema.optional(),
         storage: storageSettingsSchema.optional(),
-        pterodactyl: pterodactylSettingsSchema.optional(),
+        system: systemSettingsSchema.optional(),
     })
     .refine((data) => Object.keys(data).length > 0, {
         message: 'At least one settings field must be provided',

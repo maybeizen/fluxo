@@ -23,6 +23,11 @@ export const getAppSettings = async (req: Request, res: Response) => {
                 appLogoKey: settings.appLogoKey,
                 appLogoUrl: settings.appLogoUrl,
                 appThemeColor: settings.appThemeColor,
+                ticketsEnabled: settings.ticketsEnabled,
+                maintenanceMode: settings.maintenanceMode,
+                maintenanceMessage: settings.maintenanceMessage,
+                announcementEnabled: settings.announcementEnabled,
+                announcementMessage: settings.announcementMessage,
             })
             .from(settings)
             .limit(1)
@@ -31,6 +36,11 @@ export const getAppSettings = async (req: Request, res: Response) => {
             name: settingsRow?.appName,
             logoUrl: await resolveLogoUrl(settingsRow ?? {}),
             themeColor: settingsRow?.appThemeColor ?? '#ffd952',
+            ticketsEnabled: settingsRow?.ticketsEnabled ?? true,
+            maintenanceMode: settingsRow?.maintenanceMode ?? false,
+            maintenanceMessage: settingsRow?.maintenanceMessage ?? undefined,
+            announcementEnabled: settingsRow?.announcementEnabled ?? false,
+            announcementMessage: settingsRow?.announcementMessage ?? undefined,
         }
 
         await settingsCache.set(cacheKey, appSettings, 600)

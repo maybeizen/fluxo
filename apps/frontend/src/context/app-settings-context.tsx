@@ -10,15 +10,22 @@ import {
 import { API_BASE_URL } from '@/lib/api-client'
 import type { AppSettings } from '@/lib/public/app-settings'
 
-interface AppSettingsContextValue {
-    logoUrl: string | null
+interface AppSettingsContextValue extends Omit<AppSettings, 'logoUrl'> {
     appName: string | null
+    logoUrl: string | null
     isLoading: boolean
 }
 
 const defaultValue: AppSettingsContextValue = {
     logoUrl: null,
     appName: null,
+    name: undefined,
+    themeColor: undefined,
+    ticketsEnabled: true,
+    maintenanceMode: false,
+    maintenanceMessage: undefined,
+    announcementEnabled: false,
+    announcementMessage: undefined,
     isLoading: false,
 }
 
@@ -51,24 +58,27 @@ function fetchAppSettingsOnce(): Promise<AppSettings | null> {
 }
 
 export function AppSettingsProvider({ children }: { children: ReactNode }) {
-    const [logoUrl, setLogoUrl] = useState<string | null>(null)
-    const [appName, setAppName] = useState<string | null>(null)
+    const [settings, setSettings] = useState<AppSettings>({})
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        fetchAppSettingsOnce().then((settings) => {
-            if (settings?.logoUrl) {
-                setLogoUrl(settings.logoUrl)
-            }
-            if (settings?.name) {
-                setAppName(settings.name)
+        fetchAppSettingsOnce().then((data) => {
+            if (data) {
+                setSettings(data)
             }
             setIsLoading(false)
         })
     }, [])
 
     return (
-        <AppSettingsContext.Provider value={{ logoUrl, appName, isLoading }}>
+        <AppSettingsContext.Provider
+            value={{
+                ...settings,
+                appName: settings.name ?? null,
+                logoUrl: settings.logoUrl ?? null,
+                isLoading,
+            }}
+        >
             {children}
         </AppSettingsContext.Provider>
     )

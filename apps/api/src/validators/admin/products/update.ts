@@ -70,27 +70,6 @@ export const updateProductSchema = z.object({
     order: z.number().int().min(0, 'Order must be 0 or greater').optional(),
     integrations: z
         .object({
-            pterodactyl: z
-                .object({
-                    enabled: z.boolean().optional(),
-                    locationId: z.number().int().positive().optional(),
-                    nodeId: z.number().int().positive().optional(),
-                    nestId: z.number().int().positive().optional(),
-                    eggId: z.number().int().positive().optional(),
-                    memory: z.number().int().min(0).optional(),
-                    swap: z.number().int().min(0).optional(),
-                    disk: z.number().int().min(0).optional(),
-                    io: z.number().int().min(0).optional(),
-                    cpu: z.number().int().min(0).max(100).optional(),
-                    cpuPinning: z.string().optional(),
-                    databases: z.number().int().min(0).optional(),
-                    backups: z.number().int().min(0).optional(),
-                    additionalAllocations: z.number().int().min(0).optional(),
-                    oomKiller: z.boolean().optional(),
-                    skipEggInstallScript: z.boolean().optional(),
-                    startOnCompletion: z.boolean().optional(),
-                })
-                .optional(),
             servicePluginId: z.string().min(1).nullable().optional(),
             servicePluginConfig: z
                 .record(z.string(), z.unknown())

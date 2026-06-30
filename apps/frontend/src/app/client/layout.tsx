@@ -1,17 +1,34 @@
 'use client'
 
-import { type ReactNode } from 'react'
+import { type ReactNode, useEffect } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import { AuthGuard } from '@/components/auth-guard'
 import { Sidebar } from '@/components/ui/sidebar'
-import { AppSettingsProvider } from '@/context/app-settings-context'
+import {
+    AppSettingsProvider,
+    useAppSettings,
+} from '@/context/app-settings-context'
 import { useAuth } from '@/context/auth-context'
+import AnnouncementBanner from '@/components/ui/announcement-banner'
 
 interface ClientLayoutProps {
     children: ReactNode
 }
 
-export default function ClientLayout({ children }: ClientLayoutProps) {
+function ClientLayoutContent({ children }: ClientLayoutProps) {
     const { user, logout } = useAuth()
+    const { ticketsEnabled } = useAppSettings()
+    const router = useRouter()
+    const pathname = usePathname()
+
+    useEffect(() => {
+        if (
+            ticketsEnabled === false &&
+            pathname.startsWith('/client/support')
+        ) {
+            router.replace('/client')
+        }
+    }, [ticketsEnabled, pathname, router])
 
     const handleLogout = async () => {
         await logout()
@@ -30,11 +47,15 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             label: 'Store',
             href: '/client/store',
         },
-        {
-            icon: 'fas fa-headset',
-            label: 'Support',
-            href: '/client/support',
-        },
+        ...(ticketsEnabled !== false
+            ? [
+                  {
+                      icon: 'fas fa-headset',
+                      label: 'Support',
+                      href: '/client/support',
+                  },
+              ]
+            : []),
         { icon: 'fas fa-newspaper', label: 'News', href: '/client/news' },
         {
             icon: 'fas fa-user-circle',
@@ -44,9 +65,10 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     ]
 
     return (
-        <AppSettingsProvider>
-            <AuthGuard>
-                <div className="bg-background flex min-h-screen">
+        <AuthGuard>
+            <div className="bg-background flex min-h-screen flex-col">
+                <AnnouncementBanner />
+                <div className="flex flex-1">
                     <Sidebar
                         user={user!}
                         items={navItems}
@@ -56,7 +78,15 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                         {children}
                     </main>
                 </div>
-            </AuthGuard>
+            </div>
+        </AuthGuard>
+    )
+}
+
+export default function ClientLayout({ children }: ClientLayoutProps) {
+    return (
+        <AppSettingsProvider>
+            <ClientLayoutContent>{children}</ClientLayoutContent>
         </AppSettingsProvider>
     )
 }

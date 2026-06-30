@@ -1,9 +1,7 @@
 import { API_BASE_URL } from '@/lib/api-client'
+import type { PublicAppSettings } from '@fluxo/types'
 
-export interface AppSettings {
-    name?: string
-    logoUrl?: string
-}
+export type AppSettings = PublicAppSettings
 
 export async function getAppSettings(): Promise<AppSettings | null> {
     try {

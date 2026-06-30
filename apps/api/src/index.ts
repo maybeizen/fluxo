@@ -9,6 +9,7 @@ import { logger } from './utils/logger'
 import { seedDatabase } from './utils/seed'
 import { defaultPluginsDir, initPlugins } from './plugins/manager'
 import { ensureRedisConnected } from './utils/redis'
+import { applyDebugLogLevel } from './utils/log-level'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -29,6 +30,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
         const [settingsRow] = await getDb().select().from(settings).limit(1)
         if (settingsRow?.appThemeColor) {
             setEmailThemeColor(settingsRow.appThemeColor)
+        }
+        if (settingsRow) {
+            applyDebugLogLevel(settingsRow.debugMode ?? false)
         }
 
         const pluginsDir = process.env.PLUGINS_DIR || defaultPluginsDir

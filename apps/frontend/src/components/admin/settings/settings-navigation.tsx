@@ -3,14 +3,7 @@
 import React from 'react'
 
 type TabType =
-    | 'app'
-    | 'theme'
-    | 'auth'
-    | 'integrations'
-    | 'email'
-    | 'storage'
-    | 'gateways'
-    | 'security'
+    'app' | 'theme' | 'auth' | 'integrations' | 'email' | 'storage' | 'security'
 
 interface SettingsNavigationProps {
     activeTab: TabType
@@ -39,11 +32,6 @@ const tabs = [
         id: 'storage' as TabType,
         label: 'Storage',
         icon: 'fas fa-hard-drive',
-    },
-    {
-        id: 'gateways' as TabType,
-        label: 'Gateways',
-        icon: 'fas fa-credit-card',
     },
     { id: 'security' as TabType, label: 'Security', icon: 'fas fa-lock' },
 ]

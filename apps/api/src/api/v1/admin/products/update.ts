@@ -96,14 +96,12 @@ export const updateProduct = async (req: Request, res: Response) => {
             .where(eq(products.id, productId))
 
         if (validated.integrations !== undefined) {
-            const hasPterodactyl = validated.integrations.pterodactyl
             const hasServicePlugin =
                 validated.integrations.servicePluginId !== undefined &&
                 validated.integrations.servicePluginId !== null &&
                 validated.integrations.servicePluginId.length > 0
 
             if (
-                hasPterodactyl ||
                 hasServicePlugin ||
                 validated.integrations.servicePluginId === null
             ) {
@@ -113,87 +111,8 @@ export const updateProduct = async (req: Request, res: Response) => {
                     .where(eq(productIntegrations.productId, productId))
                     .limit(1)
 
-                const integrationData: Record<string, unknown> = {
-                    productId,
-                    enabled: hasPterodactyl
-                        ? (validated.integrations.pterodactyl!.enabled ?? false)
-                        : true,
-                }
-                if (hasPterodactyl) {
-                    integrationData.oomKiller =
-                        validated.integrations.pterodactyl!.oomKiller ?? false
-                    integrationData.skipEggInstallScript =
-                        validated.integrations.pterodactyl!
-                            .skipEggInstallScript ?? false
-                    integrationData.startOnCompletion =
-                        validated.integrations.pterodactyl!.startOnCompletion ??
-                        true
-                    if (
-                        validated.integrations.pterodactyl!.locationId !==
-                        undefined
-                    )
-                        integrationData.locationId =
-                            validated.integrations.pterodactyl!.locationId
-                    if (
-                        validated.integrations.pterodactyl!.nodeId !== undefined
-                    )
-                        integrationData.nodeId =
-                            validated.integrations.pterodactyl!.nodeId
-                    if (
-                        validated.integrations.pterodactyl!.nestId !== undefined
-                    )
-                        integrationData.nestId =
-                            validated.integrations.pterodactyl!.nestId
-                    if (validated.integrations.pterodactyl!.eggId !== undefined)
-                        integrationData.eggId =
-                            validated.integrations.pterodactyl!.eggId
-                    if (
-                        validated.integrations.pterodactyl!.memory !== undefined
-                    )
-                        integrationData.memory =
-                            validated.integrations.pterodactyl!.memory
-                    if (validated.integrations.pterodactyl!.swap !== undefined)
-                        integrationData.swap =
-                            validated.integrations.pterodactyl!.swap
-                    if (validated.integrations.pterodactyl!.disk !== undefined)
-                        integrationData.disk =
-                            validated.integrations.pterodactyl!.disk
-                    if (validated.integrations.pterodactyl!.io !== undefined)
-                        integrationData.io =
-                            validated.integrations.pterodactyl!.io
-                    if (validated.integrations.pterodactyl!.cpu !== undefined)
-                        integrationData.cpu =
-                            validated.integrations.pterodactyl!.cpu
-                    if (
-                        validated.integrations.pterodactyl!.cpuPinning !==
-                        undefined
-                    )
-                        integrationData.cpuPinning =
-                            validated.integrations.pterodactyl!.cpuPinning
-                    if (
-                        validated.integrations.pterodactyl!.databases !==
-                        undefined
-                    )
-                        integrationData.databases =
-                            validated.integrations.pterodactyl!.databases
-                    if (
-                        validated.integrations.pterodactyl!.backups !==
-                        undefined
-                    )
-                        integrationData.backups =
-                            validated.integrations.pterodactyl!.backups
-                    if (
-                        validated.integrations.pterodactyl!
-                            .additionalAllocations !== undefined
-                    )
-                        integrationData.additionalAllocations =
-                            validated.integrations.pterodactyl!.additionalAllocations
-                } else if (
-                    !hasServicePlugin &&
-                    validated.integrations.servicePluginId === null
-                ) {
-                    integrationData.enabled = false
-                }
+                const integrationData: Record<string, unknown> = { productId }
+
                 if (validated.integrations.servicePluginId !== undefined)
                     integrationData.servicePluginId =
                         validated.integrations.servicePluginId
@@ -206,12 +125,12 @@ export const updateProduct = async (req: Request, res: Response) => {
                         .update(productIntegrations)
                         .set(integrationData as any)
                         .where(eq(productIntegrations.productId, productId))
-                } else {
+                } else if (hasServicePlugin) {
                     await db
                         .insert(productIntegrations)
                         .values(integrationData as any)
                 }
-            } else if (!hasPterodactyl && !hasServicePlugin) {
+            } else if (!hasServicePlugin) {
                 await db
                     .delete(productIntegrations)
                     .where(eq(productIntegrations.productId, productId))

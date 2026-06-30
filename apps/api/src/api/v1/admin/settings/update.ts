@@ -9,6 +9,18 @@ import { settingsCache } from '../../../../utils/cache'
 import { setEmailThemeColor } from '../../../../utils/email-templates'
 import { invalidateStorageDriver } from '../../../../utils/storage'
 import { resolveLogoUrl } from '../../../../utils/serializers/user'
+import { applyDebugLogLevel } from '../../../../utils/log-level'
+
+function formatSystemSettings(settingsRow: typeof settings.$inferSelect) {
+    return {
+        ticketsEnabled: settingsRow.ticketsEnabled ?? true,
+        maintenanceMode: settingsRow.maintenanceMode ?? false,
+        maintenanceMessage: settingsRow.maintenanceMessage ?? undefined,
+        debugMode: settingsRow.debugMode ?? false,
+        announcementEnabled: settingsRow.announcementEnabled ?? false,
+        announcementMessage: settingsRow.announcementMessage ?? undefined,
+    }
+}
 
 export const updateSettings = async (req: Request, res: Response) => {
     try {
@@ -60,23 +72,6 @@ export const updateSettings = async (req: Request, res: Response) => {
                 updateData.emailSmtpPass = encrypt(data.email.smtpPass)
             if (data.email.emailFrom !== undefined)
                 updateData.emailFrom = data.email.emailFrom
-        }
-
-        if (data.gateways?.stripe) {
-            const currentGateways = (settingsRow.gateways as any) || {}
-            const updatedGateways = {
-                ...currentGateways,
-                stripe: {
-                    ...currentGateways.stripe,
-                    ...(data.gateways.stripe.secretKey !== undefined && {
-                        secretKey: encrypt(data.gateways.stripe.secretKey),
-                    }),
-                    ...(data.gateways.stripe.publishableKey !== undefined && {
-                        publishableKey: data.gateways.stripe.publishableKey,
-                    }),
-                },
-            }
-            updateData.gateways = updatedGateways
         }
 
         if (data.security?.cloudflare) {
@@ -143,6 +138,21 @@ export const updateSettings = async (req: Request, res: Response) => {
             updateData.storage = updatedStorage
         }
 
+        if (data.system) {
+            if (data.system.ticketsEnabled !== undefined)
+                updateData.ticketsEnabled = data.system.ticketsEnabled
+            if (data.system.maintenanceMode !== undefined)
+                updateData.maintenanceMode = data.system.maintenanceMode
+            if (data.system.maintenanceMessage !== undefined)
+                updateData.maintenanceMessage = data.system.maintenanceMessage
+            if (data.system.debugMode !== undefined)
+                updateData.debugMode = data.system.debugMode
+            if (data.system.announcementEnabled !== undefined)
+                updateData.announcementEnabled = data.system.announcementEnabled
+            if (data.system.announcementMessage !== undefined)
+                updateData.announcementMessage = data.system.announcementMessage
+        }
+
         await db
             .update(settings)
             .set(updateData)
@@ -161,6 +171,10 @@ export const updateSettings = async (req: Request, res: Response) => {
 
         if (updatedSettings.appThemeColor) {
             setEmailThemeColor(updatedSettings.appThemeColor)
+        }
+
+        if (data.system?.debugMode !== undefined) {
+            applyDebugLogLevel(updatedSettings.debugMode ?? false)
         }
 
         const decryptedSettings = {
@@ -195,18 +209,6 @@ export const updateSettings = async (req: Request, res: Response) => {
                     ? decrypt(updatedSettings.emailSmtpPass)
                     : undefined,
                 emailFrom: updatedSettings.emailFrom,
-            },
-            gateways: {
-                stripe: {
-                    secretKey: (updatedSettings.gateways as any)?.stripe
-                        ?.secretKey
-                        ? decrypt(
-                              (updatedSettings.gateways as any).stripe.secretKey
-                          )
-                        : undefined,
-                    publishableKey: (updatedSettings.gateways as any)?.stripe
-                        ?.publishableKey,
-                },
             },
             security: {
                 cloudflare: {
@@ -249,6 +251,7 @@ export const updateSettings = async (req: Request, res: Response) => {
                         ?.publicUrlBase,
                 },
             },
+            system: formatSystemSettings(updatedSettings),
         }
 
         res.status(200).json({

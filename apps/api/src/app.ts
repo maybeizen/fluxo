@@ -8,6 +8,7 @@ import { corsMiddleware } from './middleware/cors'
 import apiRoutes from './api/routes'
 import { sessionMiddleware } from './utils/session'
 import { normalizeUserId } from './middleware/normalizeUserId'
+import { maintenanceGuard } from './middleware/maintenanceGuard'
 import { setupWebSocket } from './utils/websocket'
 import { gatewayWebhook } from './api/v1/webhooks/gateway'
 import {
@@ -62,6 +63,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(corsMiddleware)
 app.use(sessionMiddleware)
 app.use(normalizeUserId)
+app.use(maintenanceGuard)
 
 app.use('/api', apiRoutes)
 

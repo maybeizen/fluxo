@@ -76,6 +76,7 @@ export function buildPluginContext(
                     ...cfg,
                     source: cfg?.source ?? manifest.id,
                 }),
+            setLogLevel: (level) => logger.setLogLevel(level),
         },
         get config() {
             return cachedConfig
