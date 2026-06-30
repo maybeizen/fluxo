@@ -3,8 +3,12 @@ import { getDb, tickets } from '@fluxo/db'
 import { eq } from '@fluxo/db'
 import { logger } from '../../../../utils/logger'
 import { ticketCache } from '../../../../utils/cache'
-import { uploadTicketAttachment } from '../../../../utils/multer-ticket'
-import { env } from '../../../../utils/env'
+import {
+    uploadTicketAttachment,
+    validateUploadedFileMagic,
+    normalizeExtension,
+} from '../../../../utils/upload'
+import { getStorageDriver } from '../../../../utils/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { type TicketAttachment, TicketStatus } from '@fluxo/types'
 
@@ -66,7 +70,28 @@ export const uploadAttachment = async (req: Request, res: Response) => {
                 })
             }
 
-            const attachmentUrl = `${env.API_URL}/uploads/tickets/${req.file.filename}`
+            if (
+                !validateUploadedFileMagic(
+                    req.file.buffer,
+                    req.file.mimetype
+                )
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Invalid file content',
+                })
+            }
+
+            const driver = await getStorageDriver()
+            const ext = normalizeExtension(req.file.mimetype)
+            const filename = `${uuidv4()}${ext}`
+            const { url: attachmentUrl } = await driver.save(
+                'tickets',
+                filename,
+                req.file.buffer,
+                req.file.mimetype
+            )
+
             const attachment: TicketAttachment = {
                 uuid: uuidv4(),
                 ticketUuid: ticketId.toString(),

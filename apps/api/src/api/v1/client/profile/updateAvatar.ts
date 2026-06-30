@@ -1,12 +1,12 @@
 import { type Request, type Response } from 'express'
-import { upload } from '../../../../utils/multer'
-import { getDb, users } from '@fluxo/db'
-import { eq } from '@fluxo/db'
-import { logger } from '../../../../utils/logger'
-import { env } from '../../../../utils/env'
+import {
+    uploadAvatar,
+    validateUploadedFileMagic,
+    normalizeExtension,
+} from '../../../../utils/upload'
 
 export const updateAvatar = async (req: Request, res: Response) => {
-    upload(req, res, async (err) => {
+    uploadAvatar(req, res, async (err) => {
         try {
             if (err) {
                 return res.status(400).json({
@@ -22,7 +22,17 @@ export const updateAvatar = async (req: Request, res: Response) => {
                 })
             }
 
-            const avatarUrl = `${env.API_URL}/uploads/avatars/${req.file.filename}`
+            if (
+                !validateUploadedFileMagic(
+                    req.file.buffer,
+                    req.file.mimetype
+                )
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Invalid file content',
+                })
+            }
 
             if (!req.userId) {
                 return res.status(401).json({
@@ -32,10 +42,37 @@ export const updateAvatar = async (req: Request, res: Response) => {
             }
 
             const db = getDb()
+            const [existingUser] = await db
+                .select({ avatarUrl: users.avatarUrl, username: users.username })
+                .from(users)
+                .where(eq(users.id, req.userId))
+                .limit(1)
+
+            const driver = await getStorageDriver()
+            const ext = normalizeExtension(req.file.mimetype)
+            const filename = `${req.userId}-${Date.now()}${ext}`
+            const { url: avatarUrl } = await driver.save(
+                'avatars',
+                filename,
+                req.file.buffer,
+                req.file.mimetype
+            )
+
+            if (existingUser?.avatarUrl) {
+                await driver.remove(existingUser.avatarUrl)
+            }
+
             await db
                 .update(users)
                 .set({ avatarUrl, updatedAt: new Date() })
                 .where(eq(users.id, req.userId))
+
+            await userCache.del(`id:${req.userId}`)
+            await userCache.del(`auth:${req.userId}`)
+            if (existingUser?.username) {
+                await userCache.del(`username:${existingUser.username}`)
+                await userCache.del(`profile:${existingUser.username}`)
+            }
 
             const [user] = await db
                 .select({

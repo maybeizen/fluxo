@@ -41,6 +41,9 @@ services:
             POSTGRES_URL: postgresql://${POSTGRES_USER:-fluxo}:${POSTGRES_PASSWORD:-fluxo}@postgres:5432/${POSTGRES_DB:-fluxo}
             REDIS_HOST: redis
             REDIS_PORT: 6379
+            STORAGE_DIR: /app/storage
+        volumes:
+            - storage_data:/app/storage
         depends_on:
             postgres:
                 condition: service_healthy
@@ -66,3 +69,4 @@ services:
 volumes:
     postgres_data:
     redis_data:
+    storage_data:
