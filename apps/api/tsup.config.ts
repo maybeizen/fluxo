@@ -14,6 +14,4 @@ export default defineConfig({
     minify: false,
     skipNodeModulesBundle: true,
     treeshake: true,
-
-    onSuccess: isDevelopment ? 'node dist/index.js' : undefined,
 })

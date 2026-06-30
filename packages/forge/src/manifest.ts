@@ -19,6 +19,13 @@ export const pluginManifestSchema = z.object({
     dependencies: z.array(z.string()).optional(),
     description: z.string().optional(),
     shipped: z.boolean().optional(),
+    icon: z
+        .string()
+        .regex(
+            /^[a-zA-Z0-9._-]+(\/[a-zA-Z0-9._-]+)*\.(png|svg|webp|jpg|jpeg)$/i,
+            'icon must be a relative image path within the plugin directory'
+        )
+        .optional(),
 })
 
 export type PluginManifest = z.infer<typeof pluginManifestSchema>

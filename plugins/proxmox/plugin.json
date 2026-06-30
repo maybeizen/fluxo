@@ -5,5 +5,6 @@
     "type": "service",
     "description": "Provision VMs/containers via Proxmox VE",
     "author": "Fluxo",
-    "shipped": true
+    "shipped": true,
+    "icon": "icon.svg"
 }

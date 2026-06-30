@@ -35,6 +35,16 @@ function optString(
     return typeof v === 'string' ? v : undefined
 }
 
+function defaultIconSvg(): string {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="12" fill="#18181B"/>
+  <path d="M28 24v-4a4 4 0 0 1 8 0v4" stroke="#71717A" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="20" y="24" width="24" height="20" rx="4" stroke="#71717A" stroke-width="2.5" fill="none"/>
+  <line x1="32" y1="32" x2="32" y2="38" stroke="#71717A" stroke-width="2" stroke-linecap="round"/>
+</svg>
+`
+}
+
 function toPascalCase(id: string): string {
     return id
         .split(/[-_]+/)
@@ -170,6 +180,7 @@ export const execute: CommandExecute = async (_positionals, options) => {
         type,
         description: description || undefined,
         author,
+        icon: 'icon.svg',
     }
 
     pluginManifestSchema.parse(manifest)
@@ -223,6 +234,10 @@ bun run --filter ${packageName} types
 \`\`\`
 
 See [docs/plugins/API.md](../../docs/plugins/API.md) for plugin contracts.
+
+## Icon
+
+The plugin includes \`icon.svg\` referenced in \`plugin.json\`. Replace it with your own branded icon (PNG, SVG, or WebP).
 `
 
     const backend =
@@ -246,6 +261,7 @@ See [docs/plugins/API.md](../../docs/plugins/API.md) for plugin contracts.
     await writeFile(join(pluginDir, 'eslint.config.js'), eslintConfig)
     await writeFile(join(pluginDir, 'README.md'), readme)
     await writeFile(join(pluginDir, 'backend', 'index.ts'), backend)
+    await writeFile(join(pluginDir, 'icon.svg'), defaultIconSvg())
 
     logger.success(`Created plugin at plugins/${id}`)
     console.log(`\nNext steps:`)

@@ -50,6 +50,7 @@ export class PluginManager implements IPluginRegistry {
         ReturnType<typeof buildPluginContext>
     >()
     private manifests = new Map<string, PluginManifest>()
+    private pluginDirs = new Map<string, string>()
     private enabled = new Map<string, boolean>()
     private themeManifests = new Map<string, PluginManifest>()
     private dependencyErrors = new Map<string, string[]>()
@@ -75,6 +76,7 @@ export class PluginManager implements IPluginRegistry {
         const discovered = await discoverPlugins(this.pluginsDir, this.logger)
         for (const { dir, manifest } of discovered) {
             this.manifests.set(manifest.id, manifest)
+            this.pluginDirs.set(manifest.id, dir)
         }
         this.dependencyErrors = resolvePluginDependencies(this.manifests)
 
@@ -137,6 +139,11 @@ export class PluginManager implements IPluginRegistry {
         for (const { manifest } of discovered) {
             if (manifest.type === 'theme') {
                 this.themeManifests.set(manifest.id, manifest)
+            }
+        }
+        for (const { dir, manifest } of discovered) {
+            if (manifest.type === 'theme') {
+                this.pluginDirs.set(manifest.id, dir)
             }
         }
     }
@@ -216,6 +223,7 @@ export class PluginManager implements IPluginRegistry {
         this.pluginInstances.clear()
         this.pluginContexts.clear()
         this.manifests.clear()
+        this.pluginDirs.clear()
         this.enabled.clear()
         this.themeManifests.clear()
         this.dependencyErrors.clear()
@@ -255,6 +263,10 @@ export class PluginManager implements IPluginRegistry {
 
     isEnabled(id: string): boolean {
         return this.enabled.get(id) ?? true
+    }
+
+    getPluginDir(id: string): string | undefined {
+        return this.pluginDirs.get(id)
     }
 
     async invoke<T>(

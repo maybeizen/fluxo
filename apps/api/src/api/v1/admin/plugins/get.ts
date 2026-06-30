@@ -2,6 +2,7 @@ import type { Request, Response } from 'express'
 import { getDb, plugins } from '@fluxo/db'
 import { eq } from 'drizzle-orm'
 import { getPluginManager } from '../../../../plugins/manager'
+import { getPluginIconUrl } from '../../../../utils/plugin-icon'
 
 export async function getPluginById(req: Request, res: Response) {
     try {
@@ -31,6 +32,10 @@ export async function getPluginById(req: Request, res: Response) {
             success: true,
             plugin: {
                 ...entry.manifest,
+                icon: entry.manifest.icon,
+                iconUrl: entry.manifest.icon
+                    ? getPluginIconUrl(entry.manifest.id)
+                    : null,
                 enabled: row?.enabled ?? true,
                 config: row?.config ?? null,
                 settingsSchema,
