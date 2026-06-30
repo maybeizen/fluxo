@@ -1,0 +1,68 @@
+services:
+    postgres:
+        image: postgres:16-alpine
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER:-fluxo}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fluxo}
+            POSTGRES_DB: ${POSTGRES_DB:-fluxo}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-fluxo}']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        ports:
+            - '5432:5432'
+
+    redis:
+        image: redis:7-alpine
+        restart: unless-stopped
+        command: redis-server --appendonly yes
+        volumes:
+            - redis_data:/data
+        healthcheck:
+            test: ['CMD', 'redis-cli', 'ping']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        ports:
+            - '6379:6379'
+
+    api:
+        build:
+            context: .
+            dockerfile: apps/api/Dockerfile
+        restart: unless-stopped
+        env_file:
+            - .env
+        environment:
+            POSTGRES_URL: postgresql://${POSTGRES_USER:-fluxo}:${POSTGRES_PASSWORD:-fluxo}@postgres:5432/${POSTGRES_DB:-fluxo}
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+        depends_on:
+            postgres:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        ports:
+            - '${PORT:-3001}:3001'
+
+    frontend:
+        build:
+            context: .
+            dockerfile: apps/frontend/Dockerfile
+            args:
+                NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+        restart: unless-stopped
+        env_file:
+            - .env
+        depends_on:
+            - api
+        ports:
+            - '5000:5000'
+
+volumes:
+    postgres_data:
+    redis_data:
