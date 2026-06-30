@@ -4,7 +4,7 @@
     "license": "AGPL-3.0-or-later",
     "devDependencies": {
         "@fluxo/eslint-config": "workspace:*",
-        "eslint": "^9.39.4",
+        "eslint": "^10.6.0",
         "prettier": "^3.8.3",
         "prettier-plugin-tailwindcss": "^0.7.2",
         "turbo": "^2.9.6",
