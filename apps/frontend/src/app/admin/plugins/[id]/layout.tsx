@@ -82,27 +82,27 @@ export default function PluginDetailLayout({
                         <h1 className="text-2xl font-bold text-white">
                             {plugin.name}
                         </h1>
-                    <span className="rounded bg-zinc-800 px-2 py-0.5 text-sm text-zinc-300">
-                        v{plugin.version}
-                    </span>
-                    <span
-                        className={`rounded px-2 py-0.5 text-sm font-medium ${
-                            plugin.type === 'gateway'
-                                ? 'bg-emerald-500/20 text-emerald-400'
-                                : 'bg-blue-500/20 text-blue-400'
-                        }`}
-                    >
-                        {plugin.type === 'gateway' ? 'Gateway' : 'Service'}
-                    </span>
-                    <span
-                        className={`rounded px-2 py-0.5 text-xs ${
-                            plugin.shipped
-                                ? 'bg-zinc-700 text-zinc-300'
-                                : 'bg-amber-500/20 text-amber-400'
-                        }`}
-                    >
-                        {plugin.shipped ? 'Shipped' : 'Installed'}
-                    </span>
+                        <span className="rounded bg-zinc-800 px-2 py-0.5 text-sm text-zinc-300">
+                            v{plugin.version}
+                        </span>
+                        <span
+                            className={`rounded px-2 py-0.5 text-sm font-medium ${
+                                plugin.type === 'gateway'
+                                    ? 'bg-emerald-500/20 text-emerald-400'
+                                    : 'bg-blue-500/20 text-blue-400'
+                            }`}
+                        >
+                            {plugin.type === 'gateway' ? 'Gateway' : 'Service'}
+                        </span>
+                        <span
+                            className={`rounded px-2 py-0.5 text-xs ${
+                                plugin.shipped
+                                    ? 'bg-zinc-700 text-zinc-300'
+                                    : 'bg-amber-500/20 text-amber-400'
+                            }`}
+                        >
+                            {plugin.shipped ? 'Shipped' : 'Installed'}
+                        </span>
                     </div>
                 </div>
 

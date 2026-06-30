@@ -26,10 +26,7 @@ export async function getPluginIcon(req: Request, res: Response) {
                 .json({ success: false, message: 'Plugin icon not found' })
         }
 
-        const iconPath = resolvePluginIconPath(
-            pluginDir,
-            entry.manifest.icon
-        )
+        const iconPath = resolvePluginIconPath(pluginDir, entry.manifest.icon)
         if (!iconPath) {
             return res
                 .status(404)

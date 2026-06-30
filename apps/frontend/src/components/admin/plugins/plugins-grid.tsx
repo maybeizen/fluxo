@@ -19,7 +19,9 @@ export default function PluginsGrid({
         return (
             <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-8 text-center text-zinc-400">
                 No plugins found. Add plugins to{' '}
-                <code className="rounded bg-zinc-800 px-1 py-0.5">plugins/</code>{' '}
+                <code className="rounded bg-zinc-800 px-1 py-0.5">
+                    plugins/
+                </code>{' '}
                 and restart the API.
             </div>
         )

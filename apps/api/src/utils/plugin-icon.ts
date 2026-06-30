@@ -1,4 +1,4 @@
-import { resolve, normalize, sep } from 'node:path'
+import { resolve, sep } from 'node:path'
 
 const MIME_BY_EXT: Record<string, string> = {
     '.svg': 'image/svg+xml',
