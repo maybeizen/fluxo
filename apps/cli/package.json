@@ -14,7 +14,7 @@
         "types": "tsc --noEmit"
     },
     "dependencies": {
-        "@clack/prompts": "^0.10.1",
+        "@clack/prompts": "^1.6.0",
         "@fluxo/crypto": "workspace:*",
         "@fluxo/db": "workspace:*",
         "@fluxo/forge": "workspace:*",
