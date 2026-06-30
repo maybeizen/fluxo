@@ -52,7 +52,9 @@ export function usePaginatedList<TItem, TFilters>(
     const [filters, setFiltersState] = useState<TFilters>(initialFilters)
 
     const fetcherRef = useRef(fetcher)
-    fetcherRef.current = fetcher
+    useEffect(() => {
+        fetcherRef.current = fetcher
+    }, [fetcher])
 
     const load = useCallback(async () => {
         if (!enabled) return
