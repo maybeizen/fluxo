@@ -1,18 +1,18 @@
 <div align="center">
   <img src="assets/fluxo.png" alt="Fluxo Logo" width="160" />
 
-  # Fluxo
+# Fluxo
 
-  Open-source billing panel for hosting providers — invoices, services, tickets, plugins, and payment gateways.
+Open-source billing panel for hosting providers — invoices, services, tickets, plugins, and payment gateways.
 
-  ![CI](https://img.shields.io/github/actions/workflow/status/maybeizen/fluxo/ci.yml?branch=dev&label=CI)
-  ![License](https://img.shields.io/github/license/maybeizen/fluxo?label=AGPL-3.0)
-  ![Last commit](https://img.shields.io/github/last-commit/maybeizen/fluxo/dev)
-  ![Issues](https://img.shields.io/github/issues/maybeizen/fluxo)
-  ![Stars](https://img.shields.io/github/stars/maybeizen/fluxo?style=social)
+![CI](https://img.shields.io/github/actions/workflow/status/maybeizen/fluxo/ci.yml?branch=dev&label=CI)
+![License](https://img.shields.io/github/license/maybeizen/fluxo?label=AGPL-3.0)
+![Last commit](https://img.shields.io/github/last-commit/maybeizen/fluxo/dev)
+![Issues](https://img.shields.io/github/issues/maybeizen/fluxo)
+![Stars](https://img.shields.io/github/stars/maybeizen/fluxo?style=social)
 
-  [![Available on GitHub](https://cdn.jsdelivr.net/gh/intergrav/devins-badges@master/dist/compact/image-s/svg/github.svg)](https://github.com/maybeizen/fluxo)
-  [![Documentation](https://cdn.jsdelivr.net/gh/intergrav/devins-badges@master/dist/compact/documentation/website/svg/docs.svg)](https://github.com/maybeizen/fluxo/blob/dev/DEPLOY.md)
+[![Available on GitHub](https://cdn.jsdelivr.net/gh/intergrav/devins-badges@master/dist/compact/image-s/svg/github.svg)](https://github.com/maybeizen/fluxo)
+[![Documentation](https://cdn.jsdelivr.net/gh/intergrav/devins-badges@master/dist/compact/documentation/website/svg/docs.svg)](https://github.com/maybeizen/fluxo/blob/dev/DEPLOY.md)
 
 </div>
 
@@ -38,13 +38,13 @@ bun dev
 
 ## Documentation
 
-| Topic | Link |
-| --- | --- |
-| Deployment (Docker + server) | [DEPLOY.md](DEPLOY.md) |
-| Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) |
-| Security | [SECURITY.md](SECURITY.md) |
-| Plugins | [docs/README.md](docs/README.md) |
-| Code of Conduct | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
+| Topic                        | Link                                     |
+| ---------------------------- | ---------------------------------------- |
+| Deployment (Docker + server) | [DEPLOY.md](DEPLOY.md)                   |
+| Contributing                 | [CONTRIBUTING.md](CONTRIBUTING.md)       |
+| Security                     | [SECURITY.md](SECURITY.md)               |
+| Plugins                      | [docs/README.md](docs/README.md)         |
+| Code of Conduct              | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
 
 ## Tech stack
 

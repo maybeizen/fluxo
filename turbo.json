@@ -25,9 +25,15 @@
             "cache": false,
             "persistent": true
         },
-        "lint": {},
-        "lint:fix": {},
-        "types": {},
+        "lint": {
+            "dependsOn": ["^build"]
+        },
+        "lint:fix": {
+            "dependsOn": ["^build"]
+        },
+        "types": {
+            "dependsOn": ["^build"]
+        },
         "format:check": {},
         "test": {
             "dependsOn": ["^build"]

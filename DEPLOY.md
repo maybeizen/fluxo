@@ -11,15 +11,15 @@ Fluxo supports two deployment paths: **Docker Compose** (recommended for testing
 
 Required variables (see `apps/api/src/utils/env.ts`):
 
-| Variable | Purpose |
-| --- | --- |
-| `ENCRYPTION_KEY` | Data encryption (32-byte hex recommended) |
-| `SESSION_SECRET` | Express session signing |
-| `POSTGRES_URL` | PostgreSQL connection string |
-| `REDIS_HOST` / `REDIS_PORT` | Redis |
-| `FRONTEND_URL` / `API_URL` | Public URLs |
-| `DISCORD_CLIENT_*` | Discord OAuth |
-| `NEXT_PUBLIC_API_URL` | Frontend build-time API URL |
+| Variable                    | Purpose                                   |
+| --------------------------- | ----------------------------------------- |
+| `ENCRYPTION_KEY`            | Data encryption (32-byte hex recommended) |
+| `SESSION_SECRET`            | Express session signing                   |
+| `POSTGRES_URL`              | PostgreSQL connection string              |
+| `REDIS_HOST` / `REDIS_PORT` | Redis                                     |
+| `FRONTEND_URL` / `API_URL`  | Public URLs                               |
+| `DISCORD_CLIENT_*`          | Discord OAuth                             |
+| `NEXT_PUBLIC_API_URL`       | Frontend build-time API URL               |
 
 Use `scripts/setup-env.sh` to generate secrets interactively.
 
@@ -44,12 +44,12 @@ docker compose up -d --build
 
 Services:
 
-| Service | Port | Notes |
-| --- | --- | --- |
-| `postgres` | 5432 | Data volume `postgres_data` |
-| `redis` | 6379 | Volume `redis_data` |
-| `api` | 3001 | Runs migrations on boot via `@fluxo/db` |
-| `frontend` | 5000 | Next.js production server |
+| Service    | Port | Notes                                   |
+| ---------- | ---- | --------------------------------------- |
+| `postgres` | 5432 | Data volume `postgres_data`             |
+| `redis`    | 6379 | Volume `redis_data`                     |
+| `api`      | 3001 | Runs migrations on boot via `@fluxo/db` |
+| `frontend` | 5000 | Next.js production server               |
 
 ### 3. Verify
 
@@ -172,11 +172,11 @@ bun run --filter @fluxo/db db:migrate
 
 ## Troubleshooting
 
-| Symptom | Check |
-| --- | --- |
-| API won't start | `.env` validation — compare with `.env.example` |
+| Symptom                      | Check                                                         |
+| ---------------------------- | ------------------------------------------------------------- |
+| API won't start              | `.env` validation — compare with `.env.example`               |
 | Frontend build fails locally | Remove `NODE_ENV=development` from `.env` during `next build` |
-| Discord login fails | `DISCORD_REDIRECT_URI` must match Discord app settings |
-| DB connection refused | PostgreSQL running, `POSTGRES_URL` host/port |
+| Discord login fails          | `DISCORD_REDIRECT_URI` must match Discord app settings        |
+| DB connection refused        | PostgreSQL running, `POSTGRES_URL` host/port                  |
 
 Report issues on [GitHub](https://github.com/maybeizen/fluxo/issues).
