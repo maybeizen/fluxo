@@ -40,7 +40,7 @@ export default function StorageSettings({
                                     | 's3',
                             })
                         }
-                        className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-white focus:border-primary-400 focus:outline-none"
+                        className="focus:border-primary-400 w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-white focus:outline-none"
                     >
                         <option value="local">Local (disk)</option>
                         <option value="s3">S3-compatible</option>
@@ -158,7 +158,7 @@ export default function StorageSettings({
                                             s3ForcePathStyle: e.target.checked,
                                         })
                                     }
-                                    className="h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-primary-400 focus:ring-primary-400"
+                                    className="text-primary-400 focus:ring-primary-400 h-4 w-4 rounded border-zinc-700 bg-zinc-900"
                                 />
                                 <span className="text-sm text-zinc-300">
                                     Force path-style URLs (required for MinIO,

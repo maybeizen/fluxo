@@ -112,8 +112,7 @@ export function useSettingsData() {
                         s3SecretAccessKey: '',
                         s3ForcePathStyle:
                             data.storage?.s3?.forcePathStyle || false,
-                        s3PublicUrlBase:
-                            data.storage?.s3?.publicUrlBase || '',
+                        s3PublicUrlBase: data.storage?.s3?.publicUrlBase || '',
                     })
                 }
             } catch (error) {

@@ -72,13 +72,13 @@ export function createUpload({
     }).single(field)
 }
 
-export const uploadAvatar = createUpload({
+export const uploadAvatar: RequestHandler = createUpload({
     field: 'avatar',
     maxSize: 5 * 1024 * 1024,
     allowedMimes: ['image/png', 'image/jpeg', 'image/jpg'],
 })
 
-export const uploadLogo = createUpload({
+export const uploadLogo: RequestHandler = createUpload({
     field: 'logo',
     maxSize: 2 * 1024 * 1024,
     allowedMimes: [
@@ -90,7 +90,7 @@ export const uploadLogo = createUpload({
     ],
 })
 
-export const uploadTicketAttachment = createUpload({
+export const uploadTicketAttachment: RequestHandler = createUpload({
     field: 'attachment',
     maxSize: 5 * 1024 * 1024,
     allowedMimes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
