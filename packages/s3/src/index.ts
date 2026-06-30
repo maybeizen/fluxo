@@ -1,7 +1,7 @@
 import {
-    DeleteObjectCommand,
-    PutObjectCommand,
     S3Client,
+    PutObjectCommand,
+    DeleteObjectCommand,
 } from '@aws-sdk/client-s3'
 
 export interface S3ClientConfig {
@@ -20,7 +20,13 @@ export interface PutObjectParams {
     contentType: string
 }
 
-export function createS3Client(config: S3ClientConfig) {
+export interface S3ClientHelpers {
+    putObject: (params: PutObjectParams) => Promise<void>
+    deleteObject: (key: string) => Promise<void>
+    getPublicUrl: (key: string) => string
+}
+
+export function createS3Client(config: S3ClientConfig): S3ClientHelpers {
     const client = new S3Client({
         region: config.region,
         endpoint: config.endpoint,
@@ -31,16 +37,14 @@ export function createS3Client(config: S3ClientConfig) {
         },
     })
 
-    const bucket = config.bucket
-
-    async function putObject({
+    const putObject = async ({
         key,
         body,
         contentType,
-    }: PutObjectParams): Promise<void> {
+    }: PutObjectParams): Promise<void> => {
         await client.send(
             new PutObjectCommand({
-                Bucket: bucket,
+                Bucket: config.bucket,
                 Key: key,
                 Body: body,
                 ContentType: contentType,
@@ -48,16 +52,16 @@ export function createS3Client(config: S3ClientConfig) {
         )
     }
 
-    async function deleteObject(key: string): Promise<void> {
+    const deleteObject = async (key: string): Promise<void> => {
         await client.send(
             new DeleteObjectCommand({
-                Bucket: bucket,
+                Bucket: config.bucket,
                 Key: key,
             })
         )
     }
 
-    function getPublicUrl(key: string): string {
+    const getPublicUrl = (key: string): string => {
         if (config.publicUrlBase) {
             const base = config.publicUrlBase.replace(/\/$/, '')
             return `${base}/${key}`
@@ -66,11 +70,11 @@ export function createS3Client(config: S3ClientConfig) {
         if (config.endpoint) {
             const endpoint = config.endpoint.replace(/\/$/, '')
             if (config.forcePathStyle) {
-                return `${endpoint}/${bucket}/${key}`
+                return `${endpoint}/${config.bucket}/${key}`
             }
         }
 
-        return `https://${bucket}.s3.${config.region}.amazonaws.com/${key}`
+        return `https://${config.bucket}.s3.${config.region}.amazonaws.com/${key}`
     }
 
     return { putObject, deleteObject, getPublicUrl }
