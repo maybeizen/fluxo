@@ -1,6 +1,7 @@
 {
     "name": "@fluxo/core",
     "version": "1.0.0",
+    "license": "AGPL-3.0-or-later",
     "devDependencies": {
         "@fluxo/eslint-config": "workspace:*",
         "eslint": "^9.39.4",
