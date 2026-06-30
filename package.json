@@ -1,18 +1,18 @@
 {
     "name": "@fluxo/core",
     "version": "1.0.0",
-    "license": "AGPL-3.0-or-later",
     "devDependencies": {
         "@fluxo/eslint-config": "workspace:*",
         "@types/bun": "latest",
         "eslint": "^9.39.4",
-        "prettier": "^3.8.3",
+        "prettier": "^3.9.4",
         "prettier-plugin-tailwindcss": "^0.8.0",
-        "turbo": "^2.9.6"
+        "turbo": "^2.10.1"
     },
     "peerDependencies": {
         "typescript": "^5.9.3"
     },
+    "license": "AGPL-3.0-or-later",
     "overrides": {
         "drizzle-orm": "^0.45.1",
         "react": "19.1.0",

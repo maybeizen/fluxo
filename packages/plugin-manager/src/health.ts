@@ -6,10 +6,7 @@ import type {
 import type { SafeInvokeTracker } from './safe-invoke.js'
 
 export type PluginHealthStatus =
-    | 'healthy'
-    | 'degraded'
-    | 'quarantined'
-    | 'disabled'
+    'healthy' | 'degraded' | 'quarantined' | 'disabled'
 
 export interface PluginHealthReport {
     pluginId: string

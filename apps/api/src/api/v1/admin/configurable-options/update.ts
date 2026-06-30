@@ -96,9 +96,7 @@ export const updateConfigurableOption = async (req: Request, res: Response) => {
                         .update(configurableOptionPricing)
                         .set({
                             pricingType: validated.pricing.pricingType as
-                                | 'one_time'
-                                | 'recurring'
-                                | 'billing_cycle',
+                                'one_time' | 'recurring' | 'billing_cycle',
                             amount: validated.pricing.amount,
                             useValueAsMultiplier:
                                 validated.pricing.useMultiplier ?? false,
@@ -109,9 +107,7 @@ export const updateConfigurableOption = async (req: Request, res: Response) => {
                     await db.insert(configurableOptionPricing).values({
                         optionId: id,
                         pricingType: validated.pricing.pricingType as
-                            | 'one_time'
-                            | 'recurring'
-                            | 'billing_cycle',
+                            'one_time' | 'recurring' | 'billing_cycle',
                         amount: validated.pricing.amount,
                         useValueAsMultiplier:
                             validated.pricing.useMultiplier ?? false,

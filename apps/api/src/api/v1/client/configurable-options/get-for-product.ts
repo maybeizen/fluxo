@@ -87,10 +87,8 @@ export const getConfigurableOptionsForProduct = async (
                           : optionType === 'number' || optionType === 'select'
                             ? (optionType as 'number' | 'select')
                             : ((field?.type as
-                                  | 'number'
-                                  | 'string'
-                                  | 'boolean'
-                                  | 'select') ?? 'string')
+                                  'number' | 'string' | 'boolean' | 'select') ??
+                              'string')
                 const schema = {
                     type: schemaType,
                     label: field?.label ?? opt.label ?? opt.fieldKey ?? '',

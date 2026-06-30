@@ -54,10 +54,7 @@ export const createService = async (req: Request, res: Response) => {
                 serviceOwnerId: serviceData.serviceOwnerId,
                 externalId,
                 status: (serviceData.status ?? ServiceStatus.ACTIVE) as
-                    | 'active'
-                    | 'suspended'
-                    | 'cancelled'
-                    | 'deleted',
+                    'active' | 'suspended' | 'cancelled' | 'deleted',
                 monthlyPrice: Math.round(serviceData.monthlyPrice * 100),
                 dueDate,
                 creationError,

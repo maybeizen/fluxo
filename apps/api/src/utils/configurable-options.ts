@@ -13,9 +13,7 @@ interface ConfigFieldShape {
 }
 
 export type ConfigurableOptionPricingType =
-    | 'one_time'
-    | 'recurring'
-    | 'billing_cycle'
+    'one_time' | 'recurring' | 'billing_cycle'
 
 export interface OptionRow {
     id: number

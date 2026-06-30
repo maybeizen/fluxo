@@ -34,10 +34,6 @@ export default function ProductsPage() {
 
     const itemsPerPage = 10
 
-    useEffect(() => {
-        loadProducts()
-    }, [currentPage, filters])
-
     const loadProducts = async () => {
         setIsLoading(true)
         try {
@@ -62,6 +58,10 @@ export default function ProductsPage() {
             setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        loadProducts()
+    }, [currentPage, filters])
 
     const handleDelete = async (productId: string) => {
         try {

@@ -16,9 +16,7 @@ export const createCoupon = async (req: Request, res: Response) => {
             type: validated.type as 'percentage' | 'fixed',
             value: validated.value,
             durationType: validated.duration.type as
-                | 'once'
-                | 'forever'
-                | 'repeating',
+                'once' | 'forever' | 'repeating',
             durationCount: validated.duration.count ?? null,
             maxRedemptions: validated.maxRedemptions ?? null,
             expiresAt: validated.expiresAt ?? null,

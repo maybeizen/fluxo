@@ -1,7 +1,5 @@
 export type ConfigurableOptionPricingType =
-    | 'one_time'
-    | 'recurring'
-    | 'billing_cycle'
+    'one_time' | 'recurring' | 'billing_cycle'
 
 export interface ConfigurableOptionScope {
     id: number
@@ -24,10 +22,7 @@ export interface ConfigurableOptionPricing {
 
 /** Display/input type for the option. When null, frontend uses plugin field type. */
 export type ConfigurableOptionInputType =
-    | 'text'
-    | 'number'
-    | 'checkbox'
-    | 'select'
+    'text' | 'number' | 'checkbox' | 'select'
 
 export interface ConfigurableOption {
     id: number

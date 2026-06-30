@@ -8,6 +8,7 @@ type TabType =
     | 'auth'
     | 'integrations'
     | 'email'
+    | 'storage'
     | 'gateways'
     | 'security'
 
@@ -34,6 +35,11 @@ const tabs = [
         icon: 'fas fa-plug',
     },
     { id: 'email' as TabType, label: 'SMTP', icon: 'fas fa-envelope' },
+    {
+        id: 'storage' as TabType,
+        label: 'Storage',
+        icon: 'fas fa-hard-drive',
+    },
     {
         id: 'gateways' as TabType,
         label: 'Gateways',

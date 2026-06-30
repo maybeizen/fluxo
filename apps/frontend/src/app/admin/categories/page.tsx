@@ -28,21 +28,21 @@ export default function CategoriesPage() {
     const [newDescription, setNewDescription] = useState('')
     const [isSaving, setIsSaving] = useState(false)
 
-    useEffect(() => {
-        loadCategories()
-    }, [])
-
     const loadCategories = async () => {
         setIsLoading(true)
         try {
             const data = await fetchCategories()
             setCategories(data)
-        } catch (error) {
+        } catch {
             notifications.error('Failed to load categories')
         } finally {
             setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        loadCategories()
+    }, [])
 
     const handleCreate = async () => {
         if (!newName.trim()) {

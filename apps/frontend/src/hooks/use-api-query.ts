@@ -41,7 +41,7 @@ export function useApiQuery<T>(
         } finally {
             setIsLoading(false)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/use-memo -- dynamic deps from caller
     }, [enabled, fetcher, ...deps])
 
     useEffect(() => {

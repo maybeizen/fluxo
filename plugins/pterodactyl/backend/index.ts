@@ -114,14 +114,12 @@ function buildEggEnvironment(
     const env: Record<string, string> = {}
     const root = (eggResponse?.data as Record<string, unknown>) ?? eggResponse
     const rel = (root?.relationships ?? eggResponse?.relationships) as
-        | Record<string, unknown>
-        | undefined
+        Record<string, unknown> | undefined
 
     let variablesData: Array<{ attributes?: EggVarAttrs }> | undefined
     if (rel) {
         const varsRel = rel.variables as
-            | { data?: Array<EggVarItem> }
-            | undefined
+            { data?: Array<EggVarItem> } | undefined
         if (Array.isArray(varsRel?.data)) {
             variablesData = varsRel.data
         } else {

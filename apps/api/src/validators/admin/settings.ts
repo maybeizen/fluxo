@@ -54,6 +54,21 @@ const pterodactylSettingsSchema = z.object({
     apiKey: z.string().min(1).optional(),
 })
 
+const storageSettingsSchema = z.object({
+    provider: z.enum(['local', 's3']).optional(),
+    s3: z
+        .object({
+            endpoint: z.string().min(1).optional(),
+            region: z.string().min(1).optional(),
+            bucket: z.string().min(1).optional(),
+            accessKeyId: z.string().min(1).optional(),
+            secretAccessKey: z.string().min(1).optional(),
+            forcePathStyle: z.boolean().optional(),
+            publicUrlBase: z.string().min(1).optional(),
+        })
+        .optional(),
+})
+
 export const updateSettingsSchema = z
     .object({
         app: appSettingsSchema.optional(),
@@ -62,6 +77,7 @@ export const updateSettingsSchema = z
         email: emailSettingsSchema.optional(),
         gateways: gatewaysSettingsSchema.optional(),
         security: securitySettingsSchema.optional(),
+        storage: storageSettingsSchema.optional(),
         pterodactyl: pterodactylSettingsSchema.optional(),
     })
     .refine((data) => Object.keys(data).length > 0, {

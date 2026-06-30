@@ -186,6 +186,12 @@ export default function ProfilePage() {
             return
         }
 
+        const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
+        if (!allowedTypes.includes(file.type)) {
+            notifications.error('Only PNG and JPG files are allowed')
+            return
+        }
+
         if (file.size > 5 * 1024 * 1024) {
             notifications.error('Image must be less than 5MB')
             return
@@ -208,6 +214,9 @@ export default function ProfilePage() {
             )
         } finally {
             setIsUploadingAvatar(false)
+            if (fileInputRef.current) {
+                fileInputRef.current.value = ''
+            }
         }
     }
 
@@ -339,7 +348,7 @@ export default function ProfilePage() {
                                         <input
                                             ref={fileInputRef}
                                             type="file"
-                                            accept="image/*"
+                                            accept="image/png,image/jpeg,image/jpg"
                                             onChange={handleFileUpload}
                                             className="hidden"
                                         />
@@ -356,7 +365,7 @@ export default function ProfilePage() {
                                         </Button>
                                         <p className="mt-2 text-xs text-zinc-500">
                                             Max file size: 5MB. Supported: JPG,
-                                            PNG, GIF
+                                            PNG
                                         </p>
                                     </div>
                                 ) : (

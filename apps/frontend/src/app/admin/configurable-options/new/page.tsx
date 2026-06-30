@@ -154,10 +154,7 @@ export default function NewConfigurableOptionPage() {
 
     const renderDefaultValueInput = (field: ServicePluginConfigField) => {
         const type = (inputType || field.type) as
-            | 'boolean'
-            | 'select'
-            | 'number'
-            | string
+            'boolean' | 'select' | 'number' | string
         if (type === 'boolean' || type === 'checkbox') {
             return (
                 <Checkbox
@@ -334,8 +331,7 @@ export default function NewConfigurableOptionPage() {
                                     onChange={(e) =>
                                         setInputType(
                                             (e.target.value || '') as
-                                                | ConfigurableOptionInputType
-                                                | ''
+                                                ConfigurableOptionInputType | ''
                                         )
                                     }
                                     className="focus:border-primary-300 focus:ring-primary-300/20 mt-1 block w-full rounded-md border border-zinc-800 bg-neutral-900/50 px-3 py-2 text-sm text-white focus:ring-2 focus:outline-none"
