@@ -1,0 +1,18 @@
+[Unit]
+Description=Fluxo API
+After=network.target postgresql.service redis-server.service
+Wants=postgresql.service redis-server.service
+
+[Service]
+Type=simple
+User=fluxo
+Group=fluxo
+WorkingDirectory=/opt/fluxo
+EnvironmentFile=/opt/fluxo/.env
+Environment=NODE_ENV=production
+ExecStart=/home/fluxo/.bun/bin/node /opt/fluxo/apps/api/dist/index.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
