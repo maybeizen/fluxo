@@ -34,6 +34,8 @@ export interface PluginListItem {
     description?: string
     author?: string
     shipped?: boolean
+    icon?: string
+    iconUrl?: string | null
     enabled: boolean
     config: Record<string, unknown> | null
     configFields?: ServicePluginConfigField[]

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
 import Spinner from '@/components/ui/spinner'
+import PluginIcon from '@/components/admin/plugins/plugin-icon'
 import { fetchPluginById } from '@/lib/admin/plugins'
 import type { PluginDetail } from '@/lib/admin/plugins'
 
@@ -70,10 +71,17 @@ export default function PluginDetailLayout({
                     Back to Plugins
                 </Link>
 
-                <div className="mb-6 flex flex-wrap items-center gap-2">
-                    <h1 className="text-2xl font-bold text-white">
-                        {plugin.name}
-                    </h1>
+                <div className="mb-6 flex flex-wrap items-center gap-3">
+                    <PluginIcon
+                        id={plugin.id}
+                        name={plugin.name}
+                        iconUrl={plugin.iconUrl}
+                        size="lg"
+                    />
+                    <div className="flex flex-wrap items-center gap-2">
+                        <h1 className="text-2xl font-bold text-white">
+                            {plugin.name}
+                        </h1>
                     <span className="rounded bg-zinc-800 px-2 py-0.5 text-sm text-zinc-300">
                         v{plugin.version}
                     </span>
@@ -95,6 +103,7 @@ export default function PluginDetailLayout({
                     >
                         {plugin.shipped ? 'Shipped' : 'Installed'}
                     </span>
+                    </div>
                 </div>
 
                 <nav className="mb-8 border-b border-zinc-800">
